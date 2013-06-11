@@ -1,0 +1,393 @@
+WARNING: MAY BE OUT OF DATE!
+
+General
+-------
+[X] Show heap status
+
+General->Appearance->Colors and Fonts
+-------------------------------------
+Basic->Banner Font: (Click 'Use System Font' for Terminus) Then Bold it
+Basic->Header Font: (Click 'Use System Font' for Terminus) Then Bold it
+Basic->Text Editor Block Selection Font: (Click 'Use System Font' for Terminus size 10)
+Basic->Text Font: (Click 'Use System Font' for Terminus size 10)
+
+General->Editors->Text Editors
+------------------------------
+Displayed tab width: 4
+[X] Highlight current line
+[ ] Show print margin
+[X] Show line numbers
+[X] Show range indicator
+
+Line number foreground: #C0C0C0 (192,192,192)
+Current line highlight: #000000
+Print margin: #000000
+Find scope: #C0C0C0 (192,192,192)
+Selection foreground color: [X] System Default
+Selection background color: [X] System Default
+Background color: #000000
+Foreground color: #808080 (128,128,128)
+Hyperlink: #0000FF
+
+
+General->Editors->Text Editors->Annotations
+-------------------------------------------
+Occurences *: #4D4D4D (77,77,77)
+C/C++ Occurences: #4D4D4D (77,77,77)
+TWEAK THESE LIVE AND COME UP WITH BETTER ONES!
+
+
+General->Editors->Text Editors->Spelling
+----------------------------------------
+[ ] Enable spell checking
+
+
+General->Startup and Shutdown
+-----------------------------
+[X] Refresh workspace on startup
+
+
+General->Workspace->Local History
+---------------------------------
+Days to keep files: 365
+Maximum entries per file: 100
+Maximum file size (MB): 5
+
+
+C/C++->Code Style
+-----------------
+Import... "Robs_CPP_Code_Style"
+
+
+C/C++->Editor
+-------------
+Matching brackets highlight: #FFFFFFy
+Inactive code highlight: #161616 (22,22,22)
+
+
+C/C++->Editor->Syntax Coloring
+------------------------------
+Code->Braces: #00FFFF
+Built-in types: #0000FF
+Classes, Structs, Unions: #FF8000 (255,128,0)
+Enumerators: #FFFFFF
+Enums: #0080FF (0,128,255)
+External SDK calls: #FFFF00
+Fields: #FF0000
+Function declarations: #FFFF00
+Functions: #FFFF00
+Global Variabls: #FF0000
+Keywords: #0000FF
+Labels: #FFFFFF
+Local variable declarations: #FF0000
+Local variable references: #FF0000
+Macro definitions: #FF4040 (255,64,64)
+Macro references: #FF4040 (255,64,64)
+Method declarations: #FFFF00
+Methods: #FFFF00
+Namespaces: #FF8000 (255,128,0)
+Numbers: #FFFFFF
+Operators: #00FFFF
+Others: #808080 (128,128,128)
+Parameter variables: #FF0000
+Problems: #FF0080 (255,0,128)
+Static fields: #FF0000 [X] Italic
+Static method invocations: #FFFF00 [X] Italic
+Strings: #FF00FF
+Template parameters: #FF0000
+Typedefs: #0080FF (0,128,255)
+
+Comments:
+Multi-line comment: #00FF00
+Single-line comment: #00FF00
+Task Tags: #00FF00 [X] Bold  [X] Underline
+
+Preprocessor:
+Directives: #00FFFF
+Headers: #FF00FF
+Others: #808080 (128,128,128)
+
+
+Java->Appearance
+----------------
+[X] Show method return types
+
+
+Java->Code Style->Formatter
+---------------------------
+Import... "Robs_Java_Code_Style_Formatting"
+
+
+Java->Editor
+------------
+Matching brackets highlight: #FFFFFF
+
+
+Java->Editor->Folding
+---------------------
+[ ] Enable folding
+
+
+Java->Editor->Save Actions
+--------------------------
+[X] Perform the selected actions on save
+  [ ] Format source code
+  [X] Organize imports
+  [ ] Additional actions
+  
+
+Java->Editor->Syntax Coloring
+-----------------------------
+Java:
+Abstract method invocations: [ ] Enable
+Annotation element references: [ ] Enable
+Annotations: #8000FF (128,0,255)
+Auto(un)boxed expressions: [ ] Enable
+Brackets: #00FFFF
+Classes: #FF8000 (255,128,0)
+Constants: [ ] Enable
+Deprecated members: #FF8000 (255,128,0)  [X] Strikethrough
+Enums: #0080FF (0,128,255)
+Fields: #FF0000
+Inherited method invocations: [ ] Enable
+Interfaces: #FF8000 (255,128,0)
+Keyword 'return': #0000FF
+Keywords excluding 'return': #0000FF
+Local variable declarations: #FF0000
+Local variable references: #FF0000
+Method declarations: #FFFF00
+Methods: #FFFF00
+Numbers: #FFFFFF
+Operators: #00FFFF
+Others: #808080 (128,128,128)
+Parameter variabls: #FF0000
+Static fields: #FF0000
+Static method invocations: #FFFF00
+Strings: #FF00FF
+Type arguments: [ ] Enable
+Type variables: [ ] Enable
+
+Javadoc:
+HTML markup: #FFFF80 (255,255,128)
+Links: #8080FF (128,128,255)
+Others: #80FF80 (128,255,128)
+Tags: #00FF00
+
+Comments:
+Multi-line comment: #00FF00
+Single-line comment: #00FF00
+Task Tags: #00FF00  [X] Bold   [X] Underline
+
+
+Java->Properties Files
+----------------------
+Arguments: #FFFFFF
+Assignments: #00FFFF
+Comments: #00FF00
+Keys: #FF0000
+Values: #FF00FF
+
+
+(Web)JavaScript->Code Style->Clean Up
+---------------------------
+Import... "Robs_JavaScript_Code_Style_Clean_Up"
+
+
+(Web)JavaScript->Code Style->Formatter
+---------------------------
+Import... "Robs_JavaScript_Code_Style_Formatting"
+
+
+(Web)JavaScript->Editor
+------------------
+Matching brackets highlight: #FFFFFF
+
+
+(Web)JavaScript->Editor->Folding
+---------------------------
+[ ] Enable folding
+
+
+(Web)JavaScript->Editor->Save Actions
+--------------------------------
+[X] Perform the selected actions on save
+	[ ] Format source code
+	[X] Additional actions
+		[X] Remove unnecessary '&NON-NLS$' tags
+		[X] Remove trailing whitespace
+			(o) All lines
+
+
+JavaScript->Editor->Syntax Coloring
+-----------------------------------
+JavaScript:
+Brackets: #00FFFF
+Deprecated members: #FF8000 (255,128,0)  [X] Strikethrough
+Function declarations: #FFFF00
+Fucntions: #FFFF00
+Keyword 'return': #0000FF
+Keywords excluding 'return': #0000FF
+Local variable declarations: #FF0000
+Local variable references: #FF0000
+Object initializer: [ ] Enable
+Operators: #00FFFF
+Others: #FF0000
+Parameter variables: #FF0000
+Strings: #FF00FF
+
+Jsdoc:
+HTML markup: #FFFF80 (255,255,128)
+Links: #8080FF (128,128,255)
+Others: #80FF80 (128,255,128) 
+Tags: #00FF00
+
+Comments:
+Multi-line comment: #00FF00
+Single-line comment: #00FF00
+Task Tags: #00FF00  [X] Bold   [X] Underline
+
+
+Pydev->Editor
+-------------
+Code: #808080 (128,128,128)
+Decorators: 
+Numbers: #FFFFFF
+Matching brackets: #00FFFF
+Keywords: #0000FF
+self: #FF0000
+Strings: #FF00FF
+Comments: #00FF00
+Backquotes: #FF00FF
+Class Name: #FF8000 (255,128,0)
+Function Name: #FFFF00
+
+Web->CSS Files->Editor
+-----------------------
+Line width: 999
+
+
+Web->CSS Files->Editor->Syntax Coloring
+----------------------------------------
+At-Rule: #0000FF
+Comment: #00FF00
+Curly Brace: #00FFFF
+Default: #808080 (128,128,128)
+Error: #FF0080 (255,0,128)
+Media Name: #FF8000 (255,128,0)
+Property Delimiter: #00FFFF
+Property Name: #FF0000
+Property Value: #808080 (128,128,128)
+Quoted String: #FF00FF
+Selector: #FFFF00
+SemiColon: #00FFFF
+URI: #FF00FF
+
+
+Web->HTML Files->Editor
+-----------------------
+Line width: 999
+
+
+Web->HTML Files->Editor->Syntax Coloring
+----------------------------------------
+Attribute Equal Signs: #00FFFF
+Attribute Names: #FF0000
+Attribute Values: #FF00FF
+Comment Content: #00FF00
+Comment Delimiters: #00FF00
+Content: #808080 (128,128,128)
+Declaration Delimiters: #00FFFF
+DOCTYPE Name: #FF8000 (255,128,0)
+DOCTYPE Public Reference: #FF00FF
+DOCTYPE System Reference: #FF00FF
+DOCTYPE SYSTEM/PUBLIC Keyword: #808080 (128,128,128)
+Entity References: #FFFFFF
+Tag Delimiters: #00FFFF
+Tag Names: #FFFF00
+
+
+Web->XML Files->Editor
+----------------------
+Line width: 999
+
+
+Web->XML Files->Editor->Syntax Coloring
+---------------------------------------
+Attribute Equal Signs: #00FFFF
+Attribute Names: #FF0000
+Attribute Values: #FF00FF
+CDATA Content: #FFFFFF
+CDATA Delimiters: #00FFFF
+Comment Content: #00FF00
+Comment Delimiters: #00FF00
+Content: #808080 (128,128,128)
+Declaration Delimiters: #00FFFF
+DOCTYPE Name: #FF8000 (255,128,0)
+DOCTYPE Public Reference: #FF00FF
+DOCTYPE System Reference: #FF00FF
+DOCTYPE SYSTEM/PUBLIC Keyword: #808080 (128,128,128)
+Entity References: #FFFFFF
+Processing Instruction Content: #808080 (128,128,128)
+Processing Instruction Delimiters: #00FFFF
+Tag Delimiters: #00FFFF
+Tag Names: #FFFF00
+
+
+Run/Debug->Console
+------------------
+[X] Limit console output
+Console buffer size(characters): 1000000   (1 million)
+Displayed tab width: 4
+
+
+Tasks
+-----
+[ ] Synchronize with repositories every * minutes
+
+
+Pydev->Editor
+-------------
+
+
+Pydev->Editor->Code Folding
+---------------------------
+[ ] Use Code Folder?  -  Will apply to new editors
+
+
+Pydev->Interpreter - Python
+---------------------------
+Code: #808080 (128,128,128)
+Decorators: #8000FF (128,0,255)
+Numbers: #FFFFFF
+Matching Brackets: #FFFFFF
+Keywords: #0000FF
+self: #FF0000
+Strings: #FF00FF
+Comments: #00FF00
+Backquotes: #00FFFF
+Class Name: #FF8000 (255,128,0)
+Function Name: #FFFF00
+
+
+PHP->Editor->Syntax Coloring
+----------------------------
+Comment: #00FF00
+Heredoc: #00FF00
+Keyword: #0000FF
+Normal: #808080 (128,128,128)
+Number: #FFFFFF
+PHP tags: #00FFFF
+PHPDoc: #80FF80 (128,255,128)
+String: #FF00FF
+Task Tag: #00FF00  [X] Bold   [X] Underline
+Variable: #FF0000
+
+
+Ant->Editor->Syntax
+-------------------
+Comments: #00FF00
+Constant strings: #FF00FF
+DTD Declarations: #FF8000 (255,128,0)
+Processing instructions: #00FFFF
+Tags: #FFFF00
+Text: #808080 (128,128,128)
