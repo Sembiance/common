@@ -65,6 +65,23 @@ if(!Object.forEach)
 	};
 }
 
+if(!Object.every)
+{
+	Object.every = function(obj, cb)
+	{
+		if(!cb)
+			return true;
+
+		var matches = true;
+		Object.keys(obj).forEach(function(key)
+		{
+			matches = cb(key, obj[key]);
+		});
+
+		return matches;
+	};
+}
+
 if(!Object.mutate)
 {
 	Object.mutate = function(obj, cb, startResult)

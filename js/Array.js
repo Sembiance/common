@@ -335,13 +335,13 @@ if(!Array.prototype.containsAll)
 
 if(!Array.prototype.unique)
 {
-	Array.prototype.unique = function()
+	Array.prototype.unique = function(fun)
 	{
 		var uniques = [];
 
 		return this.filter(function(item)
 		{
-			if(uniques.indexOf(item)>=0)
+			if((fun && !fun(uniques, item)) || uniques.indexOf(item)>=0)
 				return false;
 
 			uniques.push(item);
