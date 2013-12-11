@@ -337,15 +337,9 @@ if(!Array.prototype.unique)
 {
 	Array.prototype.unique = function(fun)
 	{
-		var uniques = [];
-
-		return this.filter(function(item)
+		return this.filter(function(item, i, a)
 		{
-			if((fun && !fun(uniques, item)) || uniques.indexOf(item)>=0)
-				return false;
-
-			uniques.push(item);
-			return true;
+			return a.indexOf(item)===i;
 		});
 	};
 }
