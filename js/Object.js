@@ -58,9 +58,9 @@ if(!Object.forEach)
 		if(!cb)
 			return;
 
-		Object.keys(obj).forEach(function(key)
+		Object.keys(obj).forEach(function(key, i)
 		{
-			cb(key, obj[key]);
+			cb(key, obj[key], i);
 		});
 	};
 }
@@ -73,9 +73,9 @@ if(!Object.every)
 			return true;
 
 		var matches = true;
-		Object.keys(obj).forEach(function(key)
+		Object.keys(obj).forEach(function(key, i)
 		{
-			matches = cb(key, obj[key]);
+			matches = cb(key, obj[key], i);
 		});
 
 		return matches;
