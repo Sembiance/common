@@ -28,6 +28,9 @@ public class VideoUtilities
 	        
 	        commands.add(COMMAND_MPLAYER);
 	        
+	        commands.add("-msglevel");
+	        commands.add("all=0");
+	        
 	        commands.add("-ss");
 	        commands.add(startAtTime);
 	        

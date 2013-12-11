@@ -11,6 +11,6 @@
 	<classpathentry kind="var" path="COMMONLIB_HOME/java/dom4j/dom4j.jar" sourcepath="/COMMONLIB_HOME/dom4j/dom4j-src.zip"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/tidy"/>
 	<classpathentry kind="var" path="COMMONLIB_HOME/java/jackson/jackson-core.jar"/>
-	<classpathentry kind="var" path="COMMONLIB_HOME/java/jackson/jackson-mapper.jar"/>
+	<classpathentry kind="var" path="COMMONLIB_HOME/java/jackson-1.8.1/jackson-mapper.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
