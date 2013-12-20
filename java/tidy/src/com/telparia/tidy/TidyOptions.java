@@ -12,7 +12,7 @@ public class TidyOptions
 		this.tidyLocation = tidyLocation;
 	}
 	
-	public String tidyLocation="/usr/local/bin/tidy";
+	public String tidyLocation="/mnt/compendium/bin/tidy";
 	
 	@TidyOption("drop-empty-paras")
 	public Boolean dropEmptyParagraphs;

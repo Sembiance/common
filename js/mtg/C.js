@@ -2,7 +2,7 @@
 
 (function(exports)
 {
-	exports.SUPERTYPES = ["Basic", "Legendary", "Snow", "World"];
+	exports.SUPERTYPES = ["Basic", "Legendary", "Snow", "World", "Ongoing"];
 	exports.TYPES = ["Instant", "Sorcery", "Artifact", "Creature", "Enchantment", "Land", "Planeswalker", "Tribal", "Plane", "Phenomenon", "Scheme", "Vanguard"];
 
 	// Unglued/Unhinged types
@@ -64,7 +64,8 @@
 			code : "PPR",
 			releaseDate : "1994-07-01",
 			border : "black",
-			type : "promo"
+			type : "promo",
+			cropsMissing: true
 		},
 		{
 			name : "The Dark",
@@ -148,6 +149,14 @@
 			type : "starter"
 		},
 		{
+			name : "Vanguard",
+			code : "VAN",
+			releaseDate : "1997-05-01",
+			border : "black",
+			type : "vanguard",
+			cropsMissing : true
+		},
+		{
 			name : "Weatherlight",
 			code : "WTH",
 			releaseDate : "1997-06-09",
@@ -191,7 +200,8 @@
 			code : "UGL",
 			releaseDate : "1998-08-11",
 			border : "silver",
-			type : "un"
+			type : "un",
+			cropsMissing : true
 		},
 		{
 			name : "Urza's Saga",
@@ -406,7 +416,8 @@
 			code : "UNH",
 			releaseDate : "2004-11-20",
 			border : "silver",
-			type : "un"
+			type : "un",
+			cropsMissing : true
 		},
 		{
 			name : "Betrayers of Kamigawa",
@@ -503,6 +514,14 @@
 			type : "core"
 		},
 		{
+			name : "Masters Edition",
+			code : "MED",
+			releaseDate : "2007-09-10",
+			border : "black",
+			type : "masters",
+			cropsMissing : true
+		},
+		{
 			name : "Lorwyn",
 			code : "LRW",
 			releaseDate : "2007-10-12",
@@ -515,7 +534,8 @@
 			code : "EVG",
 			releaseDate : "2007-11-16",
 			border : "black",
-			type : "duel deck"
+			type : "duel deck",
+			tokenCropsMissing : true
 		},
 		{
 			name : "Morningtide",
@@ -549,6 +569,14 @@
 			type : "from the vault"
 		},
 		{
+			name : "Masters Edition II",
+			code : "ME2",
+			releaseDate : "2008-09-22",
+			border : "black",
+			type : "masters",
+			cropsMissing : true
+		},
+		{
 			name : "Shards of Alara",
 			code : "ALA",
 			releaseDate : "2008-10-03",
@@ -561,7 +589,8 @@
 			code : "DD2",
 			releaseDate : "2008-11-07",
 			border : "black",
-			type : "duel deck"
+			type : "duel deck",
+			tokenCropsMissing : true
 		},
 		{
 			name : "Conflux",
@@ -576,7 +605,8 @@
 			code : "DDC",
 			releaseDate : "2009-04-10",
 			border : "black",
-			type : "duel deck"
+			type : "duel deck",
+			tokenCropsMissing : true
 		},
 		{
 			name : "Alara Reborn",
@@ -608,6 +638,14 @@
 			type : "planechase"
 		},
 		{
+			name : "Masters Edition III",
+			code : "ME3",
+			releaseDate : "2009-09-07",
+			border : "black",
+			type : "masters",
+			cropsMissing : true
+		},		
+		{
 			name : "Zendikar",
 			code : "ZEN",
 			releaseDate : "2009-10-02",
@@ -620,7 +658,8 @@
 			code : "DDD",
 			releaseDate : "2009-10-30",
 			border : "black",
-			type : "duel deck"
+			type : "duel deck",
+			tokenCropsMissing : true
 		},
 		{
 			name : "Premium Deck Series: Slivers",
@@ -642,7 +681,8 @@
 			code : "DDE",
 			releaseDate : "2010-03-19",
 			border : "black",
-			type : "duel deck"
+			type : "duel deck",
+			tokenCropsMissing : true
 		},
 		{
 			name : "Rise of the Eldrazi",
@@ -694,6 +734,14 @@
 			releaseDate : "2010-11-19",
 			border : "black",
 			type : "premium deck"
+		},
+		{
+			name : "Masters Edition IV",
+			code : "ME4",
+			releaseDate : "2011-01-10",
+			border : "black",
+			type : "masters",
+			cropsMissing : true
 		},
 		{
 			name : "Mirrodin Besieged",
@@ -869,7 +917,8 @@
 			code : "V13",
 			releaseDate : "2013-08-23",
 			border : "black",
-			type : "from the vault"
+			type : "from the vault",
+			cropsMissing : true
 		},
 		{
 			name : "Duel Decks: Heroes vs. Monsters",
@@ -884,14 +933,16 @@
 			releaseDate : "2013-09-27",
 			border : "black",
 			type : "expansion",
-			block : "Theros"
+			block : "Theros",
+			cropsMissing : true
 		},
 		{
 			name : "Commander 2013 Edition",
 			code : "C13",
 			releaseDate : "2013-11-01",
 			border : "black",
-			type : "commander"
+			type : "commander",
+			cropsMissing : true
 		}
 	];
 })(typeof exports==="undefined" ? window.C={} : exports);
