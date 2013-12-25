@@ -1,59 +1,29 @@
 package com.telparia.util;
 
+import java.io.IOException;
+import java.util.List;
 
 public class ProcessUtilities
 {
-	public static int runProcess(Process process)
+	public static int runProcess(List<String> commands) throws IOException, InterruptedException
 	{
-		return ProcessUtilities.runProcess(process, 0);
+		return ProcessUtilities.runProcess(commands, 0);
 	}
 	
-	public static int runProcess(Process process, long timeout)
+	public static int runProcess(List<String> commands, long timeout) throws IOException, InterruptedException
 	{
-		Worker worker = new Worker(process);
-    	worker.start();
+		ProcessBuilder builder = new ProcessBuilder();
+		builder.inheritIO();
+        builder.command(commands);
+        
+		Process process = builder.start();
+    	/*BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+    	for(String line=reader.readLine();line!=null;line=reader.readLine())
+    	{
+    		
+    	}*/
     	
-		int result=1;
-		
-    	try
-    	{
-    	    worker.join(timeout);
-    	    if(worker.result!=null)
-    	    	result = worker.result;
-    	}
-    	catch(InterruptedException ex)
-    	{
-    		worker.interrupt();
-    	}
-    	finally
-    	{
-    	    process.destroy();
-    	}
-    	
-    	return result;
-	}
-	
-	public static class Worker extends Thread
-	{
-		private final Process 	process;
-		public Integer 			result;
-  
-		private Worker(Process process)
-		{
-			this.process = process;
-		}
-  
-		@Override
-		public void run()
-		{
-			try
-			{ 
-				result = process.waitFor();
-			}
-			catch (InterruptedException ignore)
-			{
-				return;
-			}
-		}  
+    	process.waitFor();
+    	return process.exitValue();
 	}
 }
