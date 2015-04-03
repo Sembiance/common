@@ -132,6 +132,62 @@ if(!Array.prototype.forEach)
 	};
 }
 
+Array.prototype.forEachBatch = function(callback, numAtOnce, thisArg)
+{
+	var T, k;
+
+	numAtOnce = numAtOnce || 1;
+
+	if(typeof this==="undefined" || this===null)
+		throw new TypeError(" this is null or not defined");
+
+	var O = Object(this);
+	var len = O.length >>> 0;
+
+	if ({}.toString.call(callback)!=="[object Function]")
+		throw new TypeError(callback + " is not a function");
+
+	if(thisArg)
+		T = thisArg;
+
+	k = 0;
+
+	var kIndexes = [];
+	var kArgs = [];
+	while(k<len)
+	{
+		var kValue;
+
+		if(k in O)
+		{
+			kIndexes.push(k);
+			kArgs.push(O[k]);
+		}
+
+		if(kArgs.length===numAtOnce)
+		{
+			kArgs.push(kIndexes, O);
+			callback.apply(T, kArgs);
+			kArgs = [];
+			kIndexes = [];
+		}
+
+		k++;
+	}
+
+	if(kArgs.length>0)
+	{
+		while(kArgs.length<numAtOnce)
+		{
+			kArgs.push(undefined);
+			kIndexes.push(undefined);
+		}
+
+		kArgs.push(kIndexes, O);
+		callback.apply(T, kArgs);
+	}
+};
+
 if(!Array.prototype.every)
 {
 	Array.prototype.every = function(fun /*, thisp */)
@@ -296,11 +352,31 @@ if(!Array.prototype.reduceRight)
 	};
 }
 
+if(!Array.prototype.replaceAll)
+{
+	Array.prototype.replaceAll = function(oldVal, newVal)
+	{
+		if(oldVal===newVal)
+			return this;
+		
+		do
+		{
+			var valLoc = this.indexOf(oldVal);
+			if(valLoc===-1)
+				break;
+
+			this.splice(valLoc, 1, newVal);
+		} while(true);
+		
+		return this;
+	};
+}
+
 if(!Array.prototype.contains)
 {
-	Array.prototype.contains = function(i)
+	Array.prototype.contains = function(val)
 	{
-		return this.indexOf(i)!==-1;
+		return this.indexOf(val)!==-1;
 	};
 }
 
@@ -333,14 +409,94 @@ if(!Array.prototype.containsAll)
 	};
 }
 
+if(!Array.prototype.containsAny)
+{
+	Array.prototype.containsAny = function(vals)
+	{
+		for(var i=0,len=vals.length;i<len;i++)
+		{
+			if(this.indexOf(vals[i])!==-1)
+				return true;
+		}
+
+		return false;
+	};
+}
+
 if(!Array.prototype.unique)
 {
-	Array.prototype.unique = function(fun)
+	Array.prototype.unique = function()
 	{
 		return this.filter(function(item, i, a)
 		{
 			return a.indexOf(item)===i;
 		});
+	};
+}
+
+if(!Array.prototype.multiSort)
+{
+	Array.prototype.multiSort = function(sorters, reverse)
+	{
+		sorters = Array.toArray(sorters);
+
+		this.sort(function(a, b)
+		{
+			for(var i=0,len=sorters.length;i<len;i++)
+			{
+				var sort = sorters[i];
+
+				var aVal = sort(a);
+				var bVal = sort(b);
+
+				if(typeof aVal==="string")
+				{
+					var stringCompareResult = aVal.localeCompare(bVal);
+					if(stringCompareResult<0)
+						return (reverse && (!Array.isArray(reverse) || reverse[i]) ? 1 : -1);
+
+					if(stringCompareResult>0)
+						return (reverse && (!Array.isArray(reverse) || reverse[i]) ? -1 : 1);
+				}
+				else
+				{
+					if(aVal<bVal)
+						return (reverse && (!Array.isArray(reverse) || reverse[i]) ? 1 : -1);
+
+					if(aVal>bVal)
+						return (reverse && (!Array.isArray(reverse) || reverse[i]) ? -1 : 1);
+				}
+			}
+
+			return 0;
+		});
+
+		return this;
+	};
+}
+
+if(!Array.prototype.uniqueBySort)
+{
+	Array.prototype.uniqueBySort = function()
+	{
+		this.sort();
+
+		var out = [];
+		var len = this.length-1;
+		if(len>=0)
+		{
+			for(var i=0;i<len;i++)
+			{
+				if(this[i]!==this[i+1])
+				{
+					out.push(this[i]);
+				}
+			}
+
+			out.push(this[len]);
+		}
+
+		return out;
 	};
 }
 
@@ -387,7 +543,20 @@ if(!Array.toArray)
 {
 	Array.toArray = function (arg)
 	{
-		return Array.isArray(arg) ? arg : [arg];
+		if(Array.isArray(arg))
+			return arg;
+
+		if(Object.isObject(arg) && "length" in arg)
+		{
+			var a=[];
+			for(var i=0,len=arg.length;i<len;i++)
+			{
+				a.push(arg[i]);
+			}
+			return a;
+		}
+	
+		return [arg];
 	};
 }
 
@@ -619,6 +788,16 @@ if(!Array.prototype.clear)
 	};
 }
 
+if(!Array.prototype.pushAll)
+{
+	Array.prototype.pushAll = function(arr)
+	{
+		this.push.apply(this, arr);
+		
+		return this;
+	};
+}
+
 // Sums all the numbers in the array
 if(!Array.prototype.sum)
 {
@@ -641,7 +820,7 @@ if(!Array.prototype.average)
 }
 
 // On average, how far from the average is each number in our set?
-// Pass true to calc a sample variance
+// Pass true to calc a sample variance (if the data only represents a small sample of the whole of possible data)
 if(!Array.prototype.variance)
 {
 	Array.prototype.variance = function(sample)
@@ -689,8 +868,126 @@ if(!Array.prototype.subtract)
 {
 	Array.prototype.subtract = function(a)
 	{
-		return this.filter(function(o) { return a.indexOf(o)===-1; });
+		var result = this.slice();
+		a.forEach(function(o) { result.remove(o); });
+		return result;
 	};
 }
 
-// Array.prototype.pushMany is in base.js
+
+if(!Array.prototype.last)
+{
+	Array.prototype.last = function()
+	{
+		return this[this.length-1];
+	};
+}
+
+if(!Array.prototype.clone)
+{
+	Array.prototype.clone = function(deep)
+	{
+		var result = [];
+		var src = this;
+		for(var i=0,len=src.length;i<len;i++)
+		{
+			if(deep)
+				result.push((Array.isArray(src[i]) ? src[i].clone(deep) : (Object.isObject(src[i]) ? Object.clone(src[i], deep) : src[i])));
+			else
+				result.push(src[i]);
+		}
+
+		return result;
+	};
+}
+
+function CBRunner(_fun, _val, _i, _finish)
+{
+	this.fun = _fun;
+	this.val = _val;
+	this.i = _i;
+	this.finish = _finish;
+
+	CBRunner.prototype.run = function()
+	{
+		this.fun(this.val, function(err, result) { this.finish(err, result, this.i); }.bind(this), this.i);
+	};
+}
+
+function CBIterator(_a, _fun, _atOnce)
+{
+	this.a = _a.clone();
+	this.fun = _fun;
+	this.atOnce = _atOnce || 1;
+	this.results = [];
+	this.i=0;
+	this.running=[];
+
+	CBIterator.prototype.go = function(cb)
+	{
+		this.cb = cb || function(){};
+		if(this.a.length<1)
+			return this.cb(undefined, []);
+
+		this.next();
+	};
+
+	CBIterator.prototype.next = function()
+	{
+		var toRun = [];
+		while(this.running.length<this.atOnce && this.a.length>0)
+		{
+			var _i = this.i++;
+			this.running.push(_i);
+			toRun.push(new CBRunner(this.fun, this.a.shift(), _i, this.finish.bind(this)));
+		}
+
+		while(toRun.length)
+		{
+			toRun.shift().run();
+		}
+	};
+
+	CBIterator.prototype.finish = function(err, result, _i)
+	{
+		if(err)
+			return this.cb(err, this.results);
+
+		this.results[_i] = result;
+		this.running.remove(_i);
+
+		if(this.running.length===0 && this.a.length===0)
+			return this.cb(undefined, this.results);
+
+		this.next();
+	};
+}
+
+if(!Array.prototype.serialForEach)
+{
+	Array.prototype.serialForEach = function(fun, cb)
+	{
+		(new CBIterator(this, fun, 1)).go(cb);
+	};
+}
+
+if(!Array.prototype.parallelForEach)
+{
+	Array.prototype.parallelForEach = function(fun, cb, atOnce)
+	{
+		(new CBIterator(this, fun, atOnce||3)).go(cb);
+	};
+}
+
+if(!Array.prototype.pushMany)
+{
+	Array.prototype.pushMany = function(val, count)
+	{
+		while((count--)>0)
+		{
+			this.push((Array.isArray(val) ? val.clone(true) : (Object.isObject(val) ? Object.clone(val, true) : val)));
+		}
+
+		return this;
+	};
+}

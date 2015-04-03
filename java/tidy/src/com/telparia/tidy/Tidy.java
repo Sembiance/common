@@ -51,12 +51,34 @@ public class Tidy
         tidyCommands.add(inputFile.getAbsolutePath());
         
         tidyProcessBuilder.command(tidyCommands);
+        
         Process tidyProcess = tidyProcessBuilder.start();
-        tidyProcess.waitFor();
+        
+        long now = System.currentTimeMillis();
+        long timeoutInMillis = 1000L * 10;
+        long finish = now + timeoutInMillis;
+        while (isAlive(tidyProcess) && (System.currentTimeMillis() < finish))
+        {
+            Thread.sleep(10);
+        }
+        if(isAlive(tidyProcess))
+        {
+            throw new InterruptedException("Process tidy timeout out");
+        }
         
         configFile.delete();
         
         return outputFile;
+	}
+	
+	public static boolean isAlive( Process p ) {
+	    try
+	    {
+	        p.exitValue();
+	        return false;
+	    } catch (IllegalThreadStateException e) {
+	        return true;
+	    }
 	}
 	
 	/**

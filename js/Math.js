@@ -12,7 +12,9 @@ if(!Math.randomIntExcluding)
 {
 	Math.randomIntExcluding = function(min, max, excluding)
 	{
-		excluding = Array.toArray(excluding);
+		excluding = Array.toArray(excluding).map(function(i) { return i.truncate(); }).filter(function(i) { return i>=min && i<=max; }).uniqueBySort();
+		if(excluding.length===((max-min)+1))
+			throw new RangeError("randomIntExcluding called with excluding all nums, no possible return value");
 		
 		var num;
 		do

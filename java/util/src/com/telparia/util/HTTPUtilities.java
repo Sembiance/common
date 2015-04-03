@@ -3,19 +3,19 @@ package com.telparia.util;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.zip.GZIPInputStream;
 
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.HttpException;
-import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
-import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.io.IOUtils;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpRequestBase;
-import org.apache.http.impl.client.BasicResponseHandler;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.params.HttpConnectionParams;
+import org.apache.commons.io.output.ByteArrayOutputStream;
 
 public class HTTPUtilities
 {
@@ -23,84 +23,123 @@ public class HTTPUtilities
     static
     {
     	DEFAULT_HEADERS.put("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
-    	DEFAULT_HEADERS.put("Accept-Charset", "ISO-8859-1,utf-8;q=0.7,*;q=0.3");
+    	DEFAULT_HEADERS.put("Accept-Encoding", "gzip,deflate");
     	DEFAULT_HEADERS.put("Accept-Language", "en-US,en;q=0.8");
-    	DEFAULT_HEADERS.put("User-Agent", "Mozilla/5.0 (X11; Linux i686) AppleWebKit/536.11 (KHTML, like Gecko) Chrome/20.0.1132.47 Safari/536.11");
+    	DEFAULT_HEADERS.put("User-Agent", "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.69 Safari/537.36");
     }
 	
-	public static final String get(String url)
+	public static final String get(String url) throws IOException
 	{
-		return HTTPUtilities.get(url, 0);
+		return HTTPUtilities.get(url, null);
 	}
-	
-	public static final String get(String url, int retries)
+
+	public static final String get(String url, Map<String, String> extraHeaderMap) throws IOException
 	{
-		return HTTPUtilities.get(url, retries, null);
-	}
-	
-	public static final String get(String url, int retries, Map<String, String> extraHeaderMap)
-	{
-		DefaultHttpClient httpclient = new DefaultHttpClient();
-		httpclient.getParams().setIntParameter(HttpConnectionParams.CONNECTION_TIMEOUT, 10000);
+		HttpURLConnection httpConn = (HttpURLConnection)(new URL(url).openConnection());
+		for(Map.Entry<String, String> keyValue : DEFAULT_HEADERS.entrySet())
+		{
+			httpConn.addRequestProperty(keyValue.getKey(), keyValue.getValue());
+		}
 		
-		Map<String, String> headerMap = new HashMap<String, String>(DEFAULT_HEADERS);
 		if(extraHeaderMap!=null && extraHeaderMap.size()>0)
-			headerMap.putAll(extraHeaderMap);
-		
-		for(int i=-1;i<retries;i++)
 		{
-			try
+			for(Map.Entry<String, String> keyValue : extraHeaderMap.entrySet())
 			{
-				HttpGet get = new HttpGet(url);
-				HTTPUtilities.setHeadersFromMap(get, headerMap);
-				BasicResponseHandler responseHandler = new BasicResponseHandler();
-				return httpclient.execute(get, responseHandler);
-			}
-			catch(Exception e)
-			{
+				httpConn.addRequestProperty(keyValue.getKey(), keyValue.getValue());
 			}
 		}
+
+		httpConn.setInstanceFollowRedirects(true);
+		httpConn.setUseCaches(false);
+		httpConn.setDoOutput(true);
 		
-		return null;
+		if(httpConn.getResponseCode()!=200)
+			return null;
+		
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+
+		String contentEncoding = httpConn.getHeaderField("Content-Encoding");
+		if(contentEncoding!=null && contentEncoding.toLowerCase().equals("gzip"))
+			IOUtils.copy(new GZIPInputStream(httpConn.getInputStream()), out);
+		else
+			IOUtils.copy(httpConn.getInputStream(), out);
+
+		return out.toString("UTF-8");
 	}
 	
-	public static void setHeadersFromMap(HttpRequestBase baseRequest, Map<String, String> headerMap)
-	{
-		for(Map.Entry<String, String> headerEntry : headerMap.entrySet())
-		{
-			baseRequest.addHeader(headerEntry.getKey(), headerEntry.getValue());
-		}
-	}
-	
-	public static final File downloadToDisk(String url, String targetFileDiskPath) throws HttpException, IOException
+	public static final File downloadToDisk(String url, String targetFileDiskPath) throws MalformedURLException, IOException
 	{
 		return downloadToDisk(url, targetFileDiskPath, "Mozilla/4.0 (compatible; MSIE 6.0; Windows 2000)", null);
 	}
 	
-	public static final File downloadToDisk(String url, String targetFileDiskPath, String userAgent) throws HttpException, IOException
+	public static final File downloadToDisk(String url, String targetFileDiskPath, String userAgent) throws MalformedURLException, IOException
 	{
 		return downloadToDisk(url, targetFileDiskPath, userAgent, null);
 	}
 	
-	public static final File downloadToDisk(String url, String targetFileDiskPath, String userAgent, String cookieHeader) throws HttpException, IOException
+	public static final File downloadToDisk(String url, String targetFileDiskPath, String userAgent, String cookieHeader) throws MalformedURLException, IOException
 	{
-		HttpClient client = new HttpClient(new MultiThreadedHttpConnectionManager());
-		File outputFile = new File(targetFileDiskPath);
-	
-		GetMethod get = new GetMethod(url);
-		get.setFollowRedirects(true);
-		get.setRequestHeader("User-Agent", userAgent);
+		HttpURLConnection httpConn = (HttpURLConnection)(new URL(url).openConnection());
+		httpConn.addRequestProperty("User-Agent", userAgent);
 		if(cookieHeader!=null)
-			get.setRequestHeader("Cookie", cookieHeader);
+			httpConn.addRequestProperty("Cookie", cookieHeader);
+		httpConn.setInstanceFollowRedirects(true);
+		httpConn.setUseCaches(false);
+		httpConn.setDoOutput(true);
 		
-		client.executeMethod(get);
-		
+		File outputFile = new File(targetFileDiskPath);
 		FileOutputStream out = new FileOutputStream(outputFile);
-		IOUtils.copy(get.getResponseBodyAsStream(), out);
+		IOUtils.copy(httpConn.getInputStream(), out);
 		
 		out.flush();
 		out.close();
 		
 		return outputFile;
+	}
+	
+	public static final String format(String host, String pathname) throws UnsupportedEncodingException
+	{
+		return HTTPUtilities.format("http",  host,  80, pathname, null);
+	}
+	
+	public static final String format(String host, String pathname, Map<String, String> query) throws UnsupportedEncodingException
+	{
+		return HTTPUtilities.format("http",  host,  80, pathname, query);
+	}
+	
+	public static final String format(String protocol, String host, int port, String pathname, Map<String, String> query) throws UnsupportedEncodingException
+	{
+		String url = protocol + "://" + host + (port!=80 ? (":" + port) : "") + (!pathname.startsWith("/") ? "/" : "") + pathname;
+		if(query!=null)
+		{
+			boolean firstEntry = true;
+			for(Entry<String, String> entry : query.entrySet())
+			{
+				url += (firstEntry ? "?" : "&");
+				firstEntry = false;
+				url += entry.getKey() + "=" + URLEncoder.encode(entry.getValue(), "UTF8");
+			}
+		}
+		
+		return url;
+	}
+	
+	public static final Map<String, String> getURLQueryMap(String url) throws UnsupportedEncodingException, MalformedURLException
+	{
+		return getURLQueryMap(new URL(url));
+	}
+	
+	public static final Map<String, String> getURLQueryMap(URL url) throws UnsupportedEncodingException
+	{
+	    Map<String, String> queryPairs = new HashMap<String, String>();
+	    String query = url.getQuery();
+	    String[] pairs = query.split("&");
+	    for(String pair : pairs)
+	    {
+	        int idx = pair.indexOf("=");
+	        queryPairs.put(URLDecoder.decode(pair.substring(0, idx), "UTF-8"), URLDecoder.decode(pair.substring(idx + 1), "UTF-8"));
+	    }
+	    
+	    return queryPairs;
 	}
 }

@@ -75,6 +75,9 @@ if(!Object.every)
 		var matches = true;
 		Object.keys(obj).forEach(function(key, i)
 		{
+			if(!matches)
+				return;
+			
 			matches = cb(key, obj[key], i);
 		});
 
@@ -114,7 +117,7 @@ if(!Object.merge)
 			if(!hop.call(o1, key) || !dupHandler)
 				o1[key] = o2[key];
 			else
-				o1[key] = dupHandler(o1[key], o2[key]);
+				o1[key] = dupHandler(o1[key], o2[key], key);
 		});
 
 		return o1;
@@ -133,7 +136,12 @@ if(!Object.map)
 		Object.forEach(obj, function(key, value)
 		{
 			var r = cb(key, value);
-			result[r[0]] = r[1];
+			if(!Array.isArray(r))
+				result[key] = r;
+			else if(r.length===1)
+				result[key] = r[0];
+			else
+				result[r[0]] = r[1];
 		});
 
 		return result;
@@ -145,5 +153,53 @@ if(!Object.isObject)
 	Object.isObject = function (arg)
 	{
 		return arg!==null && !Array.isArray(arg) && typeof arg==="object";
+	};
+}
+
+if(!Object.swapKeyValues)
+{
+	Object.swapKeyValues = function(obj)
+	{
+		var newObj = {};
+		Object.forEach(obj, function(key, val)
+		{
+			newObj[val] = key;
+		});
+
+		return newObj;
+	};
+}
+
+if(!Object.clone)
+{
+	Object.clone = function(src, deep)
+	{
+		var result = {};
+		Object.forEach(src, function(key, val)
+		{
+			if(deep)
+				result[key] = (Array.isArray(val) ? val.clone(deep) : (Object.isObject(val) ? Object.clone(val, deep) : val));
+			else
+				result[key] = val;
+		});
+		return result;
+	};
+}
+
+if(!Object.toArray)
+{
+	Object.toArray = function(obj, keyKey)
+	{
+		var result = [];
+		keyKey = keyKey || "key";
+
+		Object.forEach(obj, function(key, value)
+		{
+			var objValue = Object.isObject(value) ? Object.clone(value) : {value:Object.clone(value)};
+			objValue[keyKey] = key;
+			result.push(objValue);
+		});
+
+		return result;
 	};
 }

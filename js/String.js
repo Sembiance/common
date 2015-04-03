@@ -45,24 +45,12 @@ if(!String.prototype.contains)
 String.prototype.trim = function(chars)
 {
 	if(!chars)
-		chars = " \t\n\r\u00a0";	// 00a0 is hex for 160 which is nbsp
+		chars = "\\s\\n\\r";
 
-	var text = this;
-	var c;
-	var i;
-	for(i=0,c=text.charAt(i);i<text.length && chars.indexOf(c)!==-1;i++,c=text.charAt(i))
-	{
-	}
+	if(Array.isArray(chars))
+		chars = chars.join("");
 
-	text = text.substring(i);
-
-	for(i=(text.length-1),c=text.charAt(i);i>=0 && chars.indexOf(c)!==-1;i--,c=text.charAt(i))
-	{
-	}
-
-	text = text.substring(0, (i+1));
-
-	return text;
+	return this.replace(new RegExp("^[" + chars + "]+|[" + chars + "]+$", "g"), "");
 };
 
 if(!String.prototype.replaceAll)
@@ -82,6 +70,20 @@ if(!String.prototype.strip)
 	};
 }
 
+if(!String.prototype.innerTrim)
+{
+	String.prototype.innerTrim = function()
+	{
+		var text = this;
+		var re = new RegExp(/\s\s/g);
+		while(text.search(re)!==-1)
+		{
+			text = text.replace(re, " ");
+		}
+
+		return text;
+	};
+}
 
 if(!String.prototype.capitalize)
 {
@@ -109,7 +111,6 @@ if(!String.prototype.toArray)
 		return this.split("");
 	};
 }
-
 
 if(!String.prototype.repeat)
 {
@@ -148,5 +149,13 @@ if(!String.prototype.pad)
 		padCharacter = typeof padCharacter==="undefined" ? " " : padCharacter;
 
 		return padCharacter.repeat(minLength-this.length) + ""+this;
+	};
+}
+
+if(!String.prototype.replaceCharAt)
+{
+	String.prototype.replaceCharAt = function(index, c)
+	{
+		return this.substring(0, index) + c + this.substring(index+1);
 	};
 }

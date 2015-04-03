@@ -40,89 +40,24 @@
 	exports.TB = base.GB*1024;
 	exports.PB = base.TB*1024;
 
-	function clone(src, deep)
+	exports.clone = function(src, deep)
 	{
-		var result = src;
-		if(Array.isArray(src))
-		{
-			result = [];
-			for(var i=0,len=src.length;i<len;i++)
-			{
-				if(deep)
-					result.push(clone(src[i]));
-				else
-					result.push(src[i]);
-			}
-		}
-		else if(Object.isObject(src))
-		{
-			result = {};
-			Object.forEach(src, function(key, val)
-			{
-				if(deep)
-					result[key] = clone(val, deep);
-				else
-					result[key] = val;
-			});
-		}
-		
-		return result;
-	}
-	exports.clone = clone;
-
-	function CBIterator(_a, _fun)
-	{
-		this.a = clone(_a);
-		this.fun = _fun;
-		this.results = null;
-		this.i=0;
-
-		CBIterator.prototype.go = function(cb)
-		{
-			this.cb = cb || function(){};
-			this.next();
-		};
-
-		CBIterator.prototype.next = function(err, result)
-		{
-			if(this.results===null)
-				this.results = [];
-			else
-				this.results.push(result);
-
-			if(err)
-				return this.cb(err, this.results);
-
-			if(!this.a.length)
-				return this.cb(undefined, this.results);
-
-			this.fun(this.a.shift(), this.next.bind(this), this.i++);
-		};
-	}
-
-	if(!Array.prototype.serialForEach)
-	{
-		Array.prototype.serialForEach = function(fun, cb)
-		{
-			(new CBIterator(this, fun)).go(cb);
-		};
-	}
-
-	if(!Array.prototype.pushMany)
-	{
-		Array.prototype.pushMany = function(val, count)
-		{
-			while((count--)>0)
-			{
-				this.push(clone(val, true));
-			}
-
-			return this;
-		};
-	}
+		return (Array.isArray(src) ? src.clone(deep) : (Object.isObject(src) ? Object.clone(src, deep) : src));
+	};
 
 	Object.forEach({log : ["debug", "info", "log"], warn : ["warn"], error : ["error", "critical", "crit"]}, function(consoleKey, synonyms)
 	{
-		synonyms.forEach(function(synonym) { exports[synonym] = base.IS_NODE ? console[consoleKey].bind(console) : (window.console[consoleKey].bind ? window.console[consoleKey].bind(window.console) : window.cosnole[consoleKey]); });
+		synonyms.forEach(function(synonym) { exports[synonym] = base.IS_NODE ? console[consoleKey].bind(console) : (window.console[consoleKey].bind ? window.console[consoleKey].bind(window.console) : window.console[consoleKey]); });
 	});
+
+	if(base.IS_NODE)
+	{
+		exports.error = function()
+		{			
+			if(arguments.length===1 && arguments[0] && arguments[0].hasOwnProperty("stack"))
+				console.error(arguments[0].stack);
+			else
+				console.error.apply(console.error, arguments);
+		};
+	}
 })(typeof exports==="undefined" ? window.base={} : exports);

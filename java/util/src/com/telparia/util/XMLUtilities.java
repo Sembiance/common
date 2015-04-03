@@ -39,9 +39,9 @@ public class XMLUtilities
 		return XMLUtilities.toXML(data);
 	}
 	
-	public static Document getURLAndTidy(String url, int retries) throws DocumentException, IOException, InterruptedException, SAXException
+	public static Document getURLAndTidy(String url) throws DocumentException, IOException, InterruptedException, SAXException
 	{
-		String HTMLData = HTTPUtilities.get(url, retries);
+		String HTMLData = HTTPUtilities.get(url);
 		if(HTMLData==null)
 			return null;
 		File tidyFile = Tidy.htmlToXHTML(HTMLData);
@@ -50,9 +50,9 @@ public class XMLUtilities
 		return XMLUtilities.toXML(data);
 	}
 	
-	public static Document getURL(String url, int retries) throws DocumentException, SAXException
+	public static Document getURL(String url) throws DocumentException, SAXException, IOException
 	{
-		return XMLUtilities.toXML(HTTPUtilities.get(url, retries));
+		return XMLUtilities.toXML(HTTPUtilities.get(url));
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -74,13 +74,17 @@ public class XMLUtilities
 		return nodes.get(0);
 	}
 	
+	@SuppressWarnings("unchecked")
 	public static Map<String, String> generateNamespaceMap(Document doc, String defaultPrefix)
 	{
 		Map<String, String> nsMap = new HashMap<String, String>();
 		
-		@SuppressWarnings("unchecked")
-		List<Namespace> namespaces = new ArrayList<Namespace>(doc.getRootElement().additionalNamespaces());
-		namespaces.add(doc.getRootElement().getNamespace());
+		List<Namespace> namespaces = new ArrayList<Namespace>();
+		if(doc!=null && doc.getRootElement()!=null)
+		{
+			namespaces.addAll(doc.getRootElement().additionalNamespaces());
+			namespaces.add(doc.getRootElement().getNamespace());
+		}
 		for(Namespace namespace : namespaces)
 		{
 			if(namespace.equals(Namespace.NO_NAMESPACE))
