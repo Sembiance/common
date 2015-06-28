@@ -1,5 +1,5 @@
 "use strict";
-/*global Element, Document, NodeList: true*/
+/*global Element, NodeList: true*/
 
 // Adds several helper methods to the built in DOM elements
 
@@ -21,6 +21,14 @@ Element.prototype.removeClass = function(className)
 	{
 		this.className = this.className.replace(new RegExp("(?:^|\\s+)" + className + "(?:\\s+|$)"), " ").trim();
 	}
+};
+
+Element.prototype.toggleClass = function(className)
+{
+	if(this.hasClass(className))
+		this.removeClass(className);
+	else
+		this.addClass(className);
 };
 
 Element.prototype.getComputedStyle = function()
@@ -50,6 +58,14 @@ Element.prototype.getX = function()
 Element.prototype.getY = function()
 {
 	return this.getXY()[1];
+};
+
+Element.prototype.clear = function()
+{
+	while(this.firstChild)
+	{
+		this.removeChild(this.firstChild);
+	}
 };
 
 NodeList.prototype.removeClass = function(className)

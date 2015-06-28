@@ -109,3 +109,52 @@ if(!Number.prototype.clearBit)
 		return this & ~(1 << (7-loc));
 	};
 }
+
+function isInt(num)
+{
+	return typeof num==='number' && parseFloat(num)==parseInt(num, 10) && !isNaN(num);
+}
+
+function findDec(num)
+{
+	var count=1;
+	var a = Math.abs(num);
+	num = a;
+
+	while(!isInt(num) && isFinite(num))
+	{
+		num = a * Math.pow(10,count++);
+	}
+
+	return count-1;
+}
+
+if(!Number.prototype.add)
+{
+	Number.prototype.add = function(num2)
+	{
+		var dec1 = findDec(this);
+		var dec2 = findDec(num2);
+		return +((this+num2).toFixed((dec1>dec2 ? dec1 : dec2)));
+	};
+}
+
+if(!Number.prototype.subtract)
+{
+	Number.prototype.subtract = function(num2)
+	{
+		var dec1 = findDec(this);
+		var dec2 = findDec(num2);
+		return +((this-num2).toFixed((dec1>dec2 ? dec1 : dec2)));
+	};
+}
+
+if(!Number.prototype.multiply)
+{
+	Number.prototype.multiply = function(num2)
+	{
+		var dec1 = findDec(this);
+		var dec2 = findDec(num2);
+		return +((this*num2).toFixed((dec1>dec2 ? dec1 : dec2)));
+	};
+}
