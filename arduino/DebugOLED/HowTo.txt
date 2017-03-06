@@ -1,0 +1,16 @@
+Install dependency library (Adafruit GFX Library):
+pio lib install 13
+
+Link to the correct library matching the size display you have:
+cd lib
+ln -s /mnt/compendium/DevLab/common/lib/arduino/Adafruit_SSD1306_128x64/ Adafruit_SSD1306
+
+Create it:
+DebugOLED * oled = new DebugOLED(<reset pin #>, <max lines>);
+
+Call in setup():
+oled->setup();
+
+Use it:
+oled->println("Hello World!");
+
