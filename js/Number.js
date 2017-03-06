@@ -31,6 +31,117 @@ if(!Number.prototype.toClock)
 	};
 }
 
+if(!Number.prototype.formatWithCommas)
+{
+	Number.prototype.formatWithCommas = function()
+	{
+		var result = "" + this;
+		
+		if(result.length<4)
+			return result;
+		
+		var reversedResult = result.reverse();
+		result = "";
+		
+		for(var i=0;i<reversedResult.length;i++)
+		{
+			if(i>0 && i%3===0)
+				result += ",";
+			
+			result += reversedResult.charAt(i);
+		}
+		
+		return result.reverse();
+	};
+}
+
+if(!Number.prototype.secondsAsHumanReadable)
+{
+	Number.prototype.secondsAsHumanReadable = function(includeTrailingZeros)
+	{
+		var secondsElapsed = this;
+		var clock = secondsElapsed.toClock(secondsElapsed<60);
+		var clockParts = clock.split(":");
+		var humanText = "";
+		var part;
+		
+		if(typeof includeTrailingZeros==="undefined")
+			includeTrailingZeros = false;
+			
+		if(clockParts.length===3)
+		{
+			part = parseInt(clockParts[0], 10);
+			if(isNaN(part))
+				part = 0;
+			if(part>8760)
+			{
+				part /= 8760;
+				part = Math.floor(part);
+				if(isNaN(part))
+					part = 0;
+				humanText += part.formatWithCommas() + " year" + (part>1 || part===0 ? "s, " : ", ");
+				
+				part = parseInt(clockParts[0], 10);
+				if(isNaN(part))
+					part = 0;
+				part %= 8760;
+				part /= 24;
+				part = Math.floor(part);
+				if(isNaN(part))
+					part = 0;
+				humanText += part.formatWithCommas() + " day" + (part>1 || part===0 ? "s" : "");
+			}
+			else if(part>24)
+			{
+				part /= 24;
+				part = Math.floor(part);
+				if(isNaN(part))
+					part = 0;
+				humanText += part.formatWithCommas() + " day" + (part>1 || part===0 ? "s, " : ", ");
+				
+				part = parseInt(clockParts[0], 10);
+				if(isNaN(part))
+					part = 0;
+				part %= 24;
+				part = Math.floor(part);
+				if(isNaN(part))
+					part = 0;
+				humanText += part.formatWithCommas() + " hour" + (part>1 || part===0 ? "s" : "");
+			}
+			else
+			{
+				humanText += part.formatWithCommas() + " hour" + (part>1 || part===0 ? "s, " : ", ");	
+				
+				part = parseInt(clockParts[1], 10);
+				if(isNaN(part))
+					part = 0;
+				humanText += part.formatWithCommas() + " minute" + (part>1 || part===0 ? "s" : "");		
+			}
+		}
+		else if(clockParts.length===2)
+		{
+			part = parseInt(clockParts[0], 10);
+			if(isNaN(part))
+				part = 0;
+			humanText += part.formatWithCommas() + " minute" + (part>1 || part===0 ? "s, " : ", ");
+			
+			part = parseInt(clockParts[1], 10);
+			if(isNaN(part))
+				part = 0;
+			humanText += part.formatWithCommas() + " second" + (part>1 || part===0 ? "s" : "");
+		}
+		else if(clockParts.length===1)
+		{
+			part = parseInt(clockParts[0], 10);
+			if(isNaN(part))
+				part = 0;
+			humanText += part.formatWithCommas() + " second" + (part>1 || part===0 ? "s" : "");
+		}
+
+		return humanText;
+	};
+}
+
 if(!Number.prototype.zeroPad)
 {
 	Number.prototype.zeroPad = function(width)

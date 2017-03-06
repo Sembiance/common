@@ -819,6 +819,21 @@ if(!Array.prototype.average)
 	};
 }
 
+// Returns the median of all the numbers in the array (middle number)
+if(!Array.prototype.median)
+{
+	Array.prototype.median = function()
+	{
+		var w = this.clone().sort(function(a,b) {return a-b;} );
+		var half = Math.floor(w.length/2);
+
+		if(w.length % 2)
+			return w[half];
+		else
+			return (w[half-1] + w[half]) / 2.0;
+	};
+}
+
 // On average, how far from the average is each number in our set?
 // Pass true to calc a sample variance (if the data only represents a small sample of the whole of possible data)
 if(!Array.prototype.variance)
@@ -989,5 +1004,51 @@ if(!Array.prototype.pushMany)
 		}
 
 		return this;
+	};
+}
+
+if(!Array.prototype.batch)
+{
+	Array.prototype.batch = function(count)
+	{
+		var batches = [];
+		while(this.length>0)
+		{
+			batches.push(this.splice(0, count));
+		}
+
+		return batches;
+	};
+}
+
+if(!Array.prototype.min)
+{
+	Array.prototype.min = function()
+	{
+		if(this.length<1)
+			return;
+
+		var min=this[0];
+		for(var i=1;i<this.length;i++)
+		{
+			min=Math.min(min, this[i]);
+		}
+		return min;
+	};
+}
+
+if(!Array.prototype.max)
+{
+	Array.prototype.max = function()
+	{
+		if(this.length<1)
+			return;
+
+		var max=this[0];
+		for(var i=1;i<this.length;i++)
+		{
+			max=Math.max(max, this[i]);
+		}
+		return max;
 	};
 }

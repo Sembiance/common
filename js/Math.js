@@ -1,10 +1,30 @@
 "use strict";
 
+if(!Math.trueRandom)
+{
+	Math.trueRandom = function()
+	{
+		var result = Math.random();
+		
+		try
+		{
+			if(window && window.chrome && window.crypto && window.crypto.getRandomValues)
+				result = window.crypto.getRandomValues(new Uint32Array(1))[0] / 0x100000000;
+		}
+		catch(err)
+		{
+			result = Math.random();
+		}
+
+		return result;
+	};
+}
+
 if(!Math.randomInt)
 {
 	Math.randomInt = function(min, max)
 	{
-		return Math.floor(Math.random() * (max - min + 1)) + min;
+		return Math.floor(Math.trueRandom() * (max - min + 1)) + min;
 	};
 }
 

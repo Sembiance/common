@@ -29,8 +29,8 @@
 	exports.HOUR = base.MINUTE*60;
 	exports.DAY = base.HOUR*24;
 	exports.WEEK = base.DAY*7;
-	exports.MONTH = base.DAY*30;
-	exports.YEAR = base.DAY*365;
+	exports.MONTH = base.DAY*30.4375;
+	exports.YEAR = base.DAY*365.25;
 	exports.STARTUP_TIME = Date.now();
 
 	exports.BYTE = 1;
@@ -58,6 +58,8 @@
 				console.error(arguments[0].stack);
 			else
 				console.error.apply(console.error, arguments);
+
+			return 1;
 		};
 	}
 })(typeof exports==="undefined" ? window.base={} : exports);

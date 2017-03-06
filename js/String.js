@@ -148,7 +148,7 @@ if(!String.prototype.pad)
 
 		padCharacter = typeof padCharacter==="undefined" ? " " : padCharacter;
 
-		return padCharacter.repeat(minLength-this.length) + ""+this;
+		return padCharacter.repeat(minLength-this.length) + "" + this;
 	};
 }
 
@@ -157,5 +157,49 @@ if(!String.prototype.replaceCharAt)
 	String.prototype.replaceCharAt = function(index, c)
 	{
 		return this.substring(0, index) + c + this.substring(index+1);
+	};
+}
+
+if(!String.prototype.shorten)
+{
+	String.prototype.shorten = function(c)
+	{
+		return this.substring(0, this.length-c);
+	};
+}
+
+if(!String.prototype.isWhiteSpace)
+{
+	String.prototype.isWhiteSpace = function()
+	{
+		for(var i=0;i<this.length;i++)
+		{
+			if(this.charAt(i)==='\t')
+				continue;
+			if(this.charAt(i)==='\n')
+				continue;
+			if(this.charAt(i)==='\r')
+				continue;
+			if(this.charAt(i)===' ')
+				continue;
+			if(this.charCodeAt(i)===160)	// nbsp
+				continue;
+			
+			return false;
+		}
+		
+		return true;	
+	};
+}
+
+if(!String.prototype.lastIndexOf)
+{
+	String.prototype.lastIndexOf = function(txt)
+	{
+		var loc = this.reverse().indexOf(txt);
+		if(loc===-1)
+			return -1;
+
+		return this.length-loc;
 	};
 }
