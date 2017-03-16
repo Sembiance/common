@@ -10,8 +10,8 @@
 class DebugOLED
 {
 	public:
-		DebugOLED(int8_t rst, uint8_t linesMax);
-		void setup(void);
+		DebugOLED(uint8_t linesMax);
+		void setup(int8_t rst);
 		void println(const char * text);
 
 	private:

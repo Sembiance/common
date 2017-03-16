@@ -1,10 +1,13 @@
 #include "DebugOLED.h"
 
-DebugOLED::DebugOLED(int8_t rst, uint8_t linesMax)
+DebugOLED::DebugOLED(uint8_t linesMax)
+{
+	this->linesMax = linesMax;
+}
+
+void DebugOLED::setup(int8_t rst)
 {
 	uint8_t i=0;
-
-	this->linesMax = linesMax;
 
 	display = new Adafruit_SSD1306(rst);
 
@@ -13,14 +16,8 @@ DebugOLED::DebugOLED(int8_t rst, uint8_t linesMax)
 	{
 		lines[i] = (char *)malloc(DEBUG_OLED_MAX_LINE_LENGTH);
 	}
-}
 
-void DebugOLED::setup()
-{
-	uint8_t i;
-	char buf[256];
-
-	display->begin(SSD1306_SWITCHCAPVCC, 0x3D);
+	display->begin(SSD1306_SWITCHCAPVCC, linesMax==8 ? 0x3D : 0x3C);
 	display->setTextSize(1);
 	display->setTextColor(WHITE);
 	display->setCursor(0,0);
