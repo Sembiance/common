@@ -1,0 +1,10 @@
+{
+	"name" : "Tlc59711",
+	"description" : "Arduino library for controlling TI's TLC59711",
+	"keywords" : "TLC59711",
+	"repository" :
+	{
+		"type" : "git",
+		"url" : "https://github.com/ulrichstern/Tlc59711.git"
+	}
+}
