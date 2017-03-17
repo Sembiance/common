@@ -16,48 +16,54 @@ SerialMsg::~SerialMsg()
 
 }
 
-void SerialMsg::setup(uint8_t txPin, uint8_t rxPin, DebugOLED * oled)
+#ifdef _USE_DEBUG_OLED
+void SerialMsg::setup(Stream * stream, DebugOLED * oled)
+#else
+void SerialMsg::setup(Stream * stream)
+#endif
 {
-	mySerial = new SoftwareSerial(rxPin, txPin);
-	mySerial->begin(9600);
+	this->stream = stream;
 
-	this->oled = oled;
-}
-
-void SerialMsg::setup(DebugOLED * oled)
-{
-	mySerial = 0;
-	Serial.begin(9600);
-
-	this->oled = oled;
+	#ifdef _USE_DEBUG_OLED
+		this->oled = oled;
+	#endif
 }
 
 bool SerialMsg::processNextMsg(void)
 {
-	char buf[256];
+	#ifdef _USE_DEBUG_OLED
+	char buf[22];
+	#endif
 	uint8_t ack[2] = {0};
 	static uint8_t seenSequences[SEEN_SEQUENCES_MAX] = {0};
 	bool seenSequence=false;
 	uint8_t seq, msgLen, crc=0, truncLen=0;
 	uint8_t msg[256];
 
-	/*for(uint8_t z=0;z<recvBufLen;z+=7)
-	{
-		for(uint8_t i=z;i<recvBufLen && (i-z)<7;i++)
-		{
-			sprintf(buf+(i*3), "%02X ", recvBuf[i]);
-		}
-		oled->println(buf);
-	}*/
-
 	if(recvBufLen<5)
 		return false;
+
+	/*#ifdef _USE_DEBUG_OLED
+		sprintf(buf, "Len: %d", recvBufLen);
+		oled->println(buf);
+		
+		for(uint8_t z=0;z<recvBufLen;z+=7)
+		{
+			for(uint8_t i=z;i<recvBufLen && (i-z)<7;i++)
+			{
+				sprintf(buf+((i-z)*3), "%02X ", recvBuf[i]);
+			}
+			oled->println(buf);
+		}
+	#endif*/
 
 	// First byte doesn't equal start byte so ignore it and continue processing
 	if(recvBuf[0]!=SERIALMSG_START_BYTE)
 	{
-		sprintf(buf, "! Start %02X != %02X", recvBuf[0], SERIALMSG_START_BYTE);
-		oled->println(buf);
+		#ifdef _USE_DEBUG_OLED
+			sprintf(buf, "! Start %02X != %02X", recvBuf[0], SERIALMSG_START_BYTE);
+			oled->println(buf);
+		#endif
 
 		truncLen=1;
 		goto processNextMsg_FINISH;
@@ -68,7 +74,13 @@ bool SerialMsg::processNextMsg(void)
 	// Not enough data yet, just return and wait for more
 	msgLen = recvBuf[2];
 	if(msgLen>(recvBufLen-5))
+	{
+		/*#ifdef _USE_DEBUG_OLED
+			sprintf(buf, "! len %d < %d", recvBufLen-5, msgLen);
+			oled->println(buf);
+		#endif*/
 		return false;
+	}
 
 	truncLen=5+msgLen;
 
@@ -81,8 +93,10 @@ bool SerialMsg::processNextMsg(void)
 	// Check that CRC matches
 	if(crc!=recvBuf[3+msgLen])
 	{
-		sprintf(buf, "! crc %02X != %02X", crc, recvBuf[3+msgLen]);
-		oled->println(buf);
+		#ifdef _USE_DEBUG_OLED
+			sprintf(buf, "! crc %02X != %02X", crc, recvBuf[3+msgLen]);
+			oled->println(buf);
+		#endif
 
 		goto processNextMsg_FINISH;
 	}
@@ -90,8 +104,10 @@ bool SerialMsg::processNextMsg(void)
 	// Check that we have a proper stop byte
 	if(recvBuf[4+msgLen]!=SERIALMSG_STOP_BYTE)
 	{
-		sprintf(buf, "! Stop %02X != %02X", recvBuf[4+msgLen], SERIALMSG_STOP_BYTE);
-		oled->println(buf);
+		#ifdef _USE_DEBUG_OLED
+			sprintf(buf, "! Stop %02X != %02X", recvBuf[4+msgLen], SERIALMSG_STOP_BYTE);
+			oled->println(buf);
+		#endif
 
 		goto processNextMsg_FINISH;
 	}
@@ -101,8 +117,10 @@ bool SerialMsg::processNextMsg(void)
 	{
 		if(msgLen!=2)
 		{
-			sprintf(buf, "! ACK len %d != 2", msgLen);
-			oled->println(buf);
+			#ifdef _USE_DEBUG_OLED
+				sprintf(buf, "! ACK len %d != 2", msgLen);
+				oled->println(buf);
+			#endif
 
 			goto processNextMsg_FINISH;
 		}
@@ -119,7 +137,7 @@ bool SerialMsg::processNextMsg(void)
 		}
 	}
 	else
-	{
+	{			
 		// Send ACK if this is an important message
 		if(seq>0)
 		{
@@ -159,30 +177,17 @@ bool SerialMsg::processNextMsg(void)
 void SerialMsg::update(void)
 {
 	bool more=false;
-	unsigned long now=millis();
+	uint32_t now=micros();
 
-	if(mySerial)
+	if(!stream->available())
+		goto update_FINISH;
+
+	while(stream->available())
 	{
-		if(!mySerial->available())
-			goto update_FINISH;
-
-		while(mySerial->available())
-		{
-			recvBuf[recvBufLen] = mySerial->read();
-			recvBufLen++;
-		}
+		recvBuf[recvBufLen] = stream->read();
+		recvBufLen++;
 	}
-	else
-	{
-		if(Serial.available()==0)
-			goto update_FINISH;
 
-		while(Serial.available()>0)
-		{
-			recvBuf[recvBufLen] = Serial.read();
-			recvBufLen++;
-		}
-	}
 
 	do
 	{
@@ -229,44 +234,27 @@ void SerialMsg::send(uint8_t * data, uint8_t len, bool important, uint8_t seqOve
 
 		importantMsgs[(IMPORTANT_MSG_HISTORY_LEN-1)].msgLen = len;
 		importantMsgs[(IMPORTANT_MSG_HISTORY_LEN-1)].seq = seq;
-		importantMsgs[(IMPORTANT_MSG_HISTORY_LEN-1)].lastSent = millis();
+		importantMsgs[(IMPORTANT_MSG_HISTORY_LEN-1)].lastSent = micros();
 	}
 
-	if(mySerial)
-	{
-		mySerial->write(SERIALMSG_START_BYTE);
-		mySerial->write(important ? seqOverride||seq : 0x00);
-		mySerial->write(len);
-	}
-	else
-	{
-		Serial.write(SERIALMSG_START_BYTE);
-		Serial.write(important ? seqOverride||seq : 0x00);
-		Serial.write(len);
-	}
+	stream->write(SERIALMSG_START_BYTE);
+	stream->write(important ? (seqOverride>0 ? seqOverride : seq) : 0x00);
+	stream->write(len);
 
-	if(seq==255)
-		seq = 1;
-	else
-		seq++;
+	if(important && seqOverride==0)
+	{
+		if(seq==255)
+			seq = 1;
+		else
+			seq+=1;
+	}
 
 	for(i=0;i<len;i++)
 	{
 		crc = crc8_update(crc, data[i]);
-		if(mySerial)
-			mySerial->write(data[i]);
-		else
-			Serial.write(data[i]);
+		stream->write(data[i]);
 	}
 
-	if(mySerial)
-	{
-		mySerial->write(crc);
-		mySerial->write(SERIALMSG_STOP_BYTE);
-	}
-	else
-	{
-		Serial.write(crc);
-		Serial.write(SERIALMSG_STOP_BYTE);
-	}
+	stream->write(crc);
+	stream->write(SERIALMSG_STOP_BYTE);
 }
