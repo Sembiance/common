@@ -7,12 +7,10 @@ DebugOLED::DebugOLED(uint8_t linesMax)
 
 void DebugOLED::setup(int8_t rst)
 {
-	uint8_t i=0;
-
 	display = new Adafruit_SSD1306(rst);
 
 	lines = (char **)malloc(sizeof(char *)*linesMax);
-	for(i=0;i<linesMax;i++)
+	for(uint8_t i=0;i<linesMax;i++)
 	{
 		lines[i] = (char *)malloc(DEBUG_OLED_MAX_LINE_LENGTH);
 	}
@@ -24,7 +22,7 @@ void DebugOLED::setup(int8_t rst)
 	display->display();
 	display->clearDisplay();
 
-	for(i=0;i<linesMax;i++)
+	for(uint8_t i=0;i<linesMax;i++)
 	{
 		memset(lines[i], 0, DEBUG_OLED_MAX_LINE_LENGTH+1);
 	}
@@ -32,8 +30,6 @@ void DebugOLED::setup(int8_t rst)
 
 void DebugOLED::println(const char * text)
 {
-	uint8_t i;
-
 	if(linesPrinted<linesMax)
 	{
 		strncpy(lines[linesPrinted], text, min(strlen(text), DEBUG_OLED_MAX_LINE_LENGTH));
@@ -45,7 +41,7 @@ void DebugOLED::println(const char * text)
 		display->clearDisplay();
 		display->setCursor(0,0);
 
-		for(i=0;i<(linesMax-1);i++)
+		for(uint8_t i=0;i<(linesMax-1);i++)
 		{
 			memset(lines[i], 0, DEBUG_OLED_MAX_LINE_LENGTH+1);
 			strncpy(lines[i], lines[(i+1)], min(strlen(lines[(i+1)]), DEBUG_OLED_MAX_LINE_LENGTH));

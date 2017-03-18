@@ -11,7 +11,7 @@
 #define SERIALMSG_START_BYTE 0xFE
 #define SERIALMSG_STOP_BYTE 0xFF
 
-#define IMPORTANT_MSG_RETRY_INTERVAL (T_SECOND*10)
+#define IMPORTANT_MSG_RETRY_INTERVAL (T_SECOND*3)
 #define IMPORTANT_MSG_HISTORY_LEN 5
 
 #define SEEN_SEQUENCES_MAX 5
@@ -39,7 +39,7 @@ class SerialMsg
 		#endif
 
 		void send(uint8_t * data, uint8_t len, bool important=false);
-		void update(void);
+		void update(uint32_t now);
 
 	private:
 		bool processNextMsg();

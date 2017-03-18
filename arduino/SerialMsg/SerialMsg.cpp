@@ -31,14 +31,12 @@ void SerialMsg::setup(Stream * stream)
 
 bool SerialMsg::processNextMsg(void)
 {
+	static uint8_t seenSequences[SEEN_SEQUENCES_MAX] = {0};
+	uint8_t seq, msgLen, crc=0, truncLen=0;
+	uint8_t msg[256];
 	#ifdef _USE_DEBUG_OLED
 	char buf[22];
 	#endif
-	uint8_t ack[2] = {0};
-	static uint8_t seenSequences[SEEN_SEQUENCES_MAX] = {0};
-	bool seenSequence=false;
-	uint8_t seq, msgLen, crc=0, truncLen=0;
-	uint8_t msg[256];
 
 	if(recvBufLen<5)
 		return false;
@@ -137,7 +135,9 @@ bool SerialMsg::processNextMsg(void)
 		}
 	}
 	else
-	{			
+	{
+		bool seenSequence=false;
+
 		// Send ACK if this is an important message
 		if(seq>0)
 		{
@@ -159,7 +159,7 @@ bool SerialMsg::processNextMsg(void)
 			}
 
 			// But always send back an ACK
-			ack[1] = seq;
+			uint8_t ack[2] = {0, seq};
 			send(ack, 2);
 		}
 
@@ -174,11 +174,8 @@ bool SerialMsg::processNextMsg(void)
 	return recvBufLen>0;
 }
 
-void SerialMsg::update(void)
+void SerialMsg::update(uint32_t now)
 {
-	bool more=false;
-	uint32_t now=micros();
-
 	if(!stream->available())
 		goto update_FINISH;
 
@@ -188,11 +185,7 @@ void SerialMsg::update(void)
 		recvBufLen++;
 	}
 
-
-	do
-	{
-		more = processNextMsg();
-	} while(more);
+	while(processNextMsg()) {};
 
 	update_FINISH:
 
@@ -217,8 +210,6 @@ void SerialMsg::send(uint8_t * data, uint8_t len, bool important)
 
 void SerialMsg::send(uint8_t * data, uint8_t len, bool important, uint8_t seqOverride)
 {
-	uint8_t i;
-	uint8_t crc=0;
 	static uint8_t seq=1;
 
 	// Check to see if we should record this message for retrying sending in future
@@ -249,7 +240,8 @@ void SerialMsg::send(uint8_t * data, uint8_t len, bool important, uint8_t seqOve
 			seq+=1;
 	}
 
-	for(i=0;i<len;i++)
+	uint8_t crc=0;
+	for(uint8_t i=0;i<len;i++)
 	{
 		crc = crc8_update(crc, data[i]);
 		stream->write(data[i]);

@@ -27,7 +27,7 @@ class BarGraph
 		void setBrightness(float brightness);
 		void setMode(BARGRAPH_MODE newMode);
 		void setMode(BARGRAPH_MODE newMode, uint32_t param);
-		void update(void);
+		void update(uint32_t now);
 
 	private:
 		Tlc59711 * tlc;
