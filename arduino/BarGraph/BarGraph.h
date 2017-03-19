@@ -3,7 +3,6 @@
 
 #include <Arduino.h>
 #include <Tlc59711.h>
-#include "DebugOLED.h"
 
 typedef enum
 {
@@ -23,7 +22,7 @@ class BarGraph
 	public:
 		BarGraph();
 		~BarGraph();
-		void setup(uint8_t n, DebugOLED * oled);
+		void setup(uint8_t n);
 		void setBrightness(float brightness);
 		void setMode(BARGRAPH_MODE newMode);
 		void setMode(BARGRAPH_MODE newMode, uint32_t param);
@@ -31,7 +30,6 @@ class BarGraph
 
 	private:
 		Tlc59711 * tlc;
-		DebugOLED * oled;
 		BARGRAPH_MODE mode;
 		BARGRAPH_MODE nextMode;
 		int16_t v[10];

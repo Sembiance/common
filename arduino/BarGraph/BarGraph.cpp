@@ -24,10 +24,8 @@ BarGraph::BarGraph()
 {
 }
 
-void BarGraph::setup(uint8_t n, DebugOLED * oled)
+void BarGraph::setup(uint8_t n)
 {
-	this->oled = oled;
-
 	tlc = new Tlc59711(n);
 	tlc->beginFast();
 	for(uint8_t i=0;i<10;i++)
