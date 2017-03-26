@@ -4,16 +4,12 @@
 
 SerialMsg::SerialMsg()
 {
+
 }
 
 SerialMsg::SerialMsg(void (*msgHandler)(uint8_t *, uint8_t))
 {
 	this->msgHandler = msgHandler;
-}
-
-SerialMsg::~SerialMsg()
-{
-
 }
 
 #ifdef _USE_DEBUG_OLED
@@ -156,6 +152,13 @@ bool SerialMsg::processNextMsg(void)
 			{
 				memcpy(seenSequences, seenSequences+1, (SEEN_SEQUENCES_MAX-1));
 				seenSequences[(SEEN_SEQUENCES_MAX-1)] = seq;
+			}
+			else
+			{
+				#ifdef _USE_DEBUG_OLED
+					sprintf(buf, "! SEEN ALREADY %d", seq);
+					oled->println(buf);
+				#endif
 			}
 
 			// But always send back an ACK

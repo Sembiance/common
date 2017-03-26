@@ -30,8 +30,6 @@ class SerialMsg
 		SerialMsg();
 		SerialMsg(void (*msgHandler)(uint8_t *, uint8_t));
 
-		~SerialMsg();
-
 		#ifdef _USE_DEBUG_OLED
 			void setup(Stream * stream, DebugOLED * oled);
 		#else
@@ -41,7 +39,7 @@ class SerialMsg
 		void send(uint8_t * data, uint8_t len, bool important=false);
 		void update(uint32_t now);
 
-	private:
+	protected:
 		bool processNextMsg();
 		void send(uint8_t * data, uint8_t len, bool important, uint8_t seqOverride);
 
