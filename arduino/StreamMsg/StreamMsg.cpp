@@ -1,21 +1,19 @@
-#include "SerialMsg.h"
+#include "StreamMsg.h"
 
 #include "crc8.h"
+#include "I2CStream.h"
 
-SerialMsg::SerialMsg()
-{
+StreamMsg::StreamMsg() { }
 
-}
-
-SerialMsg::SerialMsg(void (*msgHandler)(uint8_t *, uint8_t))
+StreamMsg::StreamMsg(void (*msgHandler)(uint8_t *, uint8_t))
 {
 	this->msgHandler = msgHandler;
 }
 
 #ifdef _USE_DEBUG_OLED
-void SerialMsg::setup(Stream * stream, DebugOLED * oled)
+void StreamMsg::setup(Stream * stream, DebugOLED * oled)
 #else
-void SerialMsg::setup(Stream * stream)
+void StreamMsg::setup(Stream * stream)
 #endif
 {
 	this->stream = stream;
@@ -25,7 +23,20 @@ void SerialMsg::setup(Stream * stream)
 	#endif
 }
 
-bool SerialMsg::processNextMsg(void)
+#ifdef _USE_DEBUG_OLED
+void StreamMsg::setupI2C(uint8_t sendAddr, uint8_t recvAddr, DebugOLED * oled)
+#else
+void StreamMsg::setupI2C(uint8_t sendAddr, uint8_t recvAddr)
+#endif
+{
+	this->stream = new I2CStream(sendAddr, recvAddr);
+
+	#ifdef _USE_DEBUG_OLED
+		this->oled = oled;
+	#endif
+}
+
+bool StreamMsg::processNextMsg(void)
 {
 	static uint8_t seenSequences[SEEN_SEQUENCES_MAX] = {0};
 	uint8_t seq, msgLen, crc=0, truncLen=0;
@@ -52,10 +63,10 @@ bool SerialMsg::processNextMsg(void)
 	#endif*/
 
 	// First byte doesn't equal start byte so ignore it and continue processing
-	if(recvBuf[0]!=SERIALMSG_START_BYTE)
+	if(recvBuf[0]!=STREAMMSG_START_BYTE)
 	{
 		#ifdef _USE_DEBUG_OLED
-			sprintf(buf, "! Start %02X != %02X", recvBuf[0], SERIALMSG_START_BYTE);
+			sprintf(buf, "! Start %02X != %02X", recvBuf[0], STREAMMSG_START_BYTE);
 			oled->println(buf);
 		#endif
 
@@ -96,10 +107,10 @@ bool SerialMsg::processNextMsg(void)
 	}
 
 	// Check that we have a proper stop byte
-	if(recvBuf[4+msgLen]!=SERIALMSG_STOP_BYTE)
+	if(recvBuf[4+msgLen]!=STREAMMSG_STOP_BYTE)
 	{
 		#ifdef _USE_DEBUG_OLED
-			sprintf(buf, "! Stop %02X != %02X", recvBuf[4+msgLen], SERIALMSG_STOP_BYTE);
+			sprintf(buf, "! Stop %02X != %02X", recvBuf[4+msgLen], STREAMMSG_STOP_BYTE);
 			oled->println(buf);
 		#endif
 
@@ -124,6 +135,11 @@ bool SerialMsg::processNextMsg(void)
 		{
 			if(importantMsgs[i].seq==msg[1])
 			{
+				/*#ifdef _USE_DEBUG_OLED
+					sprintf(buf, "GOT ACK %d", importantMsgs[i].seq);
+					oled->println(buf);
+				#endif*/
+
 				free(importantMsgs[i].msg);
 				memset(&importantMsgs[i], 0, sizeof(importantMsg));
 				break;
@@ -177,7 +193,7 @@ bool SerialMsg::processNextMsg(void)
 	return recvBufLen>0;
 }
 
-void SerialMsg::update(uint32_t now)
+void StreamMsg::update(uint32_t now)
 {
 	if(!stream->available())
 		goto update_FINISH;
@@ -206,12 +222,12 @@ void SerialMsg::update(uint32_t now)
 	}
 }
 
-void SerialMsg::send(uint8_t * data, uint8_t len, bool important)
+void StreamMsg::send(uint8_t * data, uint8_t len, bool important)
 {
 	send(data, len, important, 0);
 }
 
-void SerialMsg::send(uint8_t * data, uint8_t len, bool important, uint8_t seqOverride)
+void StreamMsg::send(uint8_t * data, uint8_t len, bool important, uint8_t seqOverride)
 {
 	static uint8_t seq=1;
 
@@ -231,7 +247,7 @@ void SerialMsg::send(uint8_t * data, uint8_t len, bool important, uint8_t seqOve
 		importantMsgs[(IMPORTANT_MSG_HISTORY_LEN-1)].lastSent = micros();
 	}
 
-	stream->write(SERIALMSG_START_BYTE);
+	stream->write(STREAMMSG_START_BYTE);
 	stream->write(important ? (seqOverride>0 ? seqOverride : seq) : 0x00);
 	stream->write(len);
 
@@ -251,5 +267,5 @@ void SerialMsg::send(uint8_t * data, uint8_t len, bool important, uint8_t seqOve
 	}
 
 	stream->write(crc);
-	stream->write(SERIALMSG_STOP_BYTE);
+	stream->write(STREAMMSG_STOP_BYTE);
 }
