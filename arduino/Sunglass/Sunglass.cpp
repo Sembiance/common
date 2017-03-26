@@ -1,9 +1,6 @@
 #include "Sunglass.h"
 #include "T.h"
 
-#define SUNGLASS_VOLTAGE_MIN 800
-#define SUNGLASS_VOLTAGE_MAX 2400
-
 const uint32_t SUNGLASS_FADE_DURATION = T_SECOND*2;
 const uint32_t SUNGLASS_FADE_INTERVAL_MIN = T_MS*10;
 

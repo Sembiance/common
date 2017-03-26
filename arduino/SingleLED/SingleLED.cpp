@@ -1,11 +1,11 @@
 #include "SingleLED.h"
 
-long easeNone(long t, long b, long c, long d)
+long SingleLED::easeNone(long t, long b, long c, long d)
 {
 	return c*t/d + b;
 }
 
-void swap(uint8_t * a, uint8_t * b)
+void SingleLED::swap(uint8_t * a, uint8_t * b)
 {
 	uint8_t t = *a;
 	*a = *b;
@@ -20,10 +20,6 @@ SingleLED::SingleLED(uint8_t dataPin)
 	dr=(tr-sr);
 	dg=(tg-sg);
 	db=(tb-sb);
-}
-
-SingleLED::~SingleLED()
-{
 }
 
 void SingleLED::setup(void)

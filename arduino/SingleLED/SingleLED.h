@@ -12,7 +12,6 @@ class SingleLED
 {
 	public:
 		SingleLED(uint8_t dataPin);
-		~SingleLED();
 
 		void setup(void);
 		void update(uint32_t now);
@@ -28,6 +27,8 @@ class SingleLED
 		Adafruit_NeoPixel * led;
 
 		void update(uint32_t now, uint8_t _r, uint8_t _g, uint8_t _b, bool _pulse);
+		long easeNone(long t, long b, long c, long d);
+		void swap(uint8_t * a, uint8_t * b);
 };
 
 #endif

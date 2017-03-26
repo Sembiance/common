@@ -4,6 +4,9 @@
 #include <Arduino.h>
 #include <Adafruit_MCP4725.h>
 
+#define SUNGLASS_VOLTAGE_MIN 800
+#define SUNGLASS_VOLTAGE_MAX 2400
+
 class Sunglass
 {
 	public:
