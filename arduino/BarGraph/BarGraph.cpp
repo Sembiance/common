@@ -2,13 +2,6 @@
 #include "T.h"
 #include "gamma8.h"
 
-typedef struct BARGRAPH_MODE_VALUES
-{
-	const int16_t val[10];
-	const int16_t dir[10];
-	const uint32_t interval;
-} BARGRAPH_MODE_VALUES;
-
 const BARGRAPH_MODE_VALUES modeValues[BARGRAPH_NUM_MODES] =
 {
 	{ {  0,   0,   0,   0,   0,   0,   0,   0,   0,   0}, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},     T_SECOND/255 },		// BARGRAPH_MODE_OFF
@@ -20,9 +13,7 @@ const BARGRAPH_MODE_VALUES modeValues[BARGRAPH_NUM_MODES] =
 	{ {  0,   0,   0,   0,   0,   0,   0,   0,   0,   0}, {1, 1, 1, 1, 1, 1, 1, 1, 1, 1}, 				 0 }, 		// BARGRAPH_MODE_PERCENTAGE
 };
 
-BarGraph::BarGraph()
-{
-}
+BarGraph::BarGraph() { }
 
 void BarGraph::setup(uint8_t n)
 {

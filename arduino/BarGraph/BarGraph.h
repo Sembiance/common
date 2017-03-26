@@ -4,6 +4,13 @@
 #include <Arduino.h>
 #include <Tlc59711.h>
 
+typedef struct BARGRAPH_MODE_VALUES
+{
+	const int16_t val[10];
+	const int16_t dir[10];
+	const uint32_t interval;
+} BARGRAPH_MODE_VALUES;
+
 typedef enum
 {
 	BARGRAPH_MODE_OFF,
