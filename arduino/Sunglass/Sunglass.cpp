@@ -1,8 +1,8 @@
 #include "Sunglass.h"
 #include "T.h"
 
-const uint32_t SUNGLASS_FADE_DURATION = T_SECOND*2;
-const uint32_t SUNGLASS_FADE_INTERVAL_MIN = T_MS*10;
+static const uint32_t SUNGLASS_FADE_DURATION = T_SECOND*2;
+static const uint32_t SUNGLASS_FADE_INTERVAL_MIN = T_MS*10;
 
 Sunglass::Sunglass(uint8_t sunglassNum)
 {

@@ -2,7 +2,7 @@
 #include "T.h"
 #include "gamma8.h"
 
-const BARGRAPH_MODE_VALUES modeValues[BARGRAPH_NUM_MODES] =
+static const BARGRAPH_MODE_VALUES modeValues[BARGRAPH_NUM_MODES] =
 {
 	{ {  0,   0,   0,   0,   0,   0,   0,   0,   0,   0}, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},     T_SECOND/255 },		// BARGRAPH_MODE_OFF
 	{ {  0,   0,   0,   0,   0,   0,   0,   0,   0,   0}, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},   (T_MS*400)/255 },		// BARGRAPH_MODE_TRANSITION

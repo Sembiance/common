@@ -66,8 +66,11 @@ bool StreamMsg::processNextMsg(void)
 	if(recvBuf[0]!=STREAMMSG_START_BYTE)
 	{
 		#ifdef _USE_DEBUG_OLED
-			sprintf(buf, "! Start %02X != %02X", recvBuf[0], STREAMMSG_START_BYTE);
-			oled->println(buf);
+			if(recvBuf[0]!=0x00 && recvBuf[0]!=0x10 && recvBuf[0]!=0x13)
+			{
+				sprintf(buf, "! Start %02X != %02X", recvBuf[0], STREAMMSG_START_BYTE);
+				oled->println(buf);
+			}
 		#endif
 
 		truncLen=1;
