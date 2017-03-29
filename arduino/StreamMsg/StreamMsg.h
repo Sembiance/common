@@ -49,6 +49,8 @@ class StreamMsg
 		uint8_t recvBuf[255]={0};
 		uint8_t recvBufLen=0;
 		void (*msgHandler)(uint8_t *, uint8_t)=0;
+		uint8_t sendSeq=1;
+		uint8_t seenSequences[SEEN_SEQUENCES_MAX] = {0};
 
 		#ifdef _USE_DEBUG_OLED
 			DebugOLED * oled;

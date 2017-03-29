@@ -38,7 +38,6 @@ void StreamMsg::setupI2C(uint8_t sendAddr, uint8_t recvAddr)
 
 bool StreamMsg::processNextMsg(void)
 {
-	static uint8_t seenSequences[SEEN_SEQUENCES_MAX] = {0};
 	uint8_t seq, msgLen, crc=0, truncLen=0;
 	uint8_t msg[256];
 	#ifdef _USE_DEBUG_OLED
@@ -232,8 +231,6 @@ void StreamMsg::send(uint8_t * data, uint8_t len, bool important)
 
 void StreamMsg::send(uint8_t * data, uint8_t len, bool important, uint8_t seqOverride)
 {
-	static uint8_t seq=1;
-
 	// Check to see if we should record this message for retrying sending in future
 	if(important && seqOverride==0)
 	{
@@ -246,20 +243,20 @@ void StreamMsg::send(uint8_t * data, uint8_t len, bool important, uint8_t seqOve
 		memcpy(importantMsgs[(IMPORTANT_MSG_HISTORY_LEN-1)].msg, data, len);
 
 		importantMsgs[(IMPORTANT_MSG_HISTORY_LEN-1)].msgLen = len;
-		importantMsgs[(IMPORTANT_MSG_HISTORY_LEN-1)].seq = seq;
+		importantMsgs[(IMPORTANT_MSG_HISTORY_LEN-1)].seq = sendSeq;
 		importantMsgs[(IMPORTANT_MSG_HISTORY_LEN-1)].lastSent = micros();
 	}
 
 	stream->write(STREAMMSG_START_BYTE);
-	stream->write(important ? (seqOverride>0 ? seqOverride : seq) : 0x00);
+	stream->write(important ? (seqOverride>0 ? seqOverride : sendSeq) : 0x00);
 	stream->write(len);
 
 	if(important && seqOverride==0)
 	{
-		if(seq==255)
-			seq = 1;
+		if(sendSeq==255)
+			sendSeq = 1;
 		else
-			seq+=1;
+			sendSeq+=1;
 	}
 
 	uint8_t crc=0;
