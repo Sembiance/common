@@ -1,9 +1,4 @@
 #include "MAX6969_7Seg.h"
-#include "T.h"
-
-MAX6969_7Seg::MAX6969_7Seg()
-{
-}
 
 void MAX6969_7Seg::setup(uint8_t diPin, uint8_t clkPin)
 {
@@ -17,8 +12,6 @@ void MAX6969_7Seg::setup(uint8_t diPin, uint8_t clkPin)
 	digitalWrite(clkPin, LOW);
 
 	clear();
-
-	flip = (diPin>40 ? true : false);	// TEMPORARY
 }
 
 void MAX6969_7Seg::clear(void)
@@ -28,10 +21,7 @@ void MAX6969_7Seg::clear(void)
 
 void MAX6969_7Seg::print(char c)
 {
-	// TEMPORARY
-	shift16(flip ? 0xFFFF : 0x0000);
-	flip = !flip;
-	// TEMPORARY
+	shift16(c<33 ? 0x0000 : segTable[((uint8_t)c-(c>='a' && c<='z' ? 65 : 33))]);
 }
 
 void MAX6969_7Seg::shift16(uint16_t data)
