@@ -117,10 +117,12 @@ class MAX6969_7Seg
 		void print(char c);
 		void dpOn(void);
 		void dpOff(void);
+		char getChar(void);
 
 	private:
 		void shift16(uint16_t data);
 
+		char currentChar=0x00;
 		uint8_t diPin;
 		uint8_t clkPin;
 		uint8_t dpPin;

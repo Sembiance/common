@@ -24,6 +24,8 @@ void MAX6969_7Seg::clear(void)
 
 void MAX6969_7Seg::print(char c)
 {
+	currentChar = c;
+
 	shift16(c<33 ? 0x0000 : segTable[((uint8_t)c-(c>='a' && c<='z' ? 65 : 33))]);
 }
 
@@ -41,4 +43,9 @@ void MAX6969_7Seg::dpOn(void)
 void MAX6969_7Seg::dpOff(void)
 {
 	digitalWrite(dpPin, HIGH);
+}
+
+char MAX6969_7Seg::getChar(void)
+{
+	return currentChar;
 }
