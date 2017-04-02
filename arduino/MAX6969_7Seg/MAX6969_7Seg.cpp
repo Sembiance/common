@@ -19,6 +19,8 @@ void MAX6969_7Seg::setup(uint8_t diPin, uint8_t clkPin, uint8_t dpPin)
 
 void MAX6969_7Seg::clear(void)
 {
+	currentChar = 0x00;
+	
 	shift16(0x0000);
 }
 
