@@ -112,15 +112,18 @@ static const uint16_t segTable[94] =
 class MAX6969_7Seg
 {
 	public:
-		void setup(uint8_t diPin, uint8_t clkPin);
+		void setup(uint8_t diPin, uint8_t clkPin, uint8_t dpPin);
 		void clear(void);
 		void print(char c);
+		void dpOn(void);
+		void dpOff(void);
 
 	private:
 		void shift16(uint16_t data);
 
 		uint8_t diPin;
 		uint8_t clkPin;
+		uint8_t dpPin;
 };
 
 #endif

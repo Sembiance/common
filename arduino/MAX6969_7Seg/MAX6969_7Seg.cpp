@@ -1,15 +1,18 @@
 #include "MAX6969_7Seg.h"
 
-void MAX6969_7Seg::setup(uint8_t diPin, uint8_t clkPin)
+void MAX6969_7Seg::setup(uint8_t diPin, uint8_t clkPin, uint8_t dpPin)
 {
 	this->diPin = diPin;
 	this->clkPin = clkPin;
+	this->dpPin = dpPin;
 
 	pinMode(diPin, OUTPUT);
 	pinMode(clkPin, OUTPUT);
+	pinMode(dpPin, OUTPUT);
 
 	digitalWrite(diPin, LOW);
 	digitalWrite(clkPin, LOW);
+	digitalWrite(dpPin, HIGH);
 
 	clear();
 }
@@ -30,3 +33,12 @@ void MAX6969_7Seg::shift16(uint16_t data)
 	shiftOut(diPin, clkPin, MSBFIRST, (data&0x00FF));
 }
 
+void MAX6969_7Seg::dpOn(void)
+{
+	digitalWrite(dpPin, LOW);
+}
+
+void MAX6969_7Seg::dpOff(void)
+{
+	digitalWrite(dpPin, HIGH);
+}
