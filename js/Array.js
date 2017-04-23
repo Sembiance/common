@@ -413,6 +413,7 @@ if(!Array.prototype.containsAny)
 {
 	Array.prototype.containsAny = function(vals)
 	{
+		vals = Array.toArray(vals);
 		for(var i=0,len=vals.length;i<len;i++)
 		{
 			if(this.indexOf(vals[i])!==-1)
