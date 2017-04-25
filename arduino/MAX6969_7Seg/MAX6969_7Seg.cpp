@@ -31,6 +31,11 @@ void MAX6969_7Seg::print(char c)
 	shift16(c<33 ? 0x0000 : segTable[((uint8_t)c-(c>='a' && c<='z' ? 65 : 33))]);
 }
 
+void MAX6969_7Seg::printRaw(uint16_t raw)
+{
+	shift16(raw);
+}
+
 void MAX6969_7Seg::shift16(uint16_t data)
 {
 	shiftOut(diPin, clkPin, MSBFIRST, (data>>8));
