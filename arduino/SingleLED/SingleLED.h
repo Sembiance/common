@@ -6,7 +6,6 @@
 #include "T.h"
 
 #define SINGLELED_DEFAULT_BRIGHTNESS 32
-const uint32_t SINGLELED_PULSATE_DURATION = T_MS*500;
 
 class SingleLED
 {
@@ -16,6 +15,7 @@ class SingleLED
 		void setup(void);
 		void update(uint32_t now);
 		void setBrightness(uint8_t brightness);
+		void setPulseDuration(uint32_t pulsateDuration);
 		void change(uint8_t ur, uint8_t ug, uint8_t ub, bool upulse);
 
 	private:
@@ -25,6 +25,7 @@ class SingleLED
 		bool	upulse=false;
 		bool 	pulse=true;
 		Adafruit_NeoPixel * led;
+		uint32_t pulsateDuration = T_MS*500;
 
 		void update(uint32_t now, uint8_t _r, uint8_t _g, uint8_t _b, bool _pulse);
 		long easeNone(long t, long b, long c, long d);

@@ -33,6 +33,11 @@ void SingleLED::setBrightness(uint8_t brightness)
 	led->setBrightness(brightness);
 }
 
+void SingleLED::setPulseDuration(uint32_t pulsateDuration)
+{
+	this->pulsateDuration = pulsateDuration;
+}
+
 void SingleLED::change(uint8_t ur, uint8_t ug, uint8_t ub, bool upulse)
 {
 	this->ur = ur;
@@ -51,7 +56,7 @@ void SingleLED::update(uint32_t now, uint8_t _r, uint8_t _g, uint8_t _b, bool _p
 	uint32_t elapsed=(now-start);
 
 	// We are currently all black and not changing to anything else right now
-	if(elapsed>SINGLELED_PULSATE_DURATION && _r==0 && _g==0 && _b==0 && r==0 && g==0 && b==0)
+	if(elapsed>pulsateDuration && _r==0 && _g==0 && _b==0 && r==0 && g==0 && b==0)
 		return;
 
 	// Currently not pulsing but changing color. So just go ahead and start pulsing so we can change color later at brighness zero
@@ -66,14 +71,14 @@ void SingleLED::update(uint32_t now, uint8_t _r, uint8_t _g, uint8_t _b, bool _p
 		start = now;
 	}
 
-	if(!pulse || elapsed<(SINGLELED_PULSATE_DURATION/255))
+	if(!pulse || elapsed<(pulsateDuration/255))
 		return;
 
-	int32_t nr = easeNone(elapsed, sr, dr, SINGLELED_PULSATE_DURATION);
-	int32_t ng = easeNone(elapsed, sg, dg, SINGLELED_PULSATE_DURATION);
-	int32_t nb = easeNone(elapsed, sb, db, SINGLELED_PULSATE_DURATION);
+	int32_t nr = easeNone(elapsed, sr, dr, pulsateDuration);
+	int32_t ng = easeNone(elapsed, sg, dg, pulsateDuration);
+	int32_t nb = easeNone(elapsed, sb, db, pulsateDuration);
 
-	if(elapsed>SINGLELED_PULSATE_DURATION)
+	if(elapsed>pulsateDuration)
 	{
 		// Only allow changing the color when the LED is off
 		if(nr<=0 && ng<=0 && nb<=0 && (_r!=r || _g!=g || _b!=b))
@@ -103,9 +108,9 @@ void SingleLED::update(uint32_t now, uint8_t _r, uint8_t _g, uint8_t _b, bool _p
 			start = now;
 			elapsed = 0;
 
-			nr = easeNone(elapsed, sr, dr, SINGLELED_PULSATE_DURATION);
-			ng = easeNone(elapsed, sg, dg, SINGLELED_PULSATE_DURATION);
-			nb = easeNone(elapsed, sb, db, SINGLELED_PULSATE_DURATION);
+			nr = easeNone(elapsed, sr, dr, pulsateDuration);
+			ng = easeNone(elapsed, sg, dg, pulsateDuration);
+			nb = easeNone(elapsed, sb, db, pulsateDuration);
 		}
 
 		// Full brightness and changing from pulse to no pulse
