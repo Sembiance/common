@@ -27,15 +27,12 @@ typedef struct importantMsg
 class StreamMsg
 {
 	public:
-		StreamMsg();
-		StreamMsg(void (*msgHandler)(uint8_t *, uint8_t));
-
 		#ifdef _USE_DEBUG_OLED
-			void setup(Stream * stream, DebugOLED * oled);
-			void setupI2C(uint8_t sendAddr, uint8_t recvAddr, DebugOLED * oled);
+			void setup(Stream * stream, DebugOLED * oled, void (*msgHandler)(uint8_t *, uint8_t, void *)=0, void * userPtr=0);
+			void setupI2C(uint8_t sendAddr, uint8_t recvAddr, DebugOLED * oled, void (*msgHandler)(uint8_t *, uint8_t, void *)=0, void * userPtr=0);
 		#else
-			void setup(Stream * stream);
-			void setupI2C(uint8_t sendAddr, uint8_t recvAddr);
+			void setup(Stream * stream, void (*msgHandler)(uint8_t *, uint8_t, void *)=0, void * userPtr=0);
+			void setupI2C(uint8_t sendAddr, uint8_t recvAddr, void (*msgHandler)(uint8_t *, uint8_t, void *)=0, void * userPtr=0);
 		#endif
 
 		void send(uint8_t * data, uint8_t len, bool important=false);
@@ -48,9 +45,10 @@ class StreamMsg
 		Stream * stream;
 		uint8_t recvBuf[255]={0};
 		uint8_t recvBufLen=0;
-		void (*msgHandler)(uint8_t *, uint8_t)=0;
+		void (*msgHandler)(uint8_t *, uint8_t, void *)=0;
 		uint8_t sendSeq=1;
 		uint8_t seenSequences[SEEN_SEQUENCES_MAX] = {0};
+		void * userPtr=0;
 
 		#ifdef _USE_DEBUG_OLED
 			DebugOLED * oled;

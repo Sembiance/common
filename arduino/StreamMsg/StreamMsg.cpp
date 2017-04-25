@@ -3,20 +3,15 @@
 #include "crc8.h"
 #include "I2CStream.h"
 
-StreamMsg::StreamMsg() { }
-
-StreamMsg::StreamMsg(void (*msgHandler)(uint8_t *, uint8_t))
-{
-	this->msgHandler = msgHandler;
-}
-
 #ifdef _USE_DEBUG_OLED
-void StreamMsg::setup(Stream * stream, DebugOLED * oled)
+void StreamMsg::setup(Stream * stream, DebugOLED * oled, void (*msgHandler)(uint8_t *, uint8_t, void *), void * userPtr)
 #else
-void StreamMsg::setup(Stream * stream)
+void StreamMsg::setup(Stream * stream, void (*msgHandler)(uint8_t *, uint8_t, void *), void * userPtr)
 #endif
 {
 	this->stream = stream;
+	this->msgHandler = msgHandler;
+	this->userPtr = userPtr;
 
 	#ifdef _USE_DEBUG_OLED
 		this->oled = oled;
@@ -24,12 +19,14 @@ void StreamMsg::setup(Stream * stream)
 }
 
 #ifdef _USE_DEBUG_OLED
-void StreamMsg::setupI2C(uint8_t sendAddr, uint8_t recvAddr, DebugOLED * oled)
+void StreamMsg::setupI2C(uint8_t sendAddr, uint8_t recvAddr, DebugOLED * oled, void (*msgHandler)(uint8_t *, uint8_t, void *), void * userPtr)
 #else
-void StreamMsg::setupI2C(uint8_t sendAddr, uint8_t recvAddr)
+void StreamMsg::setupI2C(uint8_t sendAddr, uint8_t recvAddr, void (*msgHandler)(uint8_t *, uint8_t, void *), void * userPtr)
 #endif
 {
 	this->stream = new I2CStream(sendAddr, recvAddr);
+	this->msgHandler = msgHandler;
+	this->userPtr = userPtr;
 
 	#ifdef _USE_DEBUG_OLED
 		this->oled = oled;
@@ -186,7 +183,7 @@ bool StreamMsg::processNextMsg(void)
 
 		// Only handle the message if I have a handler and if I haven't already seen it before
 		if(msgHandler && !seenSequence)
-			msgHandler(msg, msgLen);
+			msgHandler(msg, msgLen, userPtr);
 	}
 
 	processNextMsg_FINISH:
