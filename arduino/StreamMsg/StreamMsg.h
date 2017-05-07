@@ -4,10 +4,6 @@
 #include <Arduino.h>
 #include "T.h"
 
-#ifdef _USE_DEBUG_OLED
-	#include "DebugOLED.h"
-#endif
-
 #define STREAMMSG_START_BYTE 0xFE
 #define STREAMMSG_STOP_BYTE 0xFF
 
@@ -27,13 +23,8 @@ typedef struct importantMsg
 class StreamMsg
 {
 	public:
-		#ifdef _USE_DEBUG_OLED
-			void setup(Stream * stream, DebugOLED * oled, void (*msgHandler)(uint8_t *, uint8_t, void *)=0, void * userPtr=0);
-			void setupI2C(uint8_t sendAddr, uint8_t recvAddr, DebugOLED * oled, void (*msgHandler)(uint8_t *, uint8_t, void *)=0, void * userPtr=0);
-		#else
-			void setup(Stream * stream, void (*msgHandler)(uint8_t *, uint8_t, void *)=0, void * userPtr=0);
-			void setupI2C(uint8_t sendAddr, uint8_t recvAddr, void (*msgHandler)(uint8_t *, uint8_t, void *)=0, void * userPtr=0);
-		#endif
+		void setup(Stream * stream, void (*msgHandler)(uint8_t *, uint8_t, void *)=0, void * userPtr=0);
+		void setupI2C(uint8_t sendAddr, uint8_t recvAddr, void (*msgHandler)(uint8_t *, uint8_t, void *)=0, void * userPtr=0);
 
 		void send(uint8_t * data, uint8_t len, bool important=false);
 		void update(uint32_t now);
@@ -50,10 +41,6 @@ class StreamMsg
 		uint8_t seenSequences[SEEN_SEQUENCES_MAX] = {0};
 		void * userPtr=0;
 
-		#ifdef _USE_DEBUG_OLED
-			DebugOLED * oled;
-		#endif
-		
 		importantMsg importantMsgs[IMPORTANT_MSG_HISTORY_LEN] = { {0} };
 };
 

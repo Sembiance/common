@@ -3,72 +3,31 @@
 #include "crc8.h"
 #include "I2CStream.h"
 
-#ifdef _USE_DEBUG_OLED
-void StreamMsg::setup(Stream * stream, DebugOLED * oled, void (*msgHandler)(uint8_t *, uint8_t, void *), void * userPtr)
-#else
 void StreamMsg::setup(Stream * stream, void (*msgHandler)(uint8_t *, uint8_t, void *), void * userPtr)
-#endif
 {
 	this->stream = stream;
 	this->msgHandler = msgHandler;
 	this->userPtr = userPtr;
-
-	#ifdef _USE_DEBUG_OLED
-		this->oled = oled;
-	#endif
 }
 
-#ifdef _USE_DEBUG_OLED
-void StreamMsg::setupI2C(uint8_t sendAddr, uint8_t recvAddr, DebugOLED * oled, void (*msgHandler)(uint8_t *, uint8_t, void *), void * userPtr)
-#else
 void StreamMsg::setupI2C(uint8_t sendAddr, uint8_t recvAddr, void (*msgHandler)(uint8_t *, uint8_t, void *), void * userPtr)
-#endif
 {
 	this->stream = new I2CStream(sendAddr, recvAddr);
 	this->msgHandler = msgHandler;
 	this->userPtr = userPtr;
-
-	#ifdef _USE_DEBUG_OLED
-		this->oled = oled;
-	#endif
 }
 
 bool StreamMsg::processNextMsg(void)
 {
 	uint8_t seq, msgLen, crc=0, truncLen=0;
 	uint8_t msg[256];
-	#ifdef _USE_DEBUG_OLED
-	char buf[22];
-	#endif
 
 	if(recvBufLen<5)
 		return false;
 
-	/*#ifdef _USE_DEBUG_OLED
-		sprintf(buf, "Len: %d", recvBufLen);
-		oled->println(buf);
-		
-		for(uint8_t z=0;z<recvBufLen;z+=7)
-		{
-			for(uint8_t i=z;i<recvBufLen && (i-z)<7;i++)
-			{
-				sprintf(buf+((i-z)*3), "%02X ", recvBuf[i]);
-			}
-			oled->println(buf);
-		}
-	#endif*/
-
 	// First byte doesn't equal start byte so ignore it and continue processing
 	if(recvBuf[0]!=STREAMMSG_START_BYTE)
 	{
-		#ifdef _USE_DEBUG_OLED
-			if(recvBuf[0]!=0x00 && recvBuf[0]!=0x10 && recvBuf[0]!=0x13)
-			{
-				sprintf(buf, "! Start %02X != %02X", recvBuf[0], STREAMMSG_START_BYTE);
-				oled->println(buf);
-			}
-		#endif
-
 		truncLen=1;
 		goto processNextMsg_FINISH;
 	}
@@ -78,13 +37,7 @@ bool StreamMsg::processNextMsg(void)
 	// Not enough data yet, just return and wait for more
 	msgLen = recvBuf[2];
 	if(msgLen>(recvBufLen-5))
-	{
-		/*#ifdef _USE_DEBUG_OLED
-			sprintf(buf, "! len %d < %d", recvBufLen-5, msgLen);
-			oled->println(buf);
-		#endif*/
 		return false;
-	}
 
 	truncLen=5+msgLen;
 
@@ -96,49 +49,23 @@ bool StreamMsg::processNextMsg(void)
 
 	// Check that CRC matches
 	if(crc!=recvBuf[3+msgLen])
-	{
-		#ifdef _USE_DEBUG_OLED
-			sprintf(buf, "! crc %02X != %02X", crc, recvBuf[3+msgLen]);
-			oled->println(buf);
-		#endif
-
 		goto processNextMsg_FINISH;
-	}
 
 	// Check that we have a proper stop byte
 	if(recvBuf[4+msgLen]!=STREAMMSG_STOP_BYTE)
-	{
-		#ifdef _USE_DEBUG_OLED
-			sprintf(buf, "! Stop %02X != %02X", recvBuf[4+msgLen], STREAMMSG_STOP_BYTE);
-			oled->println(buf);
-		#endif
-
 		goto processNextMsg_FINISH;
-	}
 
 	// Check if just an ACK
 	if(msgLen>0 && msg[0]==0x00)
 	{
 		if(msgLen!=2)
-		{
-			#ifdef _USE_DEBUG_OLED
-				sprintf(buf, "! ACK len %d != 2", msgLen);
-				oled->println(buf);
-			#endif
-
 			goto processNextMsg_FINISH;
-		}
 
 		// Remove the message from the history so I don't send it again
 		for(uint8_t i=0;i<IMPORTANT_MSG_HISTORY_LEN;i++)
 		{
 			if(importantMsgs[i].seq==msg[1])
 			{
-				/*#ifdef _USE_DEBUG_OLED
-					sprintf(buf, "GOT ACK %d", importantMsgs[i].seq);
-					oled->println(buf);
-				#endif*/
-
 				free(importantMsgs[i].msg);
 				memset(&importantMsgs[i], 0, sizeof(importantMsg));
 				break;
@@ -167,13 +94,6 @@ bool StreamMsg::processNextMsg(void)
 			{
 				memcpy(seenSequences, seenSequences+1, (SEEN_SEQUENCES_MAX-1));
 				seenSequences[(SEEN_SEQUENCES_MAX-1)] = seq;
-			}
-			else
-			{
-				#ifdef _USE_DEBUG_OLED
-					sprintf(buf, "! SEEN ALREADY %d", seq);
-					oled->println(buf);
-				#endif
 			}
 
 			// But always send back an ACK
