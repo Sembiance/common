@@ -534,7 +534,7 @@ if(!Array.prototype.pickRandom)
 
 if(!Array.isArray)
 {
-	Array.isArray = function (arg)
+	Array.isArray = function(arg)
 	{
 		return Object.prototype.toString.call(arg) === '[object Array]';
 	};
@@ -542,7 +542,7 @@ if(!Array.isArray)
 
 if(!Array.toArray)
 {
-	Array.toArray = function (arg)
+	Array.toArray = function(arg)
 	{
 		if(Array.isArray(arg))
 			return arg;
