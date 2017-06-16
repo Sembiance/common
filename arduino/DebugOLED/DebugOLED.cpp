@@ -5,10 +5,26 @@ DebugOLED::DebugOLED(uint8_t linesMax)
 	this->linesMax = linesMax;
 }
 
+void DebugOLED::setup(int8_t dc, int8_t rst, int8_t cs)
+{
+	display = new Adafruit_SSD1306(dc, rst, cs);
+	setup();
+}
+
 void DebugOLED::setup(int8_t rst)
 {
 	display = new Adafruit_SSD1306(rst);
+	setup();
+}
 
+void DebugOLED::setup(int8_t mosi, int8_t clk, int8_t dc, int8_t rst, int8_t cs)
+{
+	display = new Adafruit_SSD1306(mosi, clk, dc, rst, cs);
+	setup();
+}
+
+void DebugOLED::setup(void)
+{
 	lines = (char **)malloc(sizeof(char *)*linesMax);
 	for(uint8_t i=0;i<linesMax;i++)
 	{
