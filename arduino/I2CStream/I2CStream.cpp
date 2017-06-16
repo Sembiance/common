@@ -2,7 +2,7 @@
 
 #include "I2CStream.h"
 
-uint8_t I2CStream::i2cbuf[255]={0};
+uint8_t I2CStream::i2cbuf[64]={0};
 uint8_t I2CStream::i2cbuflen=0;
 
 void I2CStream::recvHandler(int size)

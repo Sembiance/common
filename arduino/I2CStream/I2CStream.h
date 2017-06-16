@@ -18,9 +18,9 @@ class I2CStream : public Stream
 		uint8_t sendAddr;
 		uint8_t recvAddr;
 
-		// Sadly this is required due to Arduino Wire.onReceive() callbacks not supporting user data pointers
+		// Sadly these static methods and variables are required due to Arduino Wire.onReceive() callbacks not supporting user data pointers
 		static void recvHandler(int size);
-		static uint8_t i2cbuf[255];
+		static uint8_t i2cbuf[64];
 		static uint8_t i2cbuflen;
 };
 
