@@ -28,7 +28,7 @@ void DebugOLED::setup(void)
 	lines = (char **)malloc(sizeof(char *)*linesMax);
 	for(uint8_t i=0;i<linesMax;i++)
 	{
-		lines[i] = (char *)malloc(DEBUG_OLED_MAX_LINE_LENGTH);
+		lines[i] = (char *)malloc(DEBUG_OLED_MAX_LINE_LENGTH);		// TODO ALERT: Should this be DEBUG_OLED_MAX_LINE_LENGTH+1 ?
 	}
 
 	display->begin(SSD1306_SWITCHCAPVCC, linesMax==8 ? 0x3D : 0x3C);
