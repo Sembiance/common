@@ -1,7 +1,10 @@
-#include <string.h>
-#include <stdlib.h>
+#define _POSIX_C_SOURCE 200809L
 
-char *  strappend(char * original, char * appendage)
+#include <string.h>
+
+#include "strutil.h"
+
+char *  strappend(char * original, const char * const appendage)
 {
 	char *  endResult=0;
 
@@ -18,7 +21,7 @@ char *  strappend(char * original, char * appendage)
 	return endResult;
 }
 
-size_t strchrncount(char * haystack, char needle, size_t max)
+size_t strchrncount(const char * haystack, char needle, size_t max)
 {
 	size_t i=0;
 	size_t count=0;
@@ -38,7 +41,7 @@ size_t strchrncount(char * haystack, char needle, size_t max)
 	return i;
 }
 
-unsigned char strendswith(char * haystack, char * needle)
+bool strendswith(const char * const haystack, const char * const needle)
 {
 	if(!haystack || !(*haystack) || !needle || !(*needle))
 		return 0;
@@ -52,7 +55,7 @@ unsigned char strendswith(char * haystack, char * needle)
 	return 0;
 }
 
-char * strstrstrip(char * haystack, char * needle)
+char * strstrstrip(char * haystack, const char * const needle)
 {
 	char * loc=0;
 	size_t haystack_size=strlen(haystack);

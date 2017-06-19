@@ -31,7 +31,7 @@ uint8_t crc8(const uint8_t * v, uint8_t len)
 
 	while(len--)
 	{
-		crc = crc8_update(crc, *v++);
+		crc = crc8_update(crc, *(v++));
 	}
 
 	return crc;
