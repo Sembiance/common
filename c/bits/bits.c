@@ -81,12 +81,15 @@ void bitsget16(uint16_t val, bool * bits) { bitsget(&val, 16, bits); }
 void bitsget32(uint32_t val, bool * bits) { bitsget(&val, 32, bits); }
 void bitsget64(uint64_t val, bool * bits) { bitsget(&val, 64, bits); }
 
-uint8_t bitsneeded(uint64_t maxValue)
-{
-	return (uint8_t)ceill(logbl(maxValue)/logbl(2))+1;
-}
+#ifndef ARDUINO_ARCH_AVR
+	uint8_t bitsneeded(uint64_t maxValue)
+	{
+		return (uint8_t)ceill(logbl(maxValue)/logbl(2))+1;
+	}
 
-uint64_t bitsmaxvalue(uint8_t numBits)
-{
-	return (uint64_t)(powl((long double)2, (long double)numBits)-1);
-}
+	uint64_t bitsmaxvalue(uint8_t numBits)
+	{
+		return (uint64_t)(powl((long double)2, (long double)numBits)-1);
+	}
+#endif
+

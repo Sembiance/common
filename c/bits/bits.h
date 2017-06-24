@@ -19,7 +19,9 @@ void bitsget16(uint16_t val, bool * bits);
 void bitsget32(uint32_t val, bool * bits);
 void bitsget64(uint64_t val, bool * bits);
 
-uint8_t bitsneeded(uint64_t maxValue);
-uint64_t bitsmaxvalue(uint8_t numBits);
+#ifndef ARDUINO_ARCH_AVR
+	uint8_t bitsneeded(uint64_t maxValue);
+	uint64_t bitsmaxvalue(uint8_t numBits);
+#endif
 
 #endif
