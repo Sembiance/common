@@ -1,13 +1,19 @@
-#include "TinySSD1306.h"
-#include <TinyWireM.h>
+#include "MySSD1306.h"
 
-TinySSD1306::TinySSD1306(uint8_t i2cAddress)
+#ifdef __AVR_ATtiny85__
+	#include <TinyWireM.h>
+	#define Wire TinyWireM
+#else
+	#include <Wire.h>
+#endif
+
+MySSD1306::MySSD1306(uint8_t i2cAddress)
 {
 	this->i2cAddress = i2cAddress;
 	textRow = 0;
 }
 
-void TinySSD1306::setup(uint8_t resetPin)
+void MySSD1306::setup(uint8_t resetPin)
 {
 	pinMode(resetPin, OUTPUT);
 	digitalWrite(resetPin, HIGH);
@@ -16,7 +22,7 @@ void TinySSD1306::setup(uint8_t resetPin)
 	delay(10);
 	digitalWrite(resetPin, HIGH);
 	
-	TinyWireM.begin();
+	Wire.begin();
 
 	// Wait for OLED hardware to startup
 	delay(5);
@@ -67,7 +73,7 @@ void TinySSD1306::setup(uint8_t resetPin)
 	sendCommand(CMD_DISPLAY_ON);
 }
 
-void TinySSD1306::clear()
+void MySSD1306::clear()
 {
 	// Move cursor to upper left corner in current clip area
 	sendCommand(0x00 | 0x0);	// low col = 0
@@ -82,22 +88,22 @@ void TinySSD1306::clear()
 	// Clear the display
 	for(uint16_t i=0;i<=((128*64/8)/16);i++) 
 	{
-		TinyWireM.beginTransmission(i2cAddress);
-		TinyWireM.send(MODE_DATA);
+		Wire.beginTransmission(i2cAddress);
+		Wire.write(MODE_DATA);
 		for(uint8_t k=0;k<16;k++)
 		{
-			TinyWireM.send(0);
+			Wire.write(0);
 		}
-		TinyWireM.endTransmission();
+		Wire.endTransmission();
 	}
 }
 
-void TinySSD1306::setCursor(uint8_t col, uint8_t row)
+void MySSD1306::setCursor(uint8_t col, uint8_t row)
 {
 	clipArea(col, row, 128-col, 8-row);
 }
 
-void TinySSD1306::print(char ch)
+void MySSD1306::print(char ch)
 {
 	uint8_t data[5];
 
@@ -107,21 +113,21 @@ void TinySSD1306::print(char ch)
 	data[3] = getFlash(BasicFont, ch*5 + 3);
 	data[4] = getFlash(BasicFont, ch*5 + 4);    
 
-	TinyWireM.beginTransmission(i2cAddress);
-	TinyWireM.send(MODE_DATA);
+	Wire.beginTransmission(i2cAddress);
+	Wire.write(MODE_DATA);
 
-	TinyWireM.send(0x00);
-	TinyWireM.send(data[0]);
-	TinyWireM.send(data[1]);
-	TinyWireM.send(data[2]);
-	TinyWireM.send(data[3]);
-	TinyWireM.send(data[4]);
-	TinyWireM.send(0x00);
+	Wire.write(0x00);
+	Wire.write(data[0]);
+	Wire.write(data[1]);
+	Wire.write(data[2]);
+	Wire.write(data[3]);
+	Wire.write(data[4]);
+	Wire.write(0x00);
 
-	TinyWireM.endTransmission();
+	Wire.endTransmission();
 }
 
-void TinySSD1306::println(const char * text)
+void MySSD1306::println(const char * text)
 {
 	if(textRow>7)
 		sendCommand(0x40 | (((textRow-7)*8)) % 64);
@@ -139,44 +145,44 @@ void TinySSD1306::println(const char * text)
 	textRow++;
 }
 
-uint8_t TinySSD1306::getFlash(const uint8_t * mem, unsigned int idx)
+uint8_t MySSD1306::getFlash(const uint8_t * mem, unsigned int idx)
 {
 	return pgm_read_byte(&(mem[idx]));
 }
 
-void TinySSD1306::sendCommand(uint8_t command)
+void MySSD1306::sendCommand(uint8_t command)
 {
-	TinyWireM.begin();
-	TinyWireM.beginTransmission(i2cAddress);
+	Wire.begin();
+	Wire.beginTransmission(i2cAddress);
 
-	TinyWireM.send(MODE_COMMAND);
-	TinyWireM.send(command);
+	Wire.write(MODE_COMMAND);
+	Wire.write(command);
 
-	TinyWireM.endTransmission();
+	Wire.endTransmission();
 }
 
 // Set the clipArea, by default (0, 0, 128, 8)
-void TinySSD1306::clipArea(uint8_t col, uint8_t row, uint8_t w, uint8_t h)
+void MySSD1306::clipArea(uint8_t col, uint8_t row, uint8_t w, uint8_t h)
 {
-	TinyWireM.begin();
-	TinyWireM.beginTransmission(i2cAddress);
-	TinyWireM.send(MODE_COMMAND);
-	TinyWireM.send(CMD_ADDRESS_COLUMN);
-	TinyWireM.send(0);
+	Wire.begin();
+	Wire.beginTransmission(i2cAddress);
+	Wire.write(MODE_COMMAND);
+	Wire.write(CMD_ADDRESS_COLUMN);
+	Wire.write(0);
 
-	TinyWireM.send(col);
-	TinyWireM.send(col+w-1);
+	Wire.write(col);
+	Wire.write(col+w-1);
 
-	TinyWireM.endTransmission();
+	Wire.endTransmission();
 
-	TinyWireM.begin();
-	TinyWireM.beginTransmission(i2cAddress);
-	TinyWireM.send(MODE_COMMAND);
-	TinyWireM.send(CMD_ADDRESS_PAGE);
-	TinyWireM.send(0);
+	Wire.begin();
+	Wire.beginTransmission(i2cAddress);
+	Wire.write(MODE_COMMAND);
+	Wire.write(CMD_ADDRESS_PAGE);
+	Wire.write(0);
 
-	TinyWireM.send(row); 
-	TinyWireM.send(row+h-1);
+	Wire.write(row); 
+	Wire.write(row+h-1);
 
-	TinyWireM.endTransmission();
+	Wire.endTransmission();
 }

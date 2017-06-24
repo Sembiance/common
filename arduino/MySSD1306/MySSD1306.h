@@ -1,8 +1,8 @@
 // Modified version of: https://github.com/kirknorthrop/SSD1306_minimal
 // Definitions originally came from GOFi2cOLED
 
-#ifndef _TINYSSD1306_H
-#define _TINYSSD1306_H
+#ifndef _MYSSD1306_H
+#define _MYSSD1306_H
 
 #include <Arduino.h>
 
@@ -297,10 +297,10 @@ static const uint8_t BasicFont[] PROGMEM =
 
 #define CMD_CHARGE_PUMP_SETTING					0x8D
 
-class TinySSD1306
+class MySSD1306
 {
 	public:
-		TinySSD1306(uint8_t i2cAddress=0x3D);
+		MySSD1306(uint8_t i2cAddress=0x3D);
 
 		void setup(uint8_t resetPin);
 		void clear();
