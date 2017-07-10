@@ -81,7 +81,7 @@ void bitsget16(uint16_t val, bool * bits) { bitsget(&val, 16, bits); }
 void bitsget32(uint32_t val, bool * bits) { bitsget(&val, 32, bits); }
 void bitsget64(uint64_t val, bool * bits) { bitsget(&val, 64, bits); }
 
-#ifndef ARDUINO_ARCH_AVR
+#ifndef __AVR__
 	uint8_t bitsneeded(uint64_t maxValue)
 	{
 		return (uint8_t)ceill(logbl(maxValue)/logbl(2))+1;
