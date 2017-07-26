@@ -102,3 +102,12 @@ if(!Math.rotatePointInBox)
 		return [ dx2 + centerX, dy2 + centerY ];
 	};
 }
+
+if(!Math.expandToBounds)
+{
+	Math.expandToBounds = function(w, h, mw, mh)
+	{
+		var scale = Math.min((mw/w), (mh/h));
+		return [w*scale, h*scale];
+	};
+}
