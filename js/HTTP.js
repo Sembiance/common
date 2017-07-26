@@ -1,23 +1,7 @@
 "use strict";
 
-var HTTP = 
-{
-	get : function(url, cb)
-	{
-		HTTP.REQUEST("GET", url, undefined, cb);
-	},
-
-	put : function(url, data, cb)
-	{
-		HTTP.REQUEST("PUT", url, data, cb);
-	},
-
-	post : function(url, data, cb)
-	{
-		HTTP.REQUEST("POST", url, data, cb);
-	},
-
-	REQUEST : function(method, url, data, cb)
+(function() {
+	function httpRequest(method, url, data, cb)
 	{
 		var xhr = new XMLHttpRequest();
 		xhr.open(method, url, true);
@@ -35,7 +19,27 @@ var HTTP =
 		xhr.onreadystatechange = function(o)
 		{
 			if(xhr.readyState===4 && cb)
-				cb(xhr.responseText);
+				setImmediate(cb, undefined, xhr.responseText);
 		};
 	}
-};
+
+	var HTTP = 
+	{
+		get : function(url, cb)
+		{
+			httpRequest("GET", url, undefined, cb);
+		},
+
+		put : function(url, data, cb)
+		{
+			httpRequest("PUT", url, data, cb);
+		},
+
+		post : function(url, data, cb)
+		{
+			httpRequest("POST", url, data, cb);
+		}
+	};
+
+	window.HTTP = HTTP;
+})();
