@@ -47,7 +47,18 @@
 
 	Object.forEach({log : ["debug", "info", "log"], warn : ["warn"], error : ["error", "critical", "crit"]}, function(consoleKey, synonyms)
 	{
-		synonyms.forEach(function(synonym) { exports[synonym] = base.IS_NODE ? console[consoleKey].bind(console) : (window.console[consoleKey].bind ? window.console[consoleKey].bind(window.console) : window.console[consoleKey]); });
+		if(!base.IS_NODE && (!window.console || !window.console[consoleKey]))
+			consoleKey = "log";
+
+		synonyms.forEach(function(synonym)
+		{
+			if(base.IS_NODE)
+				exports[synonym] = console[consoleKey].bind(console);
+			else if(!window.console)
+				exports[synonym] = function() {};
+			else
+				exports[synonym] = ( window.console[consoleKey].bind ? window.console[consoleKey].bind(window.console) : window.console[consoleKey]);
+		});
 	});
 
 	if(base.IS_NODE)
