@@ -2,94 +2,61 @@
 /*global Element, NodeList: true*/
 
 // Adds several helper methods to the built in DOM elements
-
-Element.prototype.hasClass = function(className)
+if(typeof Element!=="undefined")
 {
-	var re = new RegExp("(?:^|\\s+)" + className + "(?:\\s+|$)");
-	return re.test(this.className);
-};
-
-Element.prototype.addClass = function(className)
-{
-	if(!this.hasClass(className))
-		this.className = [this.className, className].join(' ').trim();
-};
-
-Element.prototype.removeClass = function(className)
-{
-	while(this.hasClass(className))
+	Element.prototype.getComputedStyle = function()
 	{
-		this.className = this.className.replace(new RegExp("(?:^|\\s+)" + className + "(?:\\s+|$)"), " ").trim();
-	}
-};
+		return window.getComputedStyle(this);
+	};
 
-Element.prototype.toggleClass = function(className)
-{
-	if(this.hasClass(className))
-		this.removeClass(className);
-	else
-		this.addClass(className);
-};
-
-Element.prototype.getComputedStyle = function()
-{
-	return window.getComputedStyle(this);
-};
-
-Element.prototype.getXY = function()
-{
-	var y = 0, x = 0;
-	var element = this;
-	do
+	Element.prototype.getXY = function()
 	{
-		y += element.offsetTop || 0;
-		x += element.offsetLeft || 0;
-		element = element.offsetParent;
-	} while(element);
+		var y = 0, x = 0;
+		var element = this;
+		do
+		{
+			y += element.offsetTop || 0;
+			x += element.offsetLeft || 0;
+			element = element.offsetParent;
+		} while(element);
 
-	return [x, y];
-};
+		return [x, y];
+	};
 
-Element.prototype.getX = function()
-{
-	return this.getXY()[0];
-};
-
-Element.prototype.getY = function()
-{
-	return this.getXY()[1];
-};
-
-Element.prototype.clear = function()
-{
-	while(this.firstChild)
+	Element.prototype.getX = function()
 	{
-		this.removeChild(this.firstChild);
-	}
-};
+		return this.getXY()[0];
+	};
 
-NodeList.prototype.removeClass = function(className)
-{
-	for(var i=0;i<this.length;i++)
+	Element.prototype.getY = function()
 	{
-		this[i].removeClass(className);
-	}
-};
+		return this.getXY()[1];
+	};
 
-NodeList.prototype.addClass = function(className)
-{
-	for(var i=0;i<this.length;i++)
+	Element.prototype.clear = function()
 	{
-		this[i].addClass(className);
-	}
-};
+		while(this.firstChild)
+		{
+			this.removeChild(this.firstChild);
+		}
+	};
 
-NodeList.prototype.toArray = function()
+	if(typeof Element.prototype.addEventListener==='undefined')
+		Element.prototype.addEventListener = function(e, callback) { return this.attachEvent('on' + e, callback); };
+}
+
+if(typeof window.addEventListener==='undefined')
+	window.addEventListener = function(e, callback) { return this.attachEvent('on' + e, callback); };
+
+if(typeof NodeList!=="undefined")
 {
-	var a=[];
-	for(var i=0;i<this.length;i++)
+	NodeList.prototype.toArray = function()
 	{
-		a.push(this[i]);
-	}
-	return a;
-};
+		var a=[];
+		for(var i=0;i<this.length;i++)
+		{
+			a.push(this[i]);
+		}
+		return a;
+	};
+}
