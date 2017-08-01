@@ -1,5 +1,5 @@
 "use strict";
-/*global Element, NodeList: true*/
+/*global TextRectangle, Element, NodeList: true*/
 
 // Adds several helper methods to the built in DOM elements
 if(typeof Element!=="undefined")
@@ -11,26 +11,8 @@ if(typeof Element!=="undefined")
 
 	Element.prototype.getXY = function()
 	{
-		var y = 0, x = 0;
-		var element = this;
-		do
-		{
-			y += element.offsetTop || 0;
-			x += element.offsetLeft || 0;
-			element = element.offsetParent;
-		} while(element);
-
-		return [x, y];
-	};
-
-	Element.prototype.getX = function()
-	{
-		return this.getXY()[0];
-	};
-
-	Element.prototype.getY = function()
-	{
-		return this.getXY()[1];
+		var r=this.getBoundingClientRect();
+		return [r.left, r.top];
 	};
 
 	Element.prototype.clear = function()
@@ -40,13 +22,7 @@ if(typeof Element!=="undefined")
 			this.removeChild(this.firstChild);
 		}
 	};
-
-	if(typeof Element.prototype.addEventListener==='undefined')
-		Element.prototype.addEventListener = function(e, callback) { return this.attachEvent('on' + e, callback); };
 }
-
-if(typeof window.addEventListener==='undefined')
-	window.addEventListener = function(e, callback) { return this.attachEvent('on' + e, callback); };
 
 if(typeof NodeList!=="undefined")
 {
@@ -60,3 +36,7 @@ if(typeof NodeList!=="undefined")
 		return a;
 	};
 }
+
+// Adds width/height properties to getBoundingClientRect for IE8
+if("TextRectangle" in window && !("width" in TextRectangle.prototype))
+	Object.defineProperties(TextRectangle.prototype, { "width": { get: function() { return this.right - this.left; } }, "height": { get: function() { return this.bottom - this.top; } } });
