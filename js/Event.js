@@ -11,10 +11,11 @@ if(typeof window.addEventListener==="undefined")
 if(typeof window.removeEventListener==="undefined")
 	window.removeEventListener = function(e, callback) { return this.detachEvent("on" + e, callback); };
 
-if(typeof document.addEventListener==="undefined")
-	document.addEventListener = function(e, callback) { return this.attachEvent("on" + e, callback); };
-if(typeof document.removeEventListener==="undefined")
-	document.removeEventListener = function(e, callback) { return this.detachEvent("on" + e, callback); };
+// WARNING: This causes an error in IE8 when using the Greensock Draggable class due to it's detection of it and not realizing it's on IE8 anymore
+//if(typeof document.addEventListener==="undefined")
+//	document.addEventListener = function(e, callback) { return this.attachEvent("on" + e, callback); };
+//if(typeof document.removeEventListener==="undefined")
+//	document.removeEventListener = function(e, callback) { return this.detachEvent("on" + e, callback); };
 
 if(!Event.prototype.preventDefault)
 	Event.prototype.preventDefault = function() { this.returnValue=false; };
