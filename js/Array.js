@@ -561,6 +561,18 @@ if(!Array.toArray)
 	};
 }
 
+if(!Array.prototype.pushUnique)
+{
+	Array.prototype.pushUnique = function()
+	{
+		for(var i=0;i<arguments.length;i++)
+		{
+			if(this.indexOf(arguments[i])===-1)
+				this.push(arguments[i]);
+		}
+	};
+}
+
 if(!Array.prototype.pushSequence)
 {
 	Array.prototype.pushSequence = function(startAt, endAt)
@@ -583,7 +595,7 @@ if(!Array.prototype.pushSequence)
 		else
 		{
 			this.push(startAt);
-        }
+		}
 
 		return this;
 	};
