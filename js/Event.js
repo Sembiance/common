@@ -1,21 +1,31 @@
 "use strict";
 /*global Element: true*/
 
-if(typeof Element!=="undefined" && typeof Element.prototype.addEventListener==="undefined")
-	Element.prototype.addEventListener = function(e, callback) { return this.attachEvent("on" + e, callback); };
-if(typeof Element!=="undefined" && typeof Element.prototype.removeEventListener==="undefined")
-	Element.prototype.removeEventListener = function(e, callback) { return this.detachEvent("on" + e, callback); };
+// polyfill IE8: addEventListener/removeEventListener
+if(typeof window.addEventListener==="undefined" && typeof window.attachEvent!=="undefined")
+{
+	window.addEventListener = Element.prototype.addEventListener = document.addEventListener = function(e, callback) { return this.attachEvent("on" + e, callback); };
+	window.removeEventListener = Element.prototype.removeEventListener = document.removeEventListener = function(e, callback) { return this.detachEvent("on" + e, callback); };
+}
 
-if(typeof window.addEventListener==="undefined")
-	window.addEventListener = function(e, callback) { return this.attachEvent("on" + e, callback); };
-if(typeof window.removeEventListener==="undefined")
-	window.removeEventListener = function(e, callback) { return this.detachEvent("on" + e, callback); };
+// polyfill IE9: CustomEvent constructor support
+if(typeof window.CustomEvent!=="function")
+{
+	(function ()
+	{
+		function CustomEvent(event, params)
+		{
+			params = params || { bubbles: false, cancelable: false, detail: undefined };
+			var evt = document.createEvent("CustomEvent");
+			evt.initCustomEvent( event, params.bubbles, params.cancelable, params.detail );
+			return evt;
+		}
 
-// WARNING: This causes an error in IE8 when using the Greensock Draggable class due to it's detection of it and not realizing it's on IE8 anymore
-//if(typeof document.addEventListener==="undefined")
-//	document.addEventListener = function(e, callback) { return this.attachEvent("on" + e, callback); };
-//if(typeof document.removeEventListener==="undefined")
-//	document.removeEventListener = function(e, callback) { return this.detachEvent("on" + e, callback); };
+		CustomEvent.prototype = window.Event.prototype;
+
+		window.CustomEvent = CustomEvent;
+	})();
+}
 
 if(!Event.prototype.preventDefault)
 	Event.prototype.preventDefault = function() { this.returnValue=false; };
