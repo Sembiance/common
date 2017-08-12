@@ -25,7 +25,7 @@ if(typeof window.performance.now==="undefined")
 				// Since we are not willing to do that, we just detect that currentTime is stuck at zero and fall back to date.now()
 				if(ac.currentTime===0)
 					ac = null;
-			}, 2000);
+			}, 1200);
 		}
 
 		window.performance.now = function()
