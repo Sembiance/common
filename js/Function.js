@@ -15,7 +15,8 @@ if(!Function.prototype.bind)
 				return fToBind.apply(this instanceof FNOP ? this : oThis || window, aArgs.concat(Array.prototype.slice.call(arguments)));
 			};
 
-		FNOP.prototype = this.prototype;
+		if(this.prototype)
+			FNOP.prototype = this.prototype;
 		fBound.prototype = new FNOP();
 
 		return fBound;
