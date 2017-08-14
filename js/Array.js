@@ -247,6 +247,21 @@ if(!Array.prototype.map)
 	};
 }
 
+if(!Array.prototype.mapToObject)
+{
+	Array.prototype.mapToObject = function(callback, thisArg)
+	{
+		var result = {};
+
+		for(var i=0,len=this.length;i<len;i++)
+		{
+			result[this[i]] = callback.call(thisArg, this[i]);
+		}
+
+		return result;
+	};
+}
+
 if(!Array.prototype.some)
 {
 	Array.prototype.some = function(fun /*, thisp */)
