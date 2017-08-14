@@ -22,6 +22,18 @@ if(typeof Element!=="undefined")
 			this.removeChild(this.firstChild);
 		}
 	};
+
+	Element.prototype.setText = function(text)
+	{
+		if(!this.childNodes || this.childNodes.length!==1)
+		{
+			this.clear();
+			this.appendChild(document.createTextNode(text));
+			return;
+		}
+
+		this.childNodes[0].nodeValue = text;
+	};
 }
 
 if(typeof NodeList!=="undefined")
