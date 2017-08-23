@@ -15,6 +15,12 @@ if(typeof Element!=="undefined")
 		return [r.left, r.top];
 	};
 
+	Element.prototype.getWidthHeight = function()
+	{
+		var r = this.getBoundingClientRect();
+		return [r.width, r.height];
+	};
+
 	Element.prototype.clear = function()
 	{
 		while(this.firstChild)
@@ -33,6 +39,47 @@ if(typeof Element!=="undefined")
 		}
 
 		this.childNodes[0].nodeValue = text;
+	};
+
+	// Returns the first ancestor that the passed in function returns true to upon receiving it passed in
+	Element.prototype.getAncestor = function(f)
+	{
+		for(var c=this;c;c=c.parentNode)
+		{
+			if(f(c))
+				return c;
+
+			if(c.nodeName.toLowerCase()==="html")
+				return null;
+		}
+
+		return null;
+	};
+
+	// Returns the elements width
+	Element.prototype.getWidth = function()
+	{
+		return this.getBoundingClientRect().width;
+	};
+
+	// Returns the elements height
+	Element.prototype.getHeight = function()
+	{
+		return this.getBoundingClientRect().height;
+	};
+
+	// Returns the elements padding width
+	Element.prototype.getPaddingWidth = function()
+	{
+		var cs = this.getComputedStyle();
+		return (parseFloat(cs.paddingLeft)+parseFloat(cs.paddingRight));
+	};
+
+	// Returns the elements padding height
+	Element.prototype.getPaddingHeight = function()
+	{
+		var cs = this.getComputedStyle();
+		return (parseFloat(cs.paddingTop)+parseFloat(cs.paddingBottom));
 	};
 }
 
