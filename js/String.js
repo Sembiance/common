@@ -45,7 +45,7 @@ if(!String.prototype.contains)
 String.prototype.trim = function(chars)
 {
 	if(!chars)
-		chars = "\\s\\n\\r";
+		chars = "\\s\\u200B";
 
 	if(Array.isArray(chars))
 		chars = chars.join("");
