@@ -65,6 +65,30 @@ if(!Object.forEach)
 	};
 }
 
+if(!Object.filter)
+{
+	Object.filter = function(obj, cb)
+	{
+		if(!cb)
+			return obj;
+
+		var keysToDelete = [];
+
+		Object.keys(obj).forEach(function(key, i)
+		{
+			if(!cb(key, obj[key], i))
+				keysToDelete.push(key);
+		});
+
+		keysToDelete.forEach(function(keyToDelete)
+		{
+			delete obj[keyToDelete];
+		});
+
+		return obj;
+	};
+}
+
 if(!Object.every)
 {
 	Object.every = function(obj, cb)
