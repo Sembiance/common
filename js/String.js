@@ -112,22 +112,19 @@ if(!String.prototype.toArray)
 	};
 }
 
-if(!String.prototype.repeat)
+String.prototype.repeat = function(count, seperator)
 {
-	String.prototype.repeat = function(count, seperator)
+	var result = "";
+	for(var i=0;i<count;i++)
 	{
-		var result = "";
-		for(var i=0;i<count;i++)
-		{
-			if(i>0 && seperator)
-				result += seperator;
-			
-			result += this;
-		}
+		if(i>0 && seperator)
+			result += seperator;
+		
+		result += this;
+	}
 
-		return result;
-	};
-}
+	return result;
+};
 
 if(!String.prototype.repeatAsArray)
 {

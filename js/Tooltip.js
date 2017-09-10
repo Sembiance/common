@@ -3,7 +3,7 @@
 
 (function(exports)
 {
-	var Tooltip = function(_node, _text, _delay, _extraClass)
+	var Tooltip = function(_node, _text, _extraClass, _delay)
 	{
 		this.node = _node;
 		this.text = _text;
@@ -12,18 +12,20 @@
 		this.tooltipOffset = 15;
 		this.tooltipLeft = false;
 		this.tooltipBelow = false;
-		this.tooltipDelay = typeof _delay!=="undefined" ? _delay : base.SECOND;
+		this.tooltipDelay = typeof _delay!=="undefined" ? _delay : base.SECOND/2;
 		this.tooltipDelayTimeout = null;
 		this.lastPageX = null;
 		this.lastPageY = null;
 		this.visible = false;
 		this.disabled = false;
+		this.skipNextShow = false;
 
 		// Called to destroy this tooltip
 		Tooltip.prototype.destroy = function()
 		{
 			this.hide();
 			
+			this.node.removeEventListener("touchstart", this.boundTouchStartHandler);
 			this.node.removeEventListener("mouseenter", this.boundMouseEnterHandler);
 			this.node.removeEventListener("mouseleave", this.boundMouseLeaveHandler);
 
@@ -33,8 +35,20 @@
 		// Called when the mouse enters the node
 		Tooltip.prototype.mouseEnterHandler = function(e)
 		{
-			if(this.disabled)
-				return;
+			this.show(e);
+		};
+
+		// Called when the mouse leaves the node
+		Tooltip.prototype.mouseLeaveHandler = function(e)
+		{
+			this.hide();
+		};
+
+		// Shows the tooltip
+		Tooltip.prototype.show = function(e)
+		{
+			if(this.disabled || this.visible || this.skipNextShow)
+				return (this.skipNextShow = false), undefined;
 
 			document.body.addEventListener("mousemove", this.boundMouseMoveHandler);
 			document.body.appendChild(this.tooltip);
@@ -52,12 +66,6 @@
 				this.tooltip.style.display = "block";
 				this.mouseMoveHandler();
 			}.bind(this), this.tooltipDelay);
-		};
-
-		// Called when the mouse leaves the node
-		Tooltip.prototype.mouseLeaveHandler = function(e)
-		{
-			this.hide();
 		};
 
 		// Hides the tooltip
@@ -100,6 +108,12 @@
 				this.tooltip.style.left = (this.lastPageX+this.tooltipOffset) + "px";
 		};
 
+		// Don't show tooltips for touch interactions
+		Tooltip.prototype.touchStartHandler = function(e)
+		{
+			this.skipNextShow = true;
+		};
+
 		// Called to disable the tooltip
 		Tooltip.prototype.disable = function()
 		{
@@ -118,9 +132,11 @@
 		this.boundMouseEnterHandler = this.mouseEnterHandler.bind(this);
 		this.boundMouseLeaveHandler = this.mouseLeaveHandler.bind(this);
 		this.boundMouseMoveHandler = this.mouseMoveHandler.bind(this);
+		this.boundTouchStartHandler = this.touchStartHandler.bind(this);
 
 		this.node.addEventListener("mouseenter", this.boundMouseEnterHandler );
 		this.node.addEventListener("mouseleave", this.boundMouseLeaveHandler );
+		this.node.addEventListener("touchstart", this.boundTouchStartHandler );
 	};
 
 	exports.Tooltip = Tooltip;

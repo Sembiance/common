@@ -17,8 +17,10 @@ if(typeof window.performance.now==="undefined")
 			var AC = window.AudioContext || window.webkitAudioContext;
 			ac = new AC();
 			ac.createGainNode();
-			ac.createGain();
-			ac.createOscillator();
+			if(ac.createGain)
+				ac.createGain();
+			if(ac.createOscillator)
+				ac.createOscillator();
 			setTimeout(function()
 			{
 				// In Mobile safari for example, currentTime won't increase until a sound is played in response to a user action
