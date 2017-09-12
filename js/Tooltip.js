@@ -12,7 +12,7 @@
 		this.tooltipOffset = 15;
 		this.tooltipLeft = false;
 		this.tooltipBelow = false;
-		this.tooltipDelay = typeof _delay!=="undefined" ? _delay : base.SECOND/2;
+		this.tooltipDelay = typeof _delay!=="undefined" ? _delay : base.SECOND*0.75;
 		this.tooltipDelayTimeout = null;
 		this.lastPageX = null;
 		this.lastPageY = null;
