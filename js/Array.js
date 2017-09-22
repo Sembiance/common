@@ -634,7 +634,7 @@ if(!Array.prototype.remove)
 	{
 		var loc = this.indexOf(val);
 		if(loc===-1)
-			return undefined;
+			return this;
 		
 		this.splice(loc, 1);
 
@@ -651,7 +651,10 @@ if(!Array.prototype.removeAll)
 		var a=this;
 		vals.forEach(function(val)
 		{
-			while(a.remove(val)) { }
+			while(a.contains(val))
+			{
+				a.remove(val);
+			}
 		});
 
 		return this;
