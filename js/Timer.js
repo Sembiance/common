@@ -1,13 +1,13 @@
 "use strict";
 
-(function(exports)
+(function _(exports)
 {
-	var Timer = function(_duration)
+	const Timer = function(_duration)
 	{
 		this.duration = _duration;
 		this.finished = false;
 
-		Timer.prototype.start = function(_cb)
+		Timer.prototype.start = function start(_cb)
 		{
 			if(this.finished)
 				return;
@@ -24,19 +24,19 @@
 			this.timeout = setTimeout(this.finishedHandler.bind(this), this.duration);
 		};
 
-		Timer.prototype.finishedHandler = function()
+		Timer.prototype.finishedHandler = function finishedHandler()
 		{
 			this.finished = true;
 			this.cb();
 		};
 
-		Timer.prototype.stop = function()
+		Timer.prototype.stop = function stop()
 		{
 			if(!this.finished)
 				clearTimeout(this.timeout);
 		};
 
-		Timer.prototype.pause = function()
+		Timer.prototype.pause = function pause()
 		{
 			if(this.paused || this.finished || !this.started)
 				return;
@@ -46,18 +46,18 @@
 			this.duration = this.getTimeLeft();
 		};
 
-		Timer.prototype.resume = function()
+		Timer.prototype.resume = function resume()
 		{
 			if(this.paused && !this.finished)
 				this.start(this.cb);
 		};
 
-		Timer.prototype.getTimeLeft = function()
+		Timer.prototype.getTimeLeft = function getTimeLeft()
 		{
 			return this.endAt-Date.now();
 		};
 
-		Timer.prototype.isRunning = function()
+		Timer.prototype.isRunning = function isRunning()
 		{
 			return this.started && !this.paused && !this.finished;
 		};

@@ -1,27 +1,27 @@
 "use strict";
-/*global AudioContext: true*/
+/* global AudioContext: true */
 
 if(typeof window.performance==="undefined")
 	window.performance = {};
 
 if(typeof window.performance.now==="undefined")
 {
-	(function()
+	(function _()
 	{
-		var startTime = Date.now();
-		var ac = null;
-		var offset = 0;
-		var seen = 0;
+		const startTime = Date.now();
+		let ac = null;
+		let offset = 0;
+		let seen = 0;
 		if(typeof AudioContext!=="undefined" || typeof webkitAudioContext!=="undefined")
 		{
-			var AC = window.AudioContext || window.webkitAudioContext;
+			const AC = window.AudioContext || window.webkitAudioContext;
 			ac = new AC();
 			ac.createGainNode();
 			if(ac.createGain)
 				ac.createGain();
 			if(ac.createOscillator)
 				ac.createOscillator();
-			setTimeout(function()
+			setTimeout(() =>
 			{
 				// In Mobile safari for example, currentTime won't increase until a sound is played in response to a user action
 				// Since we are not willing to do that, we just detect that currentTime is stuck at zero and fall back to date.now()
@@ -30,12 +30,12 @@ if(typeof window.performance.now==="undefined")
 			}, 1200);
 		}
 
-		window.performance.now = function()
+		window.performance.now = function now()
 		{
 			if(ac)
 				return ac.currentTime;
 
-			var t = (Date.now()-startTime);
+			const t = (Date.now()-startTime);
 			if(t<seen)
 				offset += (seen-t);
 			seen = t;

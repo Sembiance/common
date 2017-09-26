@@ -1,9 +1,9 @@
 "use strict";
-/*global base: true*/
+/* global base: true */
 
-(function(exports)
+(function _()
 {
-	var Tooltip = function(_node, _text, _extraClass, _delay)
+	const Tooltip = function(_node, _text, _extraClass, _delay)
 	{
 		this.node = _node;
 		this.text = _text;
@@ -21,7 +21,7 @@
 		this.skipNextShow = false;
 
 		// Called to destroy this tooltip
-		Tooltip.prototype.destroy = function()
+		Tooltip.prototype.destroy = function destroy()
 		{
 			this.hide();
 			
@@ -33,19 +33,19 @@
 		};
 
 		// Called when the mouse enters the node
-		Tooltip.prototype.mouseEnterHandler = function(e)
+		Tooltip.prototype.mouseEnterHandler = function mouseEnterHandler(e)
 		{
 			this.show(e);
 		};
 
 		// Called when the mouse leaves the node
-		Tooltip.prototype.mouseLeaveHandler = function(e)
+		Tooltip.prototype.mouseLeaveHandler = function mouseLeaveHandler()
 		{
 			this.hide();
 		};
 
 		// Shows the tooltip
-		Tooltip.prototype.show = function(e)
+		Tooltip.prototype.show = function show(e)
 		{
 			if(this.disabled || this.visible || this.skipNextShow)
 				return (this.skipNextShow = false), undefined;
@@ -59,17 +59,17 @@
 
 			this.visible = true;
 
-			this.tooltipDelayTimeout = setTimeout(function()
+			this.tooltipDelayTimeout = setTimeout(() =>
 			{
 				this.tooltipDelayTimeout = null;
 
 				this.tooltip.style.display = "block";
 				this.mouseMoveHandler();
-			}.bind(this), this.tooltipDelay);
+			}, this.tooltipDelay);
 		};
 
 		// Hides the tooltip
-		Tooltip.prototype.hide = function(e)
+		Tooltip.prototype.hide = function hide()
 		{
 			if(!this.visible)
 				return;
@@ -89,7 +89,7 @@
 		};
 
 		// Called when the mouse is moved
-		Tooltip.prototype.mouseMoveHandler = function(e)
+		Tooltip.prototype.mouseMoveHandler = function mouseMoveHandler(e)
 		{
 			if(e)
 			{
@@ -98,24 +98,24 @@
 			}
 
 			if(this.tooltipBelow)
-				this.tooltip.style.top =  (this.lastPageY+this.tooltipOffset) + "px";
+				this.tooltip.style.top = `${(this.lastPageY+this.tooltipOffset)}px`;
 			else
-				this.tooltip.style.top =  Math.max(((this.lastPageY-this.tooltip.getHeight())-this.tooltipOffset), 0) + "px";
+				this.tooltip.style.top = `${Math.max(((this.lastPageY-this.tooltip.getHeight())-this.tooltipOffset), 0)}px`;
 
 			if(this.tooltipLeft)
-				this.tooltip.style.left = ((this.lastPageX-this.tooltip.getWidth())-this.tooltipOffset) + "px";
+				this.tooltip.style.left = `${((this.lastPageX-this.tooltip.getWidth())-this.tooltipOffset)}px`;
 			else
-				this.tooltip.style.left = (this.lastPageX+this.tooltipOffset) + "px";
+				this.tooltip.style.left = `${(this.lastPageX+this.tooltipOffset)}px`;
 		};
 
 		// Don't show tooltips for touch interactions
-		Tooltip.prototype.touchStartHandler = function(e)
+		Tooltip.prototype.touchStartHandler = function touchStartHandler()
 		{
 			this.skipNextShow = true;
 		};
 
 		// Called to disable the tooltip
-		Tooltip.prototype.disable = function()
+		Tooltip.prototype.disable = function disable()
 		{
 			this.disabled = true;
 
@@ -124,7 +124,7 @@
 		};
 
 		// Called to re-enable the tooltip
-		Tooltip.prototype.enable = function()
+		Tooltip.prototype.enable = function enable()
 		{
 			this.disabled = false;
 		};
@@ -134,10 +134,10 @@
 		this.boundMouseMoveHandler = this.mouseMoveHandler.bind(this);
 		this.boundTouchStartHandler = this.touchStartHandler.bind(this);
 
-		this.node.addEventListener("mouseenter", this.boundMouseEnterHandler );
-		this.node.addEventListener("mouseleave", this.boundMouseLeaveHandler );
-		this.node.addEventListener("touchstart", this.boundTouchStartHandler );
+		this.node.addEventListener("mouseenter", this.boundMouseEnterHandler);
+		this.node.addEventListener("mouseleave", this.boundMouseLeaveHandler);
+		this.node.addEventListener("touchstart", this.boundTouchStartHandler);
 	};
 
-	exports.Tooltip = Tooltip;
-})(typeof exports==="undefined" ? window : exports);
+	window.Tooltip = Tooltip;
+})();

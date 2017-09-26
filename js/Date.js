@@ -2,7 +2,7 @@
 
 if(!Date.now)
 {
-	Date.now = function()
+	Date.now = function now()
 	{
 		return +(new Date());
 	};

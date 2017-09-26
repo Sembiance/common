@@ -1,9 +1,10 @@
 "use strict";
 
-(function() {
+(function _()
+{
 	function httpRequest(method, url, data, cb)
 	{
-		var xhr = new XMLHttpRequest();
+		const xhr = new XMLHttpRequest();
 		xhr.open(method, url, true);
 		
 		if(data)
@@ -16,26 +17,26 @@
 			xhr.send();
 		}
 
-		xhr.onreadystatechange = function(o)
+		xhr.onreadystatechange = () =>
 		{
 			if(xhr.readyState===4 && cb)
 				setImmediate(cb, undefined, xhr.responseText);
 		};
 	}
 
-	var HTTP = 
+	const HTTP =
 	{
-		get : function(url, cb)
+		get(url, cb)
 		{
 			httpRequest("GET", url, undefined, cb);
 		},
 
-		put : function(url, data, cb)
+		put(url, data, cb)
 		{
 			httpRequest("PUT", url, data, cb);
 		},
 
-		post : function(url, data, cb)
+		post(url, data, cb)
 		{
 			httpRequest("POST", url, data, cb);
 		}

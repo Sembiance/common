@@ -1,43 +1,43 @@
 "use strict";
 
-var Vector = function()
+const Vector = function(...args)
 {
-	this.elements = Array.isArray(arguments[0]) ? arguments[0].slice() : Array.prototype.slice.call(arguments);
+	this.elements = Array.isArray(args[0]) ? args[0].slice() : args;
 
-	Vector.prototype.add = function(v2)
+	Vector.prototype.add = function add(v2)
 	{
 		if(!(v2 instanceof Vector))
-			return new Vector(this.elements.map(function(x, i) { return x + v2; }));
+			return new Vector(this.elements.map(x => x + v2));
 
 		if(this.elements.length!==v2.elements.length)
 			return null;
 		
-		return new Vector(this.elements.map(function(x, i) { return x + v2.elements[i]; }));
+		return new Vector(this.elements.map((x, i) => x + v2.elements[i]));
 	};
 
-	Vector.prototype.subtract = function(v2)
+	Vector.prototype.subtract = function subtract(v2)
 	{
 		if(!(v2 instanceof Vector))
-			return new Vector(this.elements.map(function(x, i) { return x - v2; }));
+			return new Vector(this.elements.map(x => x - v2));
 
 		if(this.elements.length!==v2.elements.length)
 			return null;
 		
-		return new Vector(this.elements.map(function(x, i) { return x - v2.elements[i]; }));
+		return new Vector(this.elements.map((x, i) => x - v2.elements[i]));
 	};
 
-	Vector.prototype.multiply = function(v2)
+	Vector.prototype.multiply = function multiply(v2)
 	{
 		if(!(v2 instanceof Vector))
-			return new Vector(this.elements.map(function(x, i) { return x * v2; }));
+			return new Vector(this.elements.map(x => x * v2));
 
 		if(this.elements.length!==v2.elements.length)
 			return null;
 		
-		return new Vector(this.elements.map(function(x, i) { return x * v2.elements[i]; }));
+		return new Vector(this.elements.map((x, i) => x * v2.elements[i]));
 	};
 
-	Vector.prototype.toArray = function()
+	Vector.prototype.toArray = function toArray()
 	{
 		return this.elements.slice();
 	};
