@@ -1,4 +1,5 @@
 "use strict";
+/* global setImmediate: true */
 
 (function _HTTP()
 {
@@ -24,23 +25,23 @@
 		};
 	}
 
-	class HTTP
+	const HTTP =
 	{
-		static get(url, cb)
+		get : function get(url, cb)
 		{
 			httpRequest("GET", url, undefined, cb);
-		}
+		},
 
-		static put(url, data, cb)
+		put : function put(url, data, cb)
 		{
 			httpRequest("PUT", url, data, cb);
-		}
+		},
 
-		static post(url, data, cb)
+		post : function post(url, data, cb)
 		{
 			httpRequest("POST", url, data, cb);
 		}
-	}
+	};
 
 	window.HTTP = HTTP;
 })();
