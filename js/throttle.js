@@ -1,19 +1,19 @@
 "use strict";
 
-(function(exports)
+(function _throttle(exports)
 {
-	function throttle(f, minInterval, reSendLastEvent)
+	function throttle(f, minInterval, reSendLastEvent=false)
 	{
-		var lastCalled = 0;
-		var lastEventTimeout = null;
+		let lastCalled = 0;
+		let lastEventTimeout = null;
 
-		var throttler = function()
+		const throttler = function(...args)
 		{
-			var timePassed = (Date.now()-lastCalled);
+			const timePassed = (Date.now()-lastCalled);
 			if(timePassed<minInterval)
 			{
 				if(reSendLastEvent)
-					scheduleNextThrottle(Array.prototype.slice.call(arguments), (minInterval-timePassed)+1);
+					scheduleNextThrottle(args, (minInterval-timePassed)+1);	// eslint-disable-line no-use-before-define
 				return;
 			}
 
@@ -25,17 +25,18 @@
 
 			lastCalled = Date.now();
 
-			return f.apply(f, Array.toArray(arguments));
+			return f.apply(f, args);
 		};
 
 		function scheduleNextThrottle(lastArgs, waitDuration)
 		{
 			if(lastEventTimeout)
 				clearTimeout(lastEventTimeout);
-			lastEventTimeout = setTimeout(function() { lastEventTimeout = null; throttler.apply(throttler, lastArgs); }, waitDuration);
+			lastEventTimeout = setTimeout(() => { lastEventTimeout = null; throttler.apply(throttler, lastArgs); }, waitDuration);
 		}
 
 		return throttler;
 	}
+
 	exports.throttle = throttle;
 })(typeof exports==="undefined" ? window : exports);

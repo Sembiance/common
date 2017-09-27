@@ -14,7 +14,7 @@ if(!JSON.stringifyJS)
 				if(i>0)
 					result+=",";
 
-				result += `${key}:${JSON.stringifyJS(val)}`;
+				result += key + ":" + JSON.stringifyJS(val);
 			});
 			result += "}";
 		}

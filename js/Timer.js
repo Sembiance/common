@@ -1,13 +1,16 @@
 "use strict";
 
-(function _(exports)
+(function _Timer(exports)
 {
-	const Timer = function(_duration)
+	class Timer
 	{
-		this.duration = _duration;
-		this.finished = false;
+		constructor(duration)
+		{
+			this.duration = duration;
+			this.finished = false;
+		}
 
-		Timer.prototype.start = function start(_cb)
+		start(_cb)
 		{
 			if(this.finished)
 				return;
@@ -22,21 +25,21 @@
 			this.startAt = Date.now();
 			this.endAt = this.startAt+this.duration;
 			this.timeout = setTimeout(this.finishedHandler.bind(this), this.duration);
-		};
+		}
 
-		Timer.prototype.finishedHandler = function finishedHandler()
+		finishedHandler()
 		{
 			this.finished = true;
 			this.cb();
-		};
+		}
 
-		Timer.prototype.stop = function stop()
+		stop()
 		{
 			if(!this.finished)
 				clearTimeout(this.timeout);
-		};
+		}
 
-		Timer.prototype.pause = function pause()
+		pause()
 		{
 			if(this.paused || this.finished || !this.started)
 				return;
@@ -44,24 +47,24 @@
 			this.paused = true;
 			this.stop();
 			this.duration = this.getTimeLeft();
-		};
+		}
 
-		Timer.prototype.resume = function resume()
+		resume()
 		{
 			if(this.paused && !this.finished)
 				this.start(this.cb);
-		};
+		}
 
-		Timer.prototype.getTimeLeft = function getTimeLeft()
+		getTimeLeft()
 		{
 			return this.endAt-Date.now();
-		};
+		}
 
-		Timer.prototype.isRunning = function isRunning()
+		isRunning()
 		{
 			return this.started && !this.paused && !this.finished;
-		};
-	};
+		}
+	}
 
 	exports.Timer = Timer;
 })(typeof exports==="undefined" ? window : exports);

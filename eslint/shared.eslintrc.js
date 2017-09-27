@@ -2,7 +2,8 @@
 module.exports =
 {
 	"env"   : { "es6" : true },
-	// Use this comment to disable a rule on a line:	// eslint-disable-line <rule here>
+	// Use this comment to disable a rule in a file:	/* eslint-disable <rule> */
+	// Use this comment to disable a rule on a line:	// eslint-disable-line <rule>
 	"rules" :
 	{
 		// Possible Errors
@@ -128,7 +129,7 @@ module.exports =
 		"no-undef-init"              : 2,
 		"no-undefined"               : 0,
 		"no-unused-vars"             : 2,
-		"no-use-before-define"       : 2,
+		"no-use-before-define"       : [2, {"functions" : false}],
 
 		// Node.js and CommonJS : Handled in parents "node", "browser", "both"
 
@@ -206,7 +207,7 @@ module.exports =
 		"quotes"                           : [2, "double", {"avoidEscape" : true}],
 		"require-jsdoc"                    : 0,
 		"semi"                             : [2, "always"],
-		"semi-spacing"                     : [2, {"before" : false}],
+		"semi-spacing"                     : 0,
 		"semi-style"                       : [2, "last"],
 		"sort-keys"                        : 0,
 		"sort-vars"                        : 0,
@@ -215,7 +216,7 @@ module.exports =
 		"space-in-parens"                  : 0,
 		"space-infix-ops"                  : 0,
 		"space-unary-ops"                  : 2,
-		"spaced-comment"                   : [2, "always"],
+		"spaced-comment"                   : 0,
 		"switch-colon-spacing"             : [2, {"after" : true, "before" : false}],
 		"template-tag-spacing"             : 2,
 		"unicode-bom"                      : 0,
@@ -246,7 +247,7 @@ module.exports =
 		"prefer-numeric-literals" : 2,
 		"prefer-rest-params"      : 2,
 		"prefer-spread"           : 2,
-		"prefer-template"         : 2,
+		"prefer-template"         : 0,
 		"require-yield"           : 2,
 		"rest-spread-spacing"     : [2, "never"],
 		"sort-imports"            : 0,

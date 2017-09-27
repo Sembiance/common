@@ -6,7 +6,7 @@ if(typeof window.performance==="undefined")
 
 if(typeof window.performance.now==="undefined")
 {
-	(function _()
+	(function _performance()
 	{
 		const startTime = Date.now();
 		let ac = null;

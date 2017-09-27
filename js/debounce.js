@@ -1,7 +1,8 @@
 "use strict";
 
 // COPIED AND MODIFIED FROM: https://github.com/component/debounce/blob/master/index.js
-(function(exports)
+
+(function _debounce(exports)
 {
 	/**
 	 * Returns a function, that, as long as it continues to be invoked, will not
@@ -17,14 +18,17 @@
 	 * @param {Boolean} whether to execute at the beginning (`false`)
 	 * @api public
 	 */
-	function debounce(func, wait, immediate)
+	function debounce(func, wait=100, immediate=false)
 	{
-		var timeoutid, args, context, timestamp, result;
-		wait = wait || 100;
+		let timeoutid = null;
+		let args = null;
+		let context = null;
+		let timestamp = null;
+		let result = null;
 
 		function later()
 		{
-			var last = Date.now()-timestamp;
+			const last = Date.now()-timestamp;
 			if(last<wait && last>=0)
 			{
 				timeoutid = setTimeout(later, wait-last);
@@ -40,12 +44,12 @@
 			}
 		}
 
-		var debounced = function()
+		const debounced = function()
 		{
-			context = this;
-			args = arguments;
+			context = this;	// eslint-disable-line consistent-this
+			args = arguments;	// eslint-disable-line prefer-rest-params
 			timestamp = Date.now();
-			var callNow = immediate && !timeoutid;
+			const callNow = immediate && !timeoutid;
 
 			if(!timeoutid)
 				timeoutid = setTimeout(later, wait);
@@ -59,7 +63,7 @@
 			return result;
 		};
 
-		debounced.clear = function()
+		debounced.clear = function clear()
 		{
 			if(timeoutid)
 			{
@@ -68,7 +72,7 @@
 			}
 		};
 
-		debounced.flush = function()
+		debounced.flush = function flush()
 		{
 			if(timeoutid)
 			{

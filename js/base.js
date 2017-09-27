@@ -1,6 +1,6 @@
 "use strict";
 
-(function _(exports)
+(function _base(exports)
 {
 	const base = exports;
 

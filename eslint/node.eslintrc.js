@@ -2,16 +2,16 @@
 module.exports =
 {
 	"extends" : ["/mnt/compendium/DevLab/common/eslint/shared.eslintrc.js"],
-	"env" : { "node": true },
+	"env" : { "node" : true },
 	"rules" :
 	{
 		// Best Practices
 		"no-implicit-globals" : 0,
 
 		// Node.js and CommonJS
-		"callback-return"       : 2,
+		"callback-return"       : [2, ["cb", "callback", "subcb"]],
 		"global-require"        : 2,
-		"handle-callback-err"   : 2,
+		"handle-callback-err"   : 0,
 		"no-buffer-constructor" : 2,
 		"no-mixed-requires"     : 2,
 		"no-new-require"        : 2,
