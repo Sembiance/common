@@ -15,7 +15,7 @@
 
 		get(cb)
 		{
-			window.localforage.getItem(this.key, cb);
+			window.localforage.getItem(this.key, (err, _o={}) => cb(err, _o || {}));
 		}
 
 		queue(cb)
