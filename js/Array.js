@@ -1083,3 +1083,14 @@ if(!Array.prototype.max)
 		return max;
 	};
 }
+
+Array.prototype.find = function(fun)
+{
+	for(let i=0;i<this.length;i++)
+	{
+		if(fun(this[i]))
+			return this[i];
+	}
+
+	return undefined;
+};

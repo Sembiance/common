@@ -5,12 +5,15 @@
 {
 	class Tooltip
 	{
-		constructor(node, text, extraClass, delay=base.SECOND*0.75)
+		constructor(node, text, extraClass, delay=base.SECOND*0.75, options={})
 		{
 			this.node = node;
 			this.text = text;
+			this.options = options;
 			this.tooltip = document.createElement("div");
-			this.tooltip.classList.add("tooltip", extraClass || undefined);
+			this.tooltip.classList.add("tooltip");
+			if(extraClass)
+				this.tooltip.classList.add(extraClass);
 			this.tooltipOffset = 15;
 			this.tooltipLeft = false;
 			this.tooltipBelow = false;
@@ -65,8 +68,9 @@
 			document.body.addEventListener("mousemove", this.boundMouseMoveHandler);
 			document.body.appendChild(this.tooltip);
 
-			this.tooltipLeft = e.pageX>(document.body.getWidth()/2);
-			this.tooltipBelow = e.pageY<(document.body.getHeight()/2);
+			this.tooltipLeft = this.options.alwaysLeft ? true : (this.options.alwaysRight ? false : e.pageX>(document.body.getWidth()/2));
+			this.tooltipBelow = this.options.alwaysBelow ? true : (this.options.alwaysAbove ? false : e.pageY<(document.body.getHeight()/2));
+
 			this.tooltip.innerHTML = (typeof this.text==="function" ? this.text() : this.text);
 
 			this.visible = true;

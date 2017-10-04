@@ -1,9 +1,9 @@
-vendors = webkit moz o official
+vendors = webkit moz o official	// @stylint ignore
 
 border-radius()
-	-webkit-border-radius arguments  
+	-webkit-border-radius arguments
 	-moz-border-radius arguments
-	border-radius arguments  
+	border-radius arguments
 
 border-image()
 	-webkit-border-image arguments
@@ -19,13 +19,18 @@ box-sizing()
 opacity(n)
 	opacity n
 	if support-for-ie
-		-ms-filter "progid:DXImageTransform.Microsoft.Alpha(Opacity=" + round(n * 100) + ")";
+		-ms-filter "progid:DXImageTransform.Microsoft.Alpha(Opacity=" + round(n * 100) + ")"
 		filter unquote("progid:DXImageTransform.Microsoft.Alpha(Opacity=" + round(n * 100) + ")")
 
 box-shadow()
 	-webkit-box-shadow arguments
 	-moz-box-shadow arguments
 	box-shadow arguments
+
+appearance()
+	-webkit-appearance arguments
+	-moz-appearance arguments
+	appearance arguments
 
 my-transition()
 	-webkit-transition arguments
@@ -122,9 +127,9 @@ animation()
 	-o-animation arguments
 	animation arguments
 
-background-opacity(level, r=0, g=0, b=0)
-	background rgb(r, g, b)
-	background rgba(r, g, b, level)
+background-opacity(level, $r=0, $g=0, $b=0)
+	background rgb($r, $g, $b)
+	background rgba($r, $g, $b, level)
 
 add-sprite(width, height, positionX, positionY, paddingTop, paddingRight, paddingBottom, paddingLeft)
 	width width
@@ -136,6 +141,7 @@ add-sprite(width, height, positionX, positionY, paddingTop, paddingRight, paddin
 	padding-right paddingRight
 	padding-bottom paddingBottom
 	padding-left paddingLeft
+	display inline-block
 
 	&.selected
 		background-position 50% 50%, positionX positionY

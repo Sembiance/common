@@ -1,5 +1,40 @@
 "use strict";
 
+if(!Object.equals)
+{
+	Object.equals = function(obj1, obj2)
+	{
+		if(obj1===obj2)
+			return true;
+
+		for(var k in obj1)
+		{
+			if(!obj1.hasOwnProperty(k))
+				continue;
+
+			if(!obj2.hasOwnProperty(k))
+				return false;
+
+			if(obj1[k]===obj2[k])
+				continue;
+
+			if(typeof obj1[k]!=="object")
+				return false;
+
+			if(!Object.equals(obj1[k], obj2[k]))
+				return false;
+		}
+
+		for(k in obj2)
+		{
+			if(obj2.hasOwnProperty(k) && !obj1.hasOwnProperty(k))
+				return false;
+		}
+
+		return true;
+	};
+}
+
 if(!Object.keys)
 {
 	Object.keys = (function()
@@ -120,6 +155,27 @@ if(!Object.mutate)
 
 		Object.keys(obj).forEach(function(key)
 		{
+			result = cb(key, obj[key], result);
+		});
+
+		return result;
+	};
+}
+
+if(!Object.mutateOnce)
+{
+	Object.mutateOnce = function(obj, cb, startResult)
+	{
+		if(!cb)
+			return;
+
+		var result = ((typeof startResult!=="undefined") ? startResult : undefined);
+
+		Object.keys(obj).forEach(function(key)
+		{
+			if(typeof result!=="undefined")
+				return;
+			
 			result = cb(key, obj[key], result);
 		});
 

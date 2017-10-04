@@ -1,4 +1,6 @@
 "use strict";
+/* global window: true */
+/* eslint-disable global-require */
 
 (function _base(exports)
 {
@@ -46,31 +48,11 @@
 		return (Array.isArray(src) ? src.clone(deep) : (Object.isObject(src) ? Object.clone(src, deep) : src));
 	};
 
-	Object.forEach({log : ["debug", "info", "log"], warn : ["warn"], error : ["error", "critical", "crit"]}, (consoleKey, synonyms) =>
+	exports.FINISH = function finish(err)
 	{
-		const type = (!base.IS_NODE && (!window.console || !window.console[consoleKey])) ? "log" : consoleKey;
+		if(err)
+			process.exit(base.error(err));
 
-		synonyms.forEach(synonym =>
-		{
-			if(base.IS_NODE)
-				exports[synonym] = console[type].bind(console);
-			else if(!window.console)
-				exports[synonym] = function noop() {};
-			else
-				exports[synonym] = ( window.console[type].bind ? window.console[type].bind(window.console) : window.console[type]);
-		});
-	});
-
-	if(base.IS_NODE)
-	{
-		exports.error = function error(err)
-		{
-			if(arguments.length===1 && err && err.hasOwnProperty("stack"))
-				console.error(err.stack);
-			else
-				console.error.apply(console.error, arguments);	// eslint-disable-line prefer-rest-params
-
-			return 1;
-		};
-	}
+		process.exit(0);
+	};
 })(typeof exports==="undefined" ? window.base={} : exports);

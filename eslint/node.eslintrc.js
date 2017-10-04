@@ -13,7 +13,7 @@ module.exports =
 		"global-require"        : 2,
 		"handle-callback-err"   : 0,
 		"no-buffer-constructor" : 2,
-		"no-mixed-requires"     : 2,
+		"no-mixed-requires"     : 0,
 		"no-new-require"        : 2,
 		"no-path-concat"        : 2,
 		"no-process-env"        : 2,
