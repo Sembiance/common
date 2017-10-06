@@ -13,11 +13,19 @@
 			this.goTimer = null;
 		}
 
+		// Calls the cb with the object for this key
 		get(cb)
 		{
-			window.localforage.getItem(this.key, (err, _o={}) => cb(err, _o || {}));
+			window.localforage.getItem(this.key, (err, _o={}) =>
+			{
+				if(err)
+					throw err;
+
+				cb(_o || {});
+			});
 		}
 
+		// Calls the cb when the object is ready to be written to
 		queue(cb)
 		{
 			this.cbQueue.push(cb);
@@ -31,6 +39,9 @@
 
 			window.localforage.getItem(this.key, (err, _o={}) =>
 			{
+				if(err)
+					throw err;
+
 				const o = _o===null ? {} : _o;
 
 				this.cbQueue.splice(0).forEach(cb => cb(o));
@@ -49,6 +60,12 @@
 		{
 			if(this.cbQueue.length>0 && !this.goTimer)
 				this.goTimer = setTimeout(this.go.bind(this), Math.max(0, (this.interval-(Date.now()-this.lastGo))));
+		}
+
+		// Removes the key from localforage and then calls the cb
+		static clear(key, cb)
+		{
+			window.localforage.removeItem(key, cb);
 		}
 	}
 

@@ -3,6 +3,7 @@ module.exports =
 {
 	"env"   : { "es6" : true },
 	// Use this comment to disable a rule in a file:	/* eslint-disable <rule> */
+	// Use this comment to disable a rule for a block:	/* eslint-disable <rule> */   <YOUR BLOCK HERE, MULTIPLE LINES FINE>    /* eslint-enable <rule> */
 	// Use this comment to disable a rule on a line:	// eslint-disable-line <rule>
 	"rules" :
 	{

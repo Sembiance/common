@@ -96,6 +96,20 @@ if(typeof Element!=="undefined")
 	{
 		var cs = this.getComputedStyle();
 		return (parseFloat(cs.marginTop)+parseFloat(cs.marginBottom));
+	};
+
+	// Disables the element by setting the disabled attribute and class
+	Element.prototype.disable = function()
+	{
+		this.classList.add("disabled");
+		this.setAttribute("disabled", "disabled");
+	};	
+
+	// Enables the element by removing the disabled attribute and class
+	Element.prototype.enable = function()
+	{
+		this.classList.remove("disabled");
+		this.removeAttribute("disabled");
 	};	
 }
 

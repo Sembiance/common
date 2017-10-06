@@ -185,7 +185,7 @@ if(!String.prototype.isWhiteSpace)
 			return false;
 		}
 		
-		return true;	
+		return true;
 	};
 }
 
