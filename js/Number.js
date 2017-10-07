@@ -180,12 +180,12 @@ if(!Number.prototype.getBits)
 	Number.prototype.getBits = function()
 	{
 		var bits = [];
-		for(var i=7;i>=0;i--)
+		for(var i=31;i>=0;i--)
 		{
-			bits.push((this & (1 << i) ? 1 : 0));
+			bits.push(this.getBit(i));
 		}
 
-		return bits;
+		return bits.reverse();
 	};
 }
 
@@ -193,7 +193,7 @@ if(!Number.prototype.getBit)
 {
 	Number.prototype.getBit = function(loc)
 	{
-		return this & (1 << (7-loc)) ? 1 : 0;
+		return ((this >> loc) %2 != 0) ? 1 : 0;
 	};
 }
 
@@ -201,7 +201,7 @@ if(!Number.prototype.setBit)
 {
 	Number.prototype.setBit = function(loc)
 	{
-		return this | 1 << (7-loc);
+		return this | 1 << loc;
 	};
 }
 
@@ -217,7 +217,7 @@ if(!Number.prototype.clearBit)
 {
 	Number.prototype.clearBit = function(loc)
 	{
-		return this & ~(1 << (7-loc));
+		return this & ~(1 << loc);
 	};
 }
 
