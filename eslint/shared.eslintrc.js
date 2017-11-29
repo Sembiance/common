@@ -167,7 +167,7 @@ module.exports =
 		"max-len"                          : [2, 271],
 		"max-lines"                        : 0,
 		"max-nested-callbacks"             : [2, 5],
-		"max-params"                       : [2, 6],
+		"max-params"                       : [2, 7],
 		"max-statements"                   : 0,
 		"max-statements-per-line"          : 0,
 		"multiline-ternary"                : [2, "never"],
