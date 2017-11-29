@@ -1,5 +1,13 @@
 "use strict";
 
+if(!Number.prototype.toLocaleString)
+{
+	Number.prototype.toLocaleString = function()
+	{
+		return "" + this;
+	};
+}
+
 if(!Number.prototype.toClock)
 {
 	Number.prototype.toClock = function(omitMinutes)
@@ -31,30 +39,6 @@ if(!Number.prototype.toClock)
 	};
 }
 
-if(!Number.prototype.formatWithCommas)
-{
-	Number.prototype.formatWithCommas = function()
-	{
-		var result = "" + this;
-		
-		if(result.length<4)
-			return result;
-		
-		var reversedResult = result.reverse();
-		result = "";
-		
-		for(var i=0;i<reversedResult.length;i++)
-		{
-			if(i>0 && i%3===0)
-				result += ",";
-			
-			result += reversedResult.charAt(i);
-		}
-		
-		return result.reverse();
-	};
-}
-
 if(!Number.prototype.secondsAsHumanReadable)
 {
 	Number.prototype.secondsAsHumanReadable = function(includeTrailingZeros)
@@ -79,7 +63,7 @@ if(!Number.prototype.secondsAsHumanReadable)
 				part = Math.floor(part);
 				if(isNaN(part))
 					part = 0;
-				humanText += part.formatWithCommas() + " year" + (part>1 || part===0 ? "s, " : ", ");
+				humanText += part.toLocaleString() + " year" + (part>1 || part===0 ? "s, " : ", ");
 				
 				part = parseInt(clockParts[0], 10);
 				if(isNaN(part))
@@ -89,7 +73,7 @@ if(!Number.prototype.secondsAsHumanReadable)
 				part = Math.floor(part);
 				if(isNaN(part))
 					part = 0;
-				humanText += part.formatWithCommas() + " day" + (part>1 || part===0 ? "s" : "");
+				humanText += part.toLocaleString() + " day" + (part>1 || part===0 ? "s" : "");
 			}
 			else if(part>24)
 			{
@@ -97,7 +81,7 @@ if(!Number.prototype.secondsAsHumanReadable)
 				part = Math.floor(part);
 				if(isNaN(part))
 					part = 0;
-				humanText += part.formatWithCommas() + " day" + (part>1 || part===0 ? "s, " : ", ");
+				humanText += part.toLocaleString() + " day" + (part>1 || part===0 ? "s, " : ", ");
 				
 				part = parseInt(clockParts[0], 10);
 				if(isNaN(part))
@@ -106,16 +90,16 @@ if(!Number.prototype.secondsAsHumanReadable)
 				part = Math.floor(part);
 				if(isNaN(part))
 					part = 0;
-				humanText += part.formatWithCommas() + " hour" + (part>1 || part===0 ? "s" : "");
+				humanText += part.toLocaleString() + " hour" + (part>1 || part===0 ? "s" : "");
 			}
 			else
 			{
-				humanText += part.formatWithCommas() + " hour" + (part>1 || part===0 ? "s, " : ", ");	
+				humanText += part.toLocaleString() + " hour" + (part>1 || part===0 ? "s, " : ", ");
 				
 				part = parseInt(clockParts[1], 10);
 				if(isNaN(part))
 					part = 0;
-				humanText += part.formatWithCommas() + " minute" + (part>1 || part===0 ? "s" : "");		
+				humanText += part.toLocaleString() + " minute" + (part>1 || part===0 ? "s" : "");
 			}
 		}
 		else if(clockParts.length===2)
@@ -123,19 +107,19 @@ if(!Number.prototype.secondsAsHumanReadable)
 			part = parseInt(clockParts[0], 10);
 			if(isNaN(part))
 				part = 0;
-			humanText += part.formatWithCommas() + " minute" + (part>1 || part===0 ? "s, " : ", ");
+			humanText += part.toLocaleString() + " minute" + (part>1 || part===0 ? "s, " : ", ");
 			
 			part = parseInt(clockParts[1], 10);
 			if(isNaN(part))
 				part = 0;
-			humanText += part.formatWithCommas() + " second" + (part>1 || part===0 ? "s" : "");
+			humanText += part.toLocaleString() + " second" + (part>1 || part===0 ? "s" : "");
 		}
 		else if(clockParts.length===1)
 		{
 			part = parseInt(clockParts[0], 10);
 			if(isNaN(part))
 				part = 0;
-			humanText += part.formatWithCommas() + " second" + (part>1 || part===0 ? "s" : "");
+			humanText += part.toLocaleString() + " second" + (part>1 || part===0 ? "s" : "");
 		}
 
 		return humanText;

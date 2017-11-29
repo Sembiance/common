@@ -136,16 +136,37 @@ if(!String.prototype.repeatAsArray)
 	};
 }
 
-if(!String.prototype.pad)
+if(!String.prototype.padStart)
 {
-	String.prototype.pad = function(minLength, padCharacter)
+	String.prototype.padStart = function padStart(targetLength, padString)
 	{
-		if(this.length>=minLength)
-			return this;
+		targetLength = targetLength>>0; //floor if number or convert non-number to 0;
+		padString = String(padString || " ");
+		if(this.length>targetLength)
+			return String(this);
+		
+		targetLength = targetLength-this.length;
+		if(targetLength>padString.length)
+			padString += padString.repeat(targetLength/padString.length); //append to original to ensure we are longer than needed
+		
+		return padString.slice(0, targetLength) + String(this);
+	};
+}
 
-		padCharacter = typeof padCharacter==="undefined" ? " " : padCharacter;
+if(!String.prototype.padEnd)
+{
+	String.prototype.padEnd = function padEnd(targetLength, padString)
+	{
+		targetLength = targetLength>>0; //floor if number or convert non-number to 0;
+		padString = String(padString || " ");
+		if(this.length>targetLength)
+			return String(this);
+	
+		targetLength = targetLength-this.length;
+		if(targetLength>padString.length)
+			padString += padString.repeat(targetLength/padString.length); //append to original to ensure we are longer than needed
 
-		return padCharacter.repeat(minLength-this.length) + "" + this;
+		return String(this) + padString.slice(0, targetLength);
 	};
 }
 

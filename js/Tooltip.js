@@ -5,7 +5,7 @@
 {
 	class Tooltip
 	{
-		constructor(node, text, extraClass, delay=base.SECOND*0.75, options={})
+		constructor(node, text, extraClass, delay=base.SECOND*0.6, options={})
 		{
 			this.node = node;
 			this.text = text;

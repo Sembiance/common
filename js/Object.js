@@ -252,15 +252,17 @@ if(!Object.swapKeyValues)
 
 if(!Object.clone)
 {
-	Object.clone = function(src, deep)
+	Object.clone = function(src, skipKeys)
 	{
+		skipKeys = skipKeys || [];
+
 		var result = {};
 		Object.forEach(src, function(key, val)
 		{
-			if(deep)
-				result[key] = (Array.isArray(val) ? val.clone(deep) : (Object.isObject(val) ? Object.clone(val, deep) : val));
-			else
-				result[key] = val;
+			if(skipKeys.contains(key))
+				return;
+
+			result[key] = (Array.isArray(val) ? val.clone() : (Object.isObject(val) ? Object.clone(val, skipKeys) : val));
 		});
 		return result;
 	};

@@ -16,6 +16,7 @@
 		require("./Date");
 		require("./Function");
 		require("./Number");
+		require("./JSON");
 
 		exports.IS_DEV = !process.argv.contains("--staging") && !process.argv.contains("--production");
 		exports.IS_STAGING = !!process.argv.contains("--staging");
@@ -43,9 +44,9 @@
 
 	exports.UTF8 = {encoding : "utf8"};
 
-	exports.clone = function clone(src, deep)
+	exports.clone = function clone(src, skipKeys)
 	{
-		return (Array.isArray(src) ? src.clone(deep) : (Object.isObject(src) ? Object.clone(src, deep) : src));
+		return (Array.isArray(src) ? src.clone() : (Object.isObject(src) ? Object.clone(src, skipKeys) : src));
 	};
 
 	exports.FINISH = function finish(err)

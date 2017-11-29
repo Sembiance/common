@@ -17,16 +17,18 @@ if(typeof Element!=="undefined")
 
 	Element.prototype.getWidthHeight = function()
 	{
+		return this.getDim();
+	};
+
+	Element.prototype.getDim = function()
+	{
 		var r = this.getBoundingClientRect();
 		return [r.width, r.height];
 	};
 
 	Element.prototype.clear = function()
 	{
-		while(this.firstChild)
-		{
-			this.removeChild(this.firstChild);
-		}
+		this.innerHTML = "";
 	};
 
 	Element.prototype.setText = function(text)
@@ -103,14 +105,24 @@ if(typeof Element!=="undefined")
 	{
 		this.classList.add("disabled");
 		this.setAttribute("disabled", "disabled");
-	};	
+	};
 
 	// Enables the element by removing the disabled attribute and class
 	Element.prototype.enable = function()
 	{
 		this.classList.remove("disabled");
 		this.removeAttribute("disabled");
-	};	
+	};
+
+	// Safely scrolls the element into view. Currently only supports vevrtical movement.
+	// .scrollIntoView should always be avoided due to it moving the whole darn screen if anything at all is offscreen. Piece of junk that function is.
+	Element.prototype.safeScrollIntoView = function(scrollParent)
+	{
+		const thisHeight = this.getHeight();
+		const thisBottomOffset = (this.offsetTop + thisHeight);
+		if(scrollParent.scrollTop>thisBottomOffset || (scrollParent.scrollTop+scrollParent.getHeight())<thisBottomOffset)
+			scrollParent.scrollTop = this.offsetTop - ((scrollParent.getHeight()-thisHeight)/2);
+	};
 }
 
 if(typeof NodeList!=="undefined")
