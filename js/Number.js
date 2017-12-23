@@ -4,7 +4,7 @@ if(!Number.prototype.toLocaleString)
 {
 	Number.prototype.toLocaleString = function()
 	{
-		return "" + this;
+		return this.toString()
 	};
 }
 

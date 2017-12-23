@@ -31,6 +31,15 @@ if(typeof Element!=="undefined")
 		this.innerHTML = "";
 	};
 
+	if(!Element.prototype.remove)
+	{
+		Element.prototype.remove = function()
+		{
+			if(this.parentNode!==null)
+				this.parentNode.removeChild(this);
+		};
+	}
+
 	Element.prototype.setText = function(text)
 	{
 		if(!this.childNodes || this.childNodes.length!==1)
@@ -58,6 +67,12 @@ if(typeof Element!=="undefined")
 		}
 
 		return null;
+	};
+
+	// Returns the width of one em for this element
+	Element.prototype.getEmWidth = function()
+	{
+		return Number(this.getComputedStyle().fontSize.match(/(\d+(\.\d+)?)px$/)[1]);
 	};
 
 	// Returns the elements width

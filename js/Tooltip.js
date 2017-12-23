@@ -1,11 +1,11 @@
 "use strict";
-/* global base: true */
+/* global Modernizr, base: true */
 
 (function _Tooltip()
 {
 	class Tooltip
 	{
-		constructor(node, text, extraClass, delay=base.SECOND*0.6, options={})
+		constructor(node, text, extraClass, delay=base.SECOND*0.5, options={})
 		{
 			this.node = node;
 			this.text = text;
@@ -32,7 +32,7 @@
 
 			this.node.addEventListener("mouseenter", this.boundMouseEnterHandler);
 			this.node.addEventListener("mouseleave", this.boundMouseLeaveHandler);
-			this.node.addEventListener("touchstart", this.boundTouchStartHandler);
+			this.node.addEventListener("touchstart", this.boundTouchStartHandler, Modernizr.passiveeventlisteners ? { passive : true } : undefined);
 		}
 
 		// Called to destroy this tooltip

@@ -252,7 +252,7 @@ if(!Object.swapKeyValues)
 
 if(!Object.clone)
 {
-	Object.clone = function(src, skipKeys)
+	Object.clone = function(src, skipKeys, shallow)
 	{
 		skipKeys = skipKeys || [];
 
@@ -262,7 +262,10 @@ if(!Object.clone)
 			if(skipKeys.contains(key))
 				return;
 
-			result[key] = (Array.isArray(val) ? val.clone() : (Object.isObject(val) ? Object.clone(val, skipKeys) : val));
+			if(shallow)
+				result[key] = val;
+			else
+				result[key] = (Array.isArray(val) ? val.clone() : (Object.isObject(val) ? Object.clone(val, skipKeys) : val));
 		});
 		return result;
 	};
