@@ -26,9 +26,9 @@
 		}
 
 		// Calls the cb when the object is ready to be written to
-		queue(cb)
+		queue(cb, finalcb=null)
 		{
-			this.cbQueue.push(cb);
+			this.cbQueue.push({ cb, finalcb });
 			this.scheduleGo();
 		}
 
@@ -44,7 +44,8 @@
 
 				const o = _o===null ? {} : _o;
 
-				this.cbQueue.splice(0).forEach(cb => cb(o));
+				const cbos = this.cbQueue.splice(0);
+				cbos.forEach(cbo => cbo.cb(o));
 
 				window.localforage.setItem(this.key, o, () =>
 				{
@@ -52,6 +53,8 @@
 					this.goTimer = null;
 
 					this.scheduleGo();
+
+					cbos.forEach(cbo => (cbo.finalcb ? cbo.finalcb() : undefined));
 				});
 			});
 		}
