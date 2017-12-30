@@ -1,7 +1,7 @@
 "use strict";
 /* global AudioContext: true */
 
-if(typeof window.performance==="undefined")
+if(typeof window.performance==="undefined" || !window.performance)
 	window.performance = {};
 
 if(typeof window.performance.now==="undefined")
@@ -16,10 +16,11 @@ if(typeof window.performance.now==="undefined")
 		{
 			const AC = window.AudioContext || window.webkitAudioContext;
 			ac = new AC();
-			ac.createGainNode();
-			if(ac.createGain)
+			if(typeof ac.createGainNode==="function")
+				ac.createGainNode();
+			if(typeof ac.createGain==="function")
 				ac.createGain();
-			if(ac.createOscillator)
+			if(typeof ac.createOscillator==="function")
 				ac.createOscillator();
 			setTimeout(() =>
 			{
@@ -33,7 +34,7 @@ if(typeof window.performance.now==="undefined")
 		window.performance.now = function now()
 		{
 			if(ac)
-				return ac.currentTime;
+				return (ac.currentTime*1000);
 
 			const t = (Date.now()-startTime);
 			if(t<seen)
