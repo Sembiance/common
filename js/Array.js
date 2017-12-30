@@ -624,6 +624,8 @@ if(!Array.prototype.pushUnique)
 			if(this.indexOf(arguments[i])===-1)
 				this.push(arguments[i]);
 		}
+
+		return this;
 	};
 }
 
