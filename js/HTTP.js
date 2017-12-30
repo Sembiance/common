@@ -21,7 +21,7 @@
 		xhr.onreadystatechange = () =>
 		{
 			if(xhr.readyState===4 && cb)
-				setImmediate(cb, ((xhr.status!==200 && xhr.status!==0) ? new Error("Invalid HTTP status code: " + xhr.status) : undefined), xhr.responseText);
+				setImmediate(cb, ((xhr.status!==200 && xhr.status!==0) ? new Error("Invalid HTTP status code (" + xhr.status + ") for URL: " + url) : undefined), xhr.responseText);
 		};
 	}
 
