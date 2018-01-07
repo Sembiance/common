@@ -5,7 +5,7 @@
 // This will handle simulating mouse events for when the Apple pencil is being used
 (function applePencil()
 {
-	if(bowser.ios!==true)
+	if(typeof bowser==="undefined" || bowser.ios!==true)
 		return;
 
 	const clickms = 300;
@@ -87,6 +87,9 @@
 				false, false, false, 0, null);
 
 			touch.target.dispatchEvent(simulatedEvent);
+
+			if(touch.target.nodeName && ["input", "select"].contains(touch.target.nodeName.toLowerCase()))
+				touch.target.focus();
 		}
 	}
 
