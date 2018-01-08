@@ -6,20 +6,27 @@
 		const xhr = new XMLHttpRequest();
 		xhr.open(method, url, true);
 		
-		if(data)
+		try
 		{
-			xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
-			xhr.send(JSON.stringify(data));
+			if(data)
+			{
+				xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
+				xhr.send(JSON.stringify(data));
+			}
+			else
+			{
+				xhr.send();
+			}
 		}
-		else
+		catch(err)
 		{
-			xhr.send();
+			return cb(err);
 		}
 
 		xhr.onreadystatechange = () =>
 		{
 			if(xhr.readyState===4 && cb)
-				cb(((xhr.status!==200 && xhr.status!==0) ? new Error("Invalid HTTP status code (" + xhr.status + ") for URL: " + url) : undefined), xhr.responseText);
+				cb(((xhr.status!==200) ? new Error("Invalid HTTP status code (" + xhr.status + ") for URL: " + url) : undefined), xhr.responseText);
 		};
 	}
 
