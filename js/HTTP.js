@@ -26,27 +26,26 @@
 		xhr.onreadystatechange = () =>
 		{
 			if(xhr.readyState===4 && cb)
-				cb(((xhr.status!==200) ? new Error("Invalid HTTP status code (" + xhr.status + ") for URL: " + url) : undefined), xhr.responseText);
+				cb(((xhr.status!==200 && (xhr.status!==0 || !xhr.responseText)) ? new Error("Invalid HTTP status code (" + xhr.status + ") for URL: " + url) : undefined), xhr.responseText);
 		};
 	}
 
-	const HTTP =
+	const HTTP = {};
+	HTTP.get = function get(url, cb)
 	{
-		get : function get(url, cb)
-		{
-			httpRequest("GET", url, undefined, cb);
-		},
-
-		put : function put(url, data, cb)
-		{
-			httpRequest("PUT", url, data, cb);
-		},
-
-		post : function post(url, data, cb)
-		{
-			httpRequest("POST", url, data, cb);
-		}
+		httpRequest("GET", url, undefined, cb);
 	};
 
-	window.HTTP = HTTP;
+	HTTP.put = function put(url, data, cb)
+	{
+		httpRequest("PUT", url, data, cb);
+	};
+
+	HTTP.post = function post(url, data, cb)
+	{
+		httpRequest("POST", url, data, cb);
+	};
+	
+	window.XU = window.XU || {};
+	window.XU.HTTP = HTTP;
 })();
