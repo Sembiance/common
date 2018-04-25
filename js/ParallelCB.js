@@ -46,5 +46,6 @@
 		}
 	}
 
-	window.ParallelCB = ParallelCB;
+	window.XU = window.XU || {};
+	window.XU.ParallelCB = ParallelCB;
 })();
