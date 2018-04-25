@@ -41,7 +41,7 @@ if(!Number.prototype.toClock)
 
 if(!Number.prototype.secondsAsHumanReadable)
 {
-	Number.prototype.secondsAsHumanReadable = function(includeTrailingZeros)
+	Number.prototype.secondsAsHumanReadable = function(includeTrailingZeros, lang="en", short=false)
 	{
 		var secondsElapsed = this;
 		var clock = secondsElapsed.toClock(secondsElapsed<60);
@@ -63,7 +63,7 @@ if(!Number.prototype.secondsAsHumanReadable)
 				part = Math.floor(part);
 				if(isNaN(part))
 					part = 0;
-				humanText += part.toLocaleString() + " year" + (part>1 || part===0 ? "s, " : ", ");
+				humanText += part.toLocaleString(lang) + (short ? "y" : (" year" + (part>1 || part===0 ? "s, " : ", ")));
 				
 				part = parseInt(clockParts[0], 10);
 				if(isNaN(part))
@@ -73,7 +73,7 @@ if(!Number.prototype.secondsAsHumanReadable)
 				part = Math.floor(part);
 				if(isNaN(part))
 					part = 0;
-				humanText += part.toLocaleString() + " day" + (part>1 || part===0 ? "s" : "");
+				humanText += part.toLocaleString(lang) + (short ? "d" : (" day" + (part>1 || part===0 ? "s" : "")));
 			}
 			else if(part>24)
 			{
@@ -81,7 +81,7 @@ if(!Number.prototype.secondsAsHumanReadable)
 				part = Math.floor(part);
 				if(isNaN(part))
 					part = 0;
-				humanText += part.toLocaleString() + " day" + (part>1 || part===0 ? "s, " : ", ");
+				humanText += part.toLocaleString(lang) + (short ? "d" : (" day" + (part>1 || part===0 ? "s, " : ", ")));
 				
 				part = parseInt(clockParts[0], 10);
 				if(isNaN(part))
@@ -90,16 +90,16 @@ if(!Number.prototype.secondsAsHumanReadable)
 				part = Math.floor(part);
 				if(isNaN(part))
 					part = 0;
-				humanText += part.toLocaleString() + " hour" + (part>1 || part===0 ? "s" : "");
+				humanText += part.toLocaleString(lang) + (short ? "h" : (" hour" + (part>1 || part===0 ? "s" : "")));
 			}
 			else
 			{
-				humanText += part.toLocaleString() + " hour" + (part>1 || part===0 ? "s, " : ", ");
+				humanText += part.toLocaleString(lang) + (short ? "h" : (" hour" + (part>1 || part===0 ? "s, " : ", ")));
 				
 				part = parseInt(clockParts[1], 10);
 				if(isNaN(part))
 					part = 0;
-				humanText += part.toLocaleString() + " minute" + (part>1 || part===0 ? "s" : "");
+				humanText += part.toLocaleString(lang) + (short ? "m" : (" minute" + (part>1 || part===0 ? "s" : "")));
 			}
 		}
 		else if(clockParts.length===2)
@@ -107,19 +107,19 @@ if(!Number.prototype.secondsAsHumanReadable)
 			part = parseInt(clockParts[0], 10);
 			if(isNaN(part))
 				part = 0;
-			humanText += part.toLocaleString() + " minute" + (part>1 || part===0 ? "s, " : ", ");
+			humanText += part.toLocaleString(lang) + (short ? "m" : (" minute" + (part>1 || part===0 ? "s, " : ", ")));
 			
 			part = parseInt(clockParts[1], 10);
 			if(isNaN(part))
 				part = 0;
-			humanText += part.toLocaleString() + " second" + (part>1 || part===0 ? "s" : "");
+			humanText += part.toLocaleString(lang) + (short ? "s" : (" second" + (part>1 || part===0 ? "s" : "")));
 		}
 		else if(clockParts.length===1)
 		{
 			part = parseInt(clockParts[0], 10);
 			if(isNaN(part))
 				part = 0;
-			humanText += part.toLocaleString() + " second" + (part>1 || part===0 ? "s" : "");
+			humanText += part.toLocaleString(lang) + (short ? "s" : (" second" + (part>1 || part===0 ? "s" : "")));
 		}
 
 		return humanText;
@@ -205,16 +205,16 @@ if(!Number.prototype.clearBit)
 	};
 }
 
-function isInt(num)
-{
-	return typeof num==='number' && parseFloat(num)==parseInt(num, 10) && !isNaN(num);
-}
-
-function findDec(num)
+Number.findDec = function(num)
 {
 	var count=1;
 	var a = Math.abs(num);
 	num = a;
+
+	function isInt(num)
+	{
+		return typeof num==='number' && parseFloat(num)==parseInt(num, 10) && !isNaN(num);
+	}
 
 	while(!isInt(num) && isFinite(num))
 	{
@@ -222,14 +222,14 @@ function findDec(num)
 	}
 
 	return count-1;
-}
+};
 
 if(!Number.prototype.add)
 {
 	Number.prototype.add = function(num2)
 	{
-		var dec1 = findDec(this);
-		var dec2 = findDec(num2);
+		var dec1 = Number.findDec(this);
+		var dec2 = Number.findDec(num2);
 		return +((this+num2).toFixed((dec1>dec2 ? dec1 : dec2)));
 	};
 }
@@ -238,8 +238,8 @@ if(!Number.prototype.subtract)
 {
 	Number.prototype.subtract = function(num2)
 	{
-		var dec1 = findDec(this);
-		var dec2 = findDec(num2);
+		var dec1 = Number.findDec(this);
+		var dec2 = Number.findDec(num2);
 		return +((this-num2).toFixed((dec1>dec2 ? dec1 : dec2)));
 	};
 }
@@ -248,8 +248,8 @@ if(!Number.prototype.multiply)
 {
 	Number.prototype.multiply = function(num2)
 	{
-		var dec1 = findDec(this);
-		var dec2 = findDec(num2);
+		var dec1 = Number.findDec(this);
+		var dec2 = Number.findDec(num2);
 		return +((this*num2).toFixed((dec1>dec2 ? dec1 : dec2)));
 	};
 }
