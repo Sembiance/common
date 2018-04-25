@@ -105,5 +105,6 @@
 		}
 	}
 
-	window.PieChart = { render };
+	window.XU = window.XU || {};
+	window.XU.PieChart = { render };
 })();

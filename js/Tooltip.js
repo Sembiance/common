@@ -146,5 +146,6 @@
 		}
 	}
 
-	window.Tooltip = Tooltip;
+	window.XU = window.XU || {};
+	window.XU.Tooltip = Tooltip;
 })();
