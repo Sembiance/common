@@ -72,5 +72,6 @@
 		}
 	}
 
-	window.LocalForageQueue = LocalForageQueue;
+	window.XU = window.XU || {};
+	window.XU.LocalForageQueue = LocalForageQueue;
 })();
