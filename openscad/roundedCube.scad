@@ -27,8 +27,8 @@
 */
 
 // Example code:
-/*
-cube([5, 10, 4]);
+
+/*cube([5, 10, 4]);
 
 translate([8, 0, 0]) { roundedCube([5, 10, 4], r=1); }
 translate([16, 0, 0]) { roundedCube([5, 10, 4], r=1, zcorners=[true, false, true, false]); }
