@@ -1,114 +1,93 @@
 "use strict";
 
-if(!Array.prototype.indexOf)
+// This polyfill does NOT support IE<9 or Safari<4
+
+// Returns true if the passed value is an array
+if(!Array.isArray)
 {
-	Array.prototype.indexOf = function (searchElement /*, fromIndex */ )
+	Array.isArray = function isArray(val)
 	{
-		if(this===null)
-			throw new TypeError();
-
-		var t = Object(this);
-		var len = t.length >>> 0;
-		if(len===0)
-			return -1;
-
-		var n = 0;
-		if(arguments.length>0)
-		{
-			n = Number(arguments[1]);
-			if(n!==n)
-				n = 0;
-			else if(n!==0 && n !== Infinity && n !== -Infinity)
-				n = (n > 0 || -1) * Math.floor(Math.abs(n));
-		}
-
-		if(n>=len)
-			return -1;
-
-		var k = n >= 0 ? n : Math.max(len - Math.abs(n), 0);
-		for (;k<len;k++)
-		{
-			if(k in t && t[k]===searchElement)
-				return k;
-		}
-
-		return -1;
+		return Object.prototype.toString.call(val)==="[object Array]";
 	};
 }
 
-if(!Array.prototype.lastIndexOf)
+// Converts the passed in value to an array. Can convert things that act "like" arrays (like HTML collections) into actual proper arrays
+if(!Array.toArray)
 {
-	Array.prototype.lastIndexOf = function(searchElement /*, fromIndex*/)
+	Array.toArray = function toArray(val)
 	{
-		if(this===null)
-			throw new TypeError();
+		if(Array.isArray(val))
+			return val;
 
-		var t = Object(this);
-		var len = t.length >>> 0;
-		if(len===0)
-			return -1;
-
-		var n = len;
-		if(arguments.length>1)
+		if(Object.isObject(val) && "length" in val)
 		{
-			n = Number(arguments[1]);
-			if(n!==n)
-				n = 0;
-			else if(n!==0 && n!==(1 / 0) && n!==-(1 / 0))
-				n = (n > 0 || -1) * Math.floor(Math.abs(n));
+			const r=[];
+			for(let i=0, len=val.length;i<len;i++)
+				r.push(val[i]);
+			return r;
 		}
-
-		var k = n >= 0 ? Math.min(n, len - 1) : len - Math.abs(n);
-		for(;k>=0;k--)
-		{
-			if(k in t && t[k]===searchElement)
-				return k;
-		}
-
-		return -1;
+	
+		return [val];
 	};
 }
 
-if(!Array.prototype.filter)
+// Returns true if the array contains the same values in the same order as another array
+if(!Array.prototype.equals)
 {
-	Array.prototype.filter = function(fun /*, thisp */)
+	Array.prototype.equals = function equals(a)
 	{
-		if(this===null)
-			throw new TypeError();
-
-		var t = Object(this);
-		var len = t.length >>> 0;
-		if(typeof fun!=="function")
-			throw new TypeError();
-
-		var res = [];
-		var thisp = arguments[1];
-		for(var i=0;i<len;i++)
+		if(this.length!==a.length)
+			return false;
+		
+		for(let i=0, len=this.length;i<len;i++)
 		{
-			if(i in t)
+			if(Array.isArray(a[i]) && Array.isArray(this[i]))
 			{
-				var val = t[i];
-				if(fun.call(thisp, val, i, t))
-					res.push(val);
+				if(!a[i].equals(this[i]))
+					return false;
+			}
+			else if(Object.isObject(a[i]) && Object.isObject(this[i]))
+			{
+				if(!Object.equals(a[i], this[i]))
+					return false;
+			}
+			else if(a[i]!==this[i])
+			{
+				return false;
 			}
 		}
 
-		return res;
+		return true;
 	};
 }
 
+// Returns a deep copy of the array unless you pass true then you get a shallow copy
+if(!Array.prototype.clone)
+{
+	Array.prototype.clone = function clone(shallow)
+	{
+		const r = [];
+		for(let i=0, len=this.length;i<len;i++)
+		{
+			if(shallow)
+				r.push(this[i]);
+			else
+				r.push((Array.isArray(this[i]) ? this[i].clone() : (Object.isObject(this[i]) ? Object.clone(this[i]) : this[i])));
+		}
+
+		return r;
+	};
+}
+
+// Same as .filter() but does the filtering in place, returning the array itself as a result for chaining purposes
 if(!Array.prototype.filterInPlace)
 {
-	Array.prototype.filterInPlace = function(fun /*, thisp */)
+	Array.prototype.filterInPlace = function filterInPlace(cb, thisArg)
 	{
-		if(this===null)
-			throw new TypeError();
-
-		var j=0, squeezing=false;
-		var thisp = arguments[1];
-		this.forEach(function (e, i)
-		{ 
-			if(fun.call(thisp, e, i, this))
+		let j=0, squeezing=false;
+		this.forEach((e, i) =>
+		{
+			if(cb.call(thisArg, e, i, this))
 			{
 				if(squeezing)
 					this[j] = e;
@@ -118,7 +97,7 @@ if(!Array.prototype.filterInPlace)
 			{
 				squeezing = true;
 			}
-		}.bind(this));
+		});
 
 		this.length = j;
 
@@ -126,332 +105,46 @@ if(!Array.prototype.filterInPlace)
 	};
 }
 
-if(!Array.prototype.forEach)
-{
-	Array.prototype.forEach = function(callback, thisArg)
-	{
-		var T, k;
-
-		if(typeof this==="undefined" || this===null)
-			throw new TypeError(" this is null or not defined");
-
-		var O = Object(this);
-		var len = O.length >>> 0;
-
-		if ({}.toString.call(callback)!=="[object Function]")
-			throw new TypeError(callback + " is not a function");
-
-		if(thisArg)
-			T = thisArg;
-
-		k = 0;
-
-		while(k<len)
-		{
-			var kValue;
-
-			if(k in O)
-			{
-				kValue = O[k];
-				callback.call(T, kValue, k, O);
-			}
-
-			k++;
-		}
-	};
-}
-
-Array.prototype.forEachBatch = function(callback, numAtOnce, thisArg)
-{
-	var T, k;
-
-	numAtOnce = numAtOnce || 1;
-
-	if(typeof this==="undefined" || this===null)
-		throw new TypeError(" this is null or not defined");
-
-	var O = Object(this);
-	var len = O.length >>> 0;
-
-	if ({}.toString.call(callback)!=="[object Function]")
-		throw new TypeError(callback + " is not a function");
-
-	if(thisArg)
-		T = thisArg;
-
-	k = 0;
-
-	var kIndexes = [];
-	var kArgs = [];
-	while(k<len)
-	{
-		var kValue;
-
-		if(k in O)
-		{
-			kIndexes.push(k);
-			kArgs.push(O[k]);
-		}
-
-		if(kArgs.length===numAtOnce)
-		{
-			kArgs.push(kIndexes, O);
-			callback.apply(T, kArgs);
-			kArgs = [];
-			kIndexes = [];
-		}
-
-		k++;
-	}
-
-	if(kArgs.length>0)
-	{
-		while(kArgs.length<numAtOnce)
-		{
-			kArgs.push(undefined);
-			kIndexes.push(undefined);
-		}
-
-		kArgs.push(kIndexes, O);
-		callback.apply(T, kArgs);
-	}
-};
-
-if(!Array.prototype.every)
-{
-	Array.prototype.every = function(fun /*, thisp */)
-	{
-		if(this===null)
-			throw new TypeError();
-
-		var t = Object(this);
-		var len = t.length >>> 0;
-		if(typeof fun!=="function")
-			throw new TypeError();
-
-		var thisp = arguments[1];
-		for(var i=0;i<len;i++)
-		{
-			if(i in t && !fun.call(thisp, t[i], i, t))
-				return false;
-		}
-
-		return true;
-	};
-}
-
-if(!Array.prototype.map)
-{
-	Array.prototype.map = function(callback, thisArg)
-	{
-		var T, A, k;
-
-		if(this===null)
-			throw new TypeError(" this is null or not defined");
-
-		var O = Object(this);
-		var len = O.length >>> 0;
-		if({}.toString.call(callback)!=="[object Function]")
-			throw new TypeError(callback + " is not a function");
-
-		if(thisArg)
-			T = thisArg;
-
-		A = new Array(len);
-		k = 0;
-		while(k<len)
-		{
-			var kValue, mappedValue;
-			if (k in O)
-			{
-				kValue = O[k];
-				mappedValue = callback.call(T, kValue, k, O);
-				A[k] = mappedValue;
-			}
-			
-			k++;
-		}
-
-		return A;
-	};
-}
-
+// Same as .map() but does the mapping in place, returning the array itself as a result for chaining purposes
 if(!Array.prototype.mapInPlace)
 {
-	Array.prototype.mapInPlace = function(callback, thisArg)
+	Array.prototype.mapInPlace = function mapInPlace(callback, thisArg)
 	{
-		this.splice.apply(this, [0, this.length, ...this.map(callback, thisArg)]);
-	};
-}
-
-if(!Array.prototype.mapToObject)
-{
-	Array.prototype.mapToObject = function(callback, thisArg)
-	{
-		var result = {};
-
-		for(var i=0,len=this.length;i<len;i++)
-		{
-			result[this[i]] = callback.call(thisArg, this[i]);
-		}
-
-		return result;
-	};
-}
-
-if(!Array.prototype.some)
-{
-	Array.prototype.some = function(fun /*, thisp */)
-	{
-		if(this === void 0 || this === null)
-			throw new TypeError();
-
-		var t = Object(this);
-		var len = t.length >>> 0;
-
-		if(typeof fun !== "function")
-			throw new TypeError();
-
-		var thisp = arguments[1];
-		
-		for(var i=0;i<len;i++)
-		{
-			if (i in t && fun.call(thisp, t[i], i, t))
-			return true;
-		}
-
-		return false;
-	};
-}
-
-if(!Array.prototype.reduce)
-{
-	Array.prototype.reduce = function reduce(accumulator)
-	{
-		var i, l = this.length, curr;
-
-		if(typeof accumulator !== "function")
-			throw new TypeError("First argument is not callable");
-
-		if((l == 0 || l === null) && (arguments.length <= 1)) // == on purpose to test 0 and false.
-			throw new TypeError("Array length is 0 and no second argument");
-
-		if(arguments.length <= 1)
-		{
-			curr = this[0];
-			i = 1;
-		}
-		else
-		{
-			curr = arguments[1];
-		}
-
-		for(i=i||0;i<l;++i)
-		{
-			if(i in this)
-				curr = accumulator.call(undefined, curr, this[i], i, this);
-		}
-
-		return curr;
-	};
-}
-
-if(!Array.prototype.reduceRight)
-{
-	Array.prototype.reduceRight = function(callbackfn /*, initialValue */)
-	{
-		if(this===null)
-			throw new TypeError();
-
-		var t = Object(this);
-		var len = t.length >>> 0;
-		if(typeof callbackfn!=="function")
-			throw new TypeError();
-
-		if(len===0 && arguments.length===1)
-			throw new TypeError();
-
-		var k = len - 1;
-		var accumulator;
-		if(arguments.length >= 2)
-		{
-			accumulator = arguments[1];
-		}
-		else
-		{
-			do
-			{
-				if(k in this)
-				{
-					accumulator = this[k--];
-					break;
-				}
-
-				if(--k<0)
-					throw new TypeError();
-			}
-			while(true);
-		}
-
-		while(k>=0)
-		{
-			if(k in t)
-				accumulator = callbackfn.call(undefined, accumulator, t[k], k, t);
-			k--;
-		}
-
-		return accumulator;
-	};
-}
-
-if(!Array.prototype.replaceAll)
-{
-	Array.prototype.replaceAll = function(oldVal, newVal)
-	{
-		if(oldVal===newVal)
-			return this;
-		
-		do
-		{
-			var valLoc = this.indexOf(oldVal);
-			if(valLoc===-1)
-				break;
-
-			this.splice(valLoc, 1, newVal);
-		} while(true);
-		
+		this.splice(0, this.length, ...this.map(callback, thisArg));
 		return this;
 	};
 }
 
-if(!Array.prototype.contains)
+// Returns an object where the keys are the values in the array and the values are the result of cb(val)
+if(!Array.prototype.mapToObject)
 {
-	Array.prototype.contains = function(val)
+	Array.prototype.mapToObject = function mapToObject(cb, thisArg)
 	{
-		return this.indexOf(val)!==-1;
-	};
-}
+		const r = {};
 
-if(!Array.prototype.count)
-{
-	Array.prototype.count = function(val)
-	{
-		var r=0;
-		for(var i=0,len=this.length;i<len;i++)
-		{
-			if(this[i]===val)
-				r++;
-		}
+		for(let i=0, len=this.length;i<len;i++)
+			r[this[i]] = cb.call(thisArg, this[i]);
 
 		return r;
 	};
 }
 
+// Returns true if the array contains the passed in value. Same as Array.includes() which is available in ES2016
+if(!Array.prototype.contains)
+{
+	Array.prototype.contains = function contains(val)
+	{
+		return this.indexOf(val)!==-1;
+	};
+}
+
+// Returns true if the array contains all of the values in the passed in array
 if(!Array.prototype.containsAll)
 {
-	Array.prototype.containsAll = function(vals)
+	Array.prototype.containsAll = function containsAll(_vals)
 	{
-		for(var i=0,len=vals.length;i<len;i++)
+		const vals = Array.toArray(_vals);
+		for(let i=0, len=vals.length;i<len;i++)
 		{
 			if(this.indexOf(vals[i])===-1)
 				return false;
@@ -461,12 +154,13 @@ if(!Array.prototype.containsAll)
 	};
 }
 
+// Returns true if the array contains any of the values in the passed in array
 if(!Array.prototype.containsAny)
 {
-	Array.prototype.containsAny = function(vals)
+	Array.prototype.containsAny = function containsAny(_vals)
 	{
-		vals = Array.toArray(vals);
-		for(var i=0,len=vals.length;i<len;i++)
+		const vals = Array.toArray(_vals);
+		for(let i=0, len=vals.length;i<len;i++)
 		{
 			if(this.indexOf(vals[i])!==-1)
 				return true;
@@ -476,35 +170,403 @@ if(!Array.prototype.containsAny)
 	};
 }
 
-if(!Array.prototype.unique)
+// Returns how many times the passed in value occurrs in the array
+if(!Array.prototype.count)
 {
-	Array.prototype.unique = function()
+	Array.prototype.count = function count(val)
 	{
-		return this.filter(function(item, i, a)
+		let r=0;
+		for(let i=0, len=this.length;i<len;i++)
 		{
-			return a.indexOf(item)===i;
-		});
+			if(this[i]===val)
+				r++;
+		}
+
+		return r;
 	};
 }
 
+// Removes the first occurence of the passed in val from the array
+if(!Array.prototype.remove)
+{
+	Array.prototype.remove = function remove(val)
+	{
+		const loc = this.indexOf(val);
+		if(loc===-1)
+			return this;
+		
+		this.splice(loc, 1);
+
+		return this;
+	};
+}
+
+// Removes every occurrence of the passed in val (or array of vals) from the array
+if(!Array.prototype.removeAll)
+{
+	Array.prototype.removeAll = function removeAll(_vals)
+	{
+		Array.toArray(_vals).forEach(val =>
+		{
+			while(this.contains(val))
+				this.remove(val);
+		});
+
+		return this;
+	};
+}
+
+// Clears the array and returns itself
+if(!Array.prototype.clear)
+{
+	Array.prototype.clear = function clear()
+	{
+		this.length = 0;
+
+		return this;
+	};
+}
+
+// Returns the sum of all the numbers in the array
+if(!Array.prototype.sum)
+{
+	Array.prototype.sum = function sum()
+	{
+		if(!this.length)
+			return 0;
+		
+		return this.reduce((p, c) => (((+p) || 0) + ((+c) || 0)));
+	};
+}
+
+// Returns an average of all the numbers in the array (arithmetic mean)
+if(!Array.prototype.average)
+{
+	Array.prototype.average = function average()
+	{
+		return this.sum()/this.length;
+	};
+}
+
+// Returns the median of all the numbers in the array (middle number)
+if(!Array.prototype.median)
+{
+	Array.prototype.median = function median()
+	{
+		const w = this.slice().sort((a, b) => a-b);
+		const half = Math.floor(w.length/2);
+
+		if(w.length % 2)
+			return w[half];
+
+		return (w[half-1] + w[half]) / 2.0;
+	};
+}
+
+// On average, how far from the average is each number in our set?
+// Pass true to calc a sample variance (if the data only represents a small sample of the whole of possible data)
+if(!Array.prototype.variance)
+{
+	Array.prototype.variance = function variance(sample)
+	{
+		const avg = this.average();
+		return (this.map(n => ((n-avg)*(n-avg))).sum() / (this.length - (sample ? 1 : 0)));
+	};
+}
+
+// A better way of expressing variance. Basically how much variation exists from the average
+// Pass true to use a 'sample' variance as the basis for the standard deviation
+if(!Array.prototype.standardDeviation)
+{
+	Array.prototype.standardDeviation = function standardDeviation(sample)
+	{
+		return Math.sqrt(this.variance(sample));
+	};
+}
+
+// Returns the lowest value in the array
+if(!Array.prototype.min)
+{
+	Array.prototype.min = function min()
+	{
+		if(this.length<1)
+			return;
+
+		let r=this[0];
+		for(let i=1, len=this.lenghth;i<len;i++)
+			r = Math.min(r, this[i]);
+
+		return r;
+	};
+}
+
+// Returns the highest value in the array
+if(!Array.prototype.max)
+{
+	Array.prototype.max = function max()
+	{
+		if(this.length<1)
+			return;
+
+		let r=this[0];
+		for(let i=1, len=this.length;i<len;i++)
+			r = Math.max(r, this[i]);
+
+		return r;
+	};
+}
+
+// Returns a NEW array containing just the unique items from this array
+if(!Array.prototype.unique)
+{
+	Array.prototype.unique = function unique()
+	{
+		return this.filter((item, i, a) => a.indexOf(item)===i);
+	};
+}
+
+// Returns a NEW array containing just the unique items from this array. Does so by sorting it first which can vastly improve speed in certain situations
+if(!Array.prototype.uniqueBySort)
+{
+	Array.prototype.uniqueBySort = function uniqueBySort()
+	{
+		this.sort();
+
+		const out = [];
+		const len = this.length-1;
+		if(len>=0)
+		{
+			for(let i=0;i<len;i++)
+			{
+				if(this[i]!==this[i+1])
+					out.push(this[i]);
+			}
+
+			out.push(this[len]);
+		}
+
+		return out;
+	};
+}
+
+// Push all the values in the array passed in onto the array. This differs from .concat() in that it doesn't create a new array but just pushes onto the existing array
+// This method is useful over .push(...vals) because it returns the array for chaining
+if(!Array.prototype.pushAll)
+{
+	Array.prototype.pushAll = function pushAll(vals)
+	{
+		this.push(...vals);
+		return this;
+	};
+}
+
+// Pushes the passed in values onto the array, but only if they are not already present within the array
+if(!Array.prototype.pushUnique)
+{
+	Array.prototype.pushUnique = function pushUnique(...vals)
+	{
+		for(let i=0, len=vals.length;i<len;i++)
+		{
+			if(this.indexOf(vals[i])===-1)
+				this.push(vals[i]);
+		}
+
+		return this;
+	};
+}
+
+// Pushes a sequence of numbers onto the end of an array
+if(!Array.prototype.pushSequence)
+{
+	Array.prototype.pushSequence = function pushSequence(startAt, endAt)
+	{
+		if(endAt>startAt)
+		{
+			for(let i=startAt;i<=endAt;i++)
+				this.push(i);
+		}
+		else if(endAt<startAt)
+		{
+			for(let i=startAt;i>=endAt;i--)
+				this.push(i);
+		}
+		else
+		{
+			this.push(startAt);
+		}
+
+		return this;
+	};
+}
+
+// Pushs the given val onto the array x times
+if(!Array.prototype.pushMany)
+{
+	Array.prototype.pushMany = function pushMany(val, _x)
+	{
+		let x = _x;
+		while((x--)>0)
+			this.push((Array.isArray(val) ? val.clone() : (Object.isObject(val) ? Object.clone(val) : val)));
+
+		return this;
+	};
+}
+
+// Pushes copies of itself x times. A similar effect can be achieved with the new ES2015 .copyWithin() method
+if(!Array.prototype.pushCopyInPlace)
+{
+	Array.prototype.pushCopyInPlace = function pushCopyInPlace(_x)
+	{
+		const x = (_x || 1);
+		const copy = this.slice();
+		for(let i=0;i<x;i++)
+			this.push(...copy);
+
+		return this;
+	};
+}
+
+// Pulls the first occurence of a value out of an array, modifying the array.
+if(!Array.prototype.pull)
+{
+	Array.prototype.pull = function pull(val)
+	{
+		const loc = this.indexOf(val);
+		if(loc===-1)
+			return undefined;
+		
+		return this.splice(loc, 1)[0];
+	};
+}
+
+// Pulls all the values in the passed in array from the base array, modifying it.
+if(!Array.prototype.pullAll)
+{
+	Array.prototype.pullAll = function pullAll(_vals)
+	{
+		const vals = Array.toArray(_vals);
+		const results=[];
+		
+		vals.forEach(val =>
+		{
+			let r = undefined;
+			do
+			{
+				r = this.pull(val);
+				if(typeof r!=="undefined")
+					results.push(r);
+			} while(r);
+		});
+		
+		return results;
+	};
+}
+
+// Returns the last element of the array
+if(!Array.prototype.last)
+{
+	Array.prototype.last = function last()
+	{
+		return this[this.length-1];
+	};
+}
+
+// Returns a NEW Array containing all the elements of the base array after except for the values passed in
+if(!Array.prototype.subtract)
+{
+	Array.prototype.subtract = function subtract(vals)
+	{
+		const r = this.slice();
+		vals.forEach(v => r.remove(v));
+		return r;
+	};
+}
+
+// Returns a NEW array with any "empty" elements removed. Any element that has "falsy" truthiness is removed.
+if(!Array.prototype.filterEmpty)
+{
+	Array.prototype.filterEmpty = function filterEmpty()
+	{
+		return this.filter(a => !!a);
+	};
+}
+
+// Flattens an array
+if(!Array.prototype.flatten)
+{
+	Array.prototype.flatten = function flatten(_depth)
+	{
+		let depth = typeof _depth==="undefined" ? 1 : _depth;
+		return this.reduce((a, v) => (Array.isArray(v) && depth>0 ? a.concat(v.flatten((--depth))) : a.concat(v)), []);
+	};
+}
+
+// Replaces a particular value at index idx, returning the array for chaining
+if(!Array.prototype.replaceAt)
+{
+	Array.prototype.replaceAt = function replaceAt(idx, v)
+	{
+		this[idx] = v;
+		return this;
+	};
+}
+
+// Reduce the array just like .reduce() but only once. Stopping once you return a non-null/non-undefined result
+if(!Array.prototype.reduceOnce)
+{
+	Array.prototype.reduceOnce = function reduceOnce(cb)
+	{
+		return this.reduce((r, ...args) =>
+		{
+			if(r!==null)
+				return r;
+
+			const cbRes = cb(...args);
+			return (typeof cbRes==="undefined" ? null : cbRes);
+		}, null);
+	};
+}
+
+// Replaces all values in the array that match oldVal with newVal
+if(!Array.prototype.replaceAll)
+{
+	Array.prototype.replaceAll = function replaceAll(oldVal, newVal)
+	{
+		if(oldVal===newVal)
+			return this;
+		
+		do
+		{
+			const loc = this.indexOf(oldVal);
+			if(loc===-1)
+				break;
+
+			this.splice(loc, 1, newVal);
+		} while(true);
+		
+		return this;
+	};
+}
+
+// Sorts an array based on the values returned by the sorter cb functions passed in. reverse can be `true` or an array of booleans corresponding to each sorter cb
 if(!Array.prototype.multiSort)
 {
-	Array.prototype.multiSort = function(sorters, reverse)
+	Array.prototype.multiSort = function multiSort(_sorters, reverse)
 	{
-		sorters = Array.toArray(sorters);
+		const sorters = Array.toArray(_sorters);
 
-		this.sort(function(a, b)
+		this.sort((a, b) =>
 		{
-			for(var i=0,len=sorters.length;i<len;i++)
+			for(let i=0, len=sorters.length;i<len;i++)
 			{
-				var sort = sorters[i];
+				const sort = sorters[i];
 
-				var aVal = sort(a);
-				var bVal = sort(b);
+				const aVal = sort(a);
+				const bVal = sort(b);
 
 				if(typeof aVal==="string")
 				{
-					var stringCompareResult = aVal.localeCompare(bVal);
+					const stringCompareResult = aVal.localeCompare(bVal);
 					if(stringCompareResult<0)
 						return (reverse && (!Array.isArray(reverse) || reverse[i]) ? 1 : -1);
 
@@ -528,245 +590,51 @@ if(!Array.prototype.multiSort)
 	};
 }
 
-if(!Array.prototype.uniqueBySort)
-{
-	Array.prototype.uniqueBySort = function()
-	{
-		this.sort();
-
-		var out = [];
-		var len = this.length-1;
-		if(len>=0)
-		{
-			for(var i=0;i<len;i++)
-			{
-				if(this[i]!==this[i+1])
-				{
-					out.push(this[i]);
-				}
-			}
-
-			out.push(this[len]);
-		}
-
-		return out;
-	};
-}
-
+// Returns a random value from the array. If only 1 item requested, it returns that item, otherwise it returns an array of values
+// Can pass an excluded value or array of excluded values
 if(!Array.prototype.pickRandom)
 {
-	Array.prototype.pickRandom = function(num, excludedItems)
+	Array.prototype.pickRandom = function pickRandom(num=1, _excludedItems=[])
 	{
-		if(typeof num==="undefined")
-			return this[Math.floor(Math.random()*this.length)];
+		const excludedItems = Array.toArray(_excludedItems);
 
-		if(num>=this.length)
-			return this;
-
-		var a=this;
-		var excludedIndexes=[];
-		if(excludedItems)
+		if(excludedItems.length===0)
 		{
-			Array.toArray(excludedItems).forEach(function(excludedItem)
+			// Saves time and just picks 1 at random
+			if(num===1)
+				return this[Math.floor(Math.random()*this.length)];
+
+			// If we want all our elements, just shuffle em up and return em
+			if(num>=this.length)
+				return this.slice().shuffle();
+		}
+
+		const excludedIndexes=[];
+		if(excludedItems.length>0)
+		{
+			excludedItems.forEach(excludedItem =>
 			{
-				var excludedItemIndex = a.indexOf(excludedItem);
+				const excludedItemIndex = this.indexOf(excludedItem);
 				if(excludedItemIndex!==-1)
 					excludedIndexes.push(excludedItemIndex);
 			});
 		}
 
-		var pickedIndexes=[];
-		for(var i=0;i<num;i++)
-		{
+		const pickedIndexes=[];
+		for(let i=0;i<num;i++)
 			pickedIndexes.push(Math.randomIntExcluding(0, (this.length-1), pickedIndexes.concat(excludedIndexes)));
-		}
 
-		var result = pickedIndexes.map(function(pickedIndex) { return a[pickedIndex]; });
-		return (num===1 ? result[0] : result);
+		const r = pickedIndexes.map(pickedIndex => this[pickedIndex]);
+		return (num===1 ? r[0] : r);
 	};
 }
 
-if(!Array.isArray)
-{
-	Array.isArray = function(arg)
-	{
-		return Object.prototype.toString.call(arg) === '[object Array]';
-	};
-}
-
-if(!Array.toArray)
-{
-	Array.toArray = function(arg)
-	{
-		if(Array.isArray(arg))
-			return arg;
-
-		if(Object.isObject(arg) && "length" in arg)
-		{
-			var a=[];
-			for(var i=0,len=arg.length;i<len;i++)
-			{
-				a.push(arg[i]);
-			}
-			return a;
-		}
-	
-		return [arg];
-	};
-}
-
-if(!Array.prototype.pushUnique)
-{
-	Array.prototype.pushUnique = function()
-	{
-		for(var i=0;i<arguments.length;i++)
-		{
-			if(this.indexOf(arguments[i])===-1)
-				this.push(arguments[i]);
-		}
-
-		return this;
-	};
-}
-
-if(!Array.prototype.pushSequence)
-{
-	Array.prototype.pushSequence = function(startAt, endAt)
-	{
-		var i;
-		if(endAt>startAt)
-		{
-			for(i=startAt;i<=endAt;i++)
-			{
-				this.push(i);
-			}
-		}
-		else if(endAt<startAt)
-		{
-			for(i=startAt;i>=endAt;i--)
-			{
-				this.push(i);
-			}
-		}
-		else
-		{
-			this.push(startAt);
-		}
-
-		return this;
-	};
-}
-
-if(!Array.prototype.pull)
-{
-	Array.prototype.pull = function(val)
-	{
-		var loc = this.indexOf(val);
-		if(loc===-1)
-			return undefined;
-		
-		return this.splice(loc, 1)[0];
-	};
-}
-
-if(!Array.prototype.remove)
-{
-	Array.prototype.remove = function(val)
-	{
-		var loc = this.indexOf(val);
-		if(loc===-1)
-			return this;
-		
-		this.splice(loc, 1);
-
-		return this;
-	};
-}
-
-if(!Array.prototype.removeAll)
-{
-	Array.prototype.removeAll = function(vals)
-	{
-		vals = Array.toArray(vals);
-		
-		var a=this;
-		vals.forEach(function(val)
-		{
-			while(a.contains(val))
-			{
-				a.remove(val);
-			}
-		});
-
-		return this;
-	};
-}
-
-if(!Array.prototype.pullAll)
-{
-	Array.prototype.pullAll = function(vals)
-	{
-		vals = Array.toArray(vals);
-		var results=[];
-		
-		var a=this;
-		vals.forEach(function(val)
-		{
-			var result;
-			do
-			{
-				result = a.pull(val);
-				if(typeof result!=="undefined")
-					results.push(result);
-			} while(result);
-		});
-		
-		return results;
-	};
-}
-
-if(!Array.prototype.equals)
-{
-	Array.prototype.equals = function(a)
-	{
-		if(this.length!==a.length)
-			return false;
-		
-		var i=0, len=this.length;
-		for(;i<len;i++)
-		{
-			if(a[i]!==this[i])
-				return false;
-		}
-
-		return true;
-	};
-}
-
-Array.prototype.rotate = (function()
-{
-	var push = Array.prototype.push, splice = Array.prototype.splice;
-
-	return function(count)
-	{
-		var len = this.length >>> 0;	// convert to uint
-		count = count >> 0;				// convert to int
-
-		// convert count to value in range [0, len[
-		count = ((count % len) + len) % len;
-
-		// use splice.call() instead of this.splice() to make function generic
-		push.apply(this, splice.call(this, 0, count));
-		return this;
-	};
-})();
-
-
+// Shuffles an array of numbers. Correctly.
 if(!Array.prototype.shuffle)
 {
-	Array.prototype.shuffle = function()
+	Array.prototype.shuffle = function shuffle()
 	{
-		var m = this.length, t, i;
+		let m=this.length, t=null, i=0;
 		while(m)
 		{
 			i = Math.randomInt(0, --m);
@@ -779,389 +647,144 @@ if(!Array.prototype.shuffle)
 	};
 }
 
-if(!Array.prototype.mutate)
+// Returns the first value that the cb returns a truthy value for
+// I OVERWRITE the Array.prototype.find() always because stupid Internet Explorer has a non-standard bad version of this method
+Array.prototype.find = function find(cb)
 {
-	Array.prototype.mutate = function(fun, startRes)
+	for(let i=0, len=this.length;i<len;i++)
 	{
-		if(this===null)
-			throw new TypeError();
-		if(typeof fun!=="function")
-			throw new TypeError();
-
-		var res = startRes;
-		for(var i=0,len=this.length;i<len;i++)
-		{
-			res = fun(this[i], res, i, this);
-		}
-
-		return res;
-	};
-}
-
-if(!Array.prototype.mutateOnce)
-{
-	Array.prototype.mutateOnce = function(fun)
-	{
-		if(this===null)
-			throw new TypeError();
-		if(typeof fun!=="function")
-			throw new TypeError();
-
-		for(var i=0,len=this.length;i<len;i++)
-		{
-			var res = fun(this[i], i, this);
-			if(typeof res!=="undefined")
-				return res;
-		}
-	};
-}
-
-if(!Array.prototype.mutateRightOnce)
-{
-	Array.prototype.mutateRightOnce = function(fun)
-	{
-		if(this===null)
-			throw new TypeError();
-		if(typeof fun!=="function")
-			throw new TypeError();
-
-		for(var i=(this.length-1);i>=0;i--)
-		{
-			var res = fun(this[i], i, this);
-			if(typeof res!=="undefined")
-				return res;
-		}
-	};
-}
-
-if(!Array.prototype.mutateRight)
-{
-	Array.prototype.mutateRight = function(fun, startRes)
-	{
-		if(this===null)
-			throw new TypeError();
-		if(typeof fun!=="function")
-			throw new TypeError();
-
-		var res = startRes;
-		for(var i=(this.length-1);i>=0;i--)
-		{
-			res = fun(this[i], res, i, this);
-		}
-		return res;
-	};
-}
-
-if(!Array.prototype.clear)
-{
-	Array.prototype.clear = function()
-	{
-		this.length = 0;
-	};
-}
-
-if(!Array.prototype.pushAll)
-{
-	Array.prototype.pushAll = function(arr)
-	{
-		this.push.apply(this, arr);
-		
-		return this;
-	};
-}
-
-// Sums all the numbers in the array
-if(!Array.prototype.sum)
-{
-	Array.prototype.sum = function()
-	{
-		if(!this.length)
-			return 0;
-		
-		return this.reduce(function(p,c,i) { return (+p || 0) + (+c || 0); });
-	};
-}
-
-// Returns an average of all the numbers in the array (arithmetic mean)
-if(!Array.prototype.average)
-{
-	Array.prototype.average = function()
-	{
-		return this.sum()/this.length;
-	};
-}
-
-// Returns the median of all the numbers in the array (middle number)
-if(!Array.prototype.median)
-{
-	Array.prototype.median = function()
-	{
-		var w = this.slice().sort(function(a,b) {return a-b;} );
-		var half = Math.floor(w.length/2);
-
-		if(w.length % 2)
-			return w[half];
-		else
-			return (w[half-1] + w[half]) / 2.0;
-	};
-}
-
-// On average, how far from the average is each number in our set?
-// Pass true to calc a sample variance (if the data only represents a small sample of the whole of possible data)
-if(!Array.prototype.variance)
-{
-	Array.prototype.variance = function(sample)
-	{
-		var avg = this.average();
-		return (this.map(function(n) { return ((n-avg)*(n-avg)); }).sum() / (this.length - (sample ? 1 : 0)));
-	};
-}
-
-// A better way of expressing variance. Basically how much variation exists from the average
-if(!Array.prototype.standardDeviation)
-{
-	Array.prototype.standardDeviation = function(sample)
-	{
-		return Math.sqrt(this.variance(sample));
-	};
-}
-
-if(!Array.prototype.flatten)
-{
-	Array.prototype.flatten = function(sep)
-	{
-		var result = [];
-		this.forEach(function(a, i)
-		{
-			if(i>0 && sep)
-				result.push(sep);
-
-			result = result.concat(a);
-		});
-
-		return result;
-	};
-}
-
-if(!Array.prototype.filterEmpty)
-{
-	Array.prototype.filterEmpty = function()
-	{
-		return this.filter(function(a) { return !!a; });
-	};
-}
-
-if(!Array.prototype.subtract)
-{
-	Array.prototype.subtract = function(a)
-	{
-		var result = this.slice();
-		a.forEach(function(o) { result.remove(o); });
-		return result;
-	};
-}
-
-
-if(!Array.prototype.last)
-{
-	Array.prototype.last = function()
-	{
-		return this[this.length-1];
-	};
-}
-
-if(!Array.prototype.clone)
-{
-	Array.prototype.clone = function(shallow)
-	{
-		var result = [];
-		var src = this;
-		for(var i=0,len=src.length;i<len;i++)
-		{
-			if(shallow)
-				result.push(src[i]);
-			else
-				result.push((Array.isArray(src[i]) ? src[i].clone() : (Object.isObject(src[i]) ? Object.clone(src[i]) : src[i])));
-		}
-
-		return result;
-	};
-}
-
-
-if(!Array.prototype.pushCopyInPlace)
-{
-	Array.prototype.pushCopyInPlace = function(copies)
-	{
-		copies = copies || 1;
-		var copy = this.slice();
-		for(var i=0;i<(copies||1);i++)
-			this.push(...copy);
-
-		return this;
-	};
-}
-
-function CBRunner(_fun, _val, _i, _finish)
-{
-	this.fun = _fun;
-	this.val = _val;
-	this.i = _i;
-	this.finish = _finish;
-
-	CBRunner.prototype.run = function(delay)
-	{
-		if(delay)
-			setTimeout(this.runActual.bind(this), delay);
-		else
-			this.runActual();
-	};
-
-	CBRunner.prototype.runActual = function()
-	{
-		this.fun(this.val, function(err, result) { this.finish(err, result, this.i); }.bind(this), this.i);
-	};
-}
-
-function CBIterator(_a, _fun, _atOnce, _minInterval)
-{
-	this.a = _a.slice();
-	this.fun = _fun;
-	this.atOnce = _atOnce || 1;
-	this.results = [];
-	this.i=0;
-	this.running=[];
-	this.minInterval = _minInterval || 0;
-	this.intervalDelay=0;
-
-	CBIterator.prototype.go = function(cb)
-	{
-		this.cb = cb || function(){};
-		if(this.a.length<1)
-			return this.cb(undefined, []);
-
-		this.next();
-	};
-
-	CBIterator.prototype.next = function()
-	{
-		var toRun = [];
-		while(this.running.length<this.atOnce && this.a.length>0)
-		{
-			var _i = this.i++;
-			this.running.push(_i);
-			toRun.push(new CBRunner(this.fun, this.a.shift(), _i, this.finish.bind(this)));
-		}
-
-		while(toRun.length)
-		{
-			if(this.intervalDelay<this.atOnce)
-				this.intervalDelay++;
-
-			toRun.shift().run(this.intervalDelay*this.minInterval);
-		}
-	};
-
-	CBIterator.prototype.finish = function(err, result, _i)
-	{
-		this.intervalDelay--;
-		
-		if(err)
-			return this.cb(err, this.results);
-
-		this.results[_i] = result;
-		this.running.remove(_i);
-
-		if(this.running.length===0 && this.a.length===0)
-			return this.cb(undefined, this.results);
-
-		this.next();
-	};
-}
-
-if(!Array.prototype.serialForEach)
-{
-	Array.prototype.serialForEach = function(fun, cb)
-	{
-		(new CBIterator(this, fun, 1)).go(cb);
-	};
-}
-
-if(!Array.prototype.parallelForEach)
-{
-	Array.prototype.parallelForEach = function(fun, cb, atOnce, minInterval)
-	{
-		(new CBIterator(this, fun, atOnce||3, minInterval||0)).go(cb);
-	};
-}
-
-if(!Array.prototype.pushMany)
-{
-	Array.prototype.pushMany = function(val, count)
-	{
-		while((count--)>0)
-		{
-			this.push((Array.isArray(val) ? val.clone() : (Object.isObject(val) ? Object.clone(val) : val)));
-		}
-
-		return this;
-	};
-}
-
-if(!Array.prototype.batch)
-{
-	Array.prototype.batch = function(count)
-	{
-		var batches = [];
-		while(this.length>0)
-		{
-			batches.push(this.splice(0, count));
-		}
-
-		return batches;
-	};
-}
-
-if(!Array.prototype.min)
-{
-	Array.prototype.min = function()
-	{
-		if(this.length<1)
-			return;
-
-		var min=this[0];
-		for(var i=1;i<this.length;i++)
-		{
-			min=Math.min(min, this[i]);
-		}
-		return min;
-	};
-}
-
-if(!Array.prototype.max)
-{
-	Array.prototype.max = function()
-	{
-		if(this.length<1)
-			return;
-
-		var max=this[0];
-		for(var i=1;i<this.length;i++)
-		{
-			max=Math.max(max, this[i]);
-		}
-		return max;
-	};
-}
-
-// Always use mine, as it correctly returns the element unlike the non-standard IE version
-Array.prototype.find = function(fun)
-{
-	for(var i=0;i<this.length;i++)
-	{
-		if(fun(this[i]))
+		if(cb(this[i], i, this))
 			return this[i];
 	}
 
 	return undefined;
 };
+
+// Rotates the array elements by x places
+if(!Array.prototype.rotate)
+{
+	Array.prototype.rotate = function rotate(x)
+	{
+		this.unshift.apply(this, this.splice(x, this.length));	// eslint-disable-line prefer-spread
+		return this;
+	};
+}
+
+/* // Alternative rotate implementation
+Array.prototype.rotate = function rotate(x)
+{
+	var len = this.length >>> 0,
+	x = x >> 0;
+
+	Array.prototype.unshift.apply(this, Array.prototype.splice.call(this, x % len, len));
+	return this;
+};*/
+
+// Batches up the values in the array into sub arrays of x length
+if(!Array.prototype.batch)
+{
+	Array.prototype.batch = function batch(x=1)
+	{
+		const batches = [];
+		while(this.length>0)
+			batches.push(this.splice(0, x));
+
+		return batches;
+	};
+}
+
+(function _arrayAsyncFuncs()
+{
+	function CBRunner(_fun, _val, _i, _finish)
+	{
+		this.fun = _fun;
+		this.val = _val;
+		this.i = _i;
+		this.finish = _finish;
+
+		CBRunner.prototype.run = function run(delay)
+		{
+			if(delay)
+				setTimeout(this.runActual.bind(this), delay);
+			else
+				this.runActual();
+		};
+
+		CBRunner.prototype.runActual = function runActual()
+		{
+			this.fun(this.val, (err, result) => this.finish(err, result, this.i), this.i);
+		};
+	}
+
+	function CBIterator(_a, _fun, _atOnce, _minInterval)
+	{
+		this.a = _a.slice();
+		this.fun = _fun;
+		this.atOnce = _atOnce || 1;
+		this.results = [];
+		this.i=0;
+		this.running=[];
+		this.minInterval = _minInterval || 0;
+		this.intervalDelay=0;
+
+		CBIterator.prototype.go = function go(cb)
+		{
+			this.cb = cb || function _cb() {};
+			if(this.a.length<1)
+				return this.cb(undefined, []);
+
+			this.next();
+		};
+
+		CBIterator.prototype.next = function next()
+		{
+			const toRun = [];
+			while(this.running.length<this.atOnce && this.a.length>0)
+			{
+				const curi = this.i++;
+				this.running.push(curi);
+				toRun.push(new CBRunner(this.fun, this.a.shift(), curi, this.finish.bind(this)));
+			}
+
+			while(toRun.length)
+			{
+				if(this.intervalDelay<this.atOnce)
+					this.intervalDelay++;
+
+				toRun.shift().run(this.intervalDelay*this.minInterval);
+			}
+		};
+
+		CBIterator.prototype.finish = function finish(err, result, curi)
+		{
+			this.intervalDelay--;
+			
+			if(err)
+				return this.cb(err, this.results);
+
+			this.results[curi] = result;
+			this.running.remove(curi);
+
+			if(this.running.length===0 && this.a.length===0)
+				return this.cb(undefined, this.results);
+
+			this.next();
+		};
+	}
+
+	if(!Array.prototype.serialForEach)
+	{
+		Array.prototype.serialForEach = function parallelForEach(fun, cb)
+		{
+			(new CBIterator(this, fun, 1)).go(cb);
+		};
+	}
+
+	if(!Array.prototype.parallelForEach)
+	{
+		Array.prototype.parallelForEach = function parallelForEach(fun, cb, atOnce, minInterval)
+		{
+			(new CBIterator(this, fun, atOnce||3, minInterval||0)).go(cb);
+		};
+	}
+})();
