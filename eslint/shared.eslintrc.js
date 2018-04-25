@@ -5,8 +5,17 @@ module.exports =
 	// Use this comment to disable a rule in a file:	/* eslint-disable <rule> */
 	// Use this comment to disable a rule for a block:	/* eslint-disable <rule> */   <YOUR BLOCK HERE, MULTIPLE LINES FINE>    /* eslint-enable <rule> */
 	// Use this comment to disable a rule on a line:	// eslint-disable-line <rule>
+
+	// 0 == off
+	// 1 == warn
+	// 2 == error
+
 	"rules" :
 	{
+		// New
+		"multiline-comment-style"     : 0,
+		"implicit-arrow-linebreak"    : 0,
+
 		// Possible Errors
 		"for-direction"               : 2,
 		"getter-return"               : 0,
