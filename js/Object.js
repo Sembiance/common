@@ -1,33 +1,45 @@
 "use strict";
 
+// This polyfill does NOT support IE<9 or Safari<5
+
+// Returns 'true' if the val is an Object and NOT an Array
+if(!Object.isObject)
+{
+	Object.isObject = function isObject(val)
+	{
+		return val!==null && !Array.isArray(val) && typeof val==="object";
+	};
+}
+
+// Returns whether two objects are equal or not
 if(!Object.equals)
 {
-	Object.equals = function(obj1, obj2)
+	Object.equals = function equals(o1, o2)
 	{
-		if(obj1===obj2)
+		if(o1===o2)
 			return true;
 
-		for(var k in obj1)
+		for(const k in o1)
 		{
-			if(!obj1.hasOwnProperty(k))
+			if(!o1.hasOwnProperty(k))
 				continue;
 
-			if(!obj2.hasOwnProperty(k))
+			if(!o2.hasOwnProperty(k))
 				return false;
 
-			if(obj1[k]===obj2[k])
+			if(o1[k]===o2[k])
 				continue;
 
-			if(typeof obj1[k]!=="object")
+			if(typeof o1[k]!=="object")
 				return false;
 
-			if(!Object.equals(obj1[k], obj2[k]))
+			if(!Object.equals(o1[k], o2[k]))
 				return false;
 		}
 
-		for(k in obj2)
+		for(const k in o2)
 		{
-			if(obj2.hasOwnProperty(k) && !obj1.hasOwnProperty(k))
+			if(o2.hasOwnProperty(k) && !o1.hasOwnProperty(k))
 				return false;
 		}
 
@@ -35,161 +47,155 @@ if(!Object.equals)
 	};
 }
 
-if(!Object.keys)
+// Deep copies an object unless shallow is set to true. Can also pass an array of keys to skip
+if(!Object.clone)
 {
-	Object.keys = (function()
+	Object.clone = function clone(src, skipKeys=[], shallow)
 	{
-		var hop = Object.prototype.hasOwnProperty,
-			hasDontEnumBug = !({toString: null}).propertyIsEnumerable("toString"),
-			dontEnums = [ "toString", "toLocaleString", "valueOf", "hasOwnProperty", "isPrototypeOf", "propertyIsEnumerable", "constructor" ],
-			dontEnumsLength = dontEnums.length;
-
-		return function (obj)
+		const result = {};
+		Object.forEach(src, (k, v) =>
 		{
-			if(typeof obj!=="object" && typeof obj!=="function" || obj === null)
-				throw new TypeError("Object.keys called on non-object");
+			if(skipKeys.contains(k))
+				return;
 
-			var result = [];
-
-			for(var prop in obj)
-			{
-				if(hop.call(obj, prop))
-					result.push(prop);
-			}
-
-			if(hasDontEnumBug)
-			{
-				for(var i=0;i<dontEnumsLength;i++)
-				{
-					if(hop.call(obj, dontEnums[i]))
-						result.push(dontEnums[i]);
-				}
-			}
-			
-			return result;
-		};
-	})();
-}
-
-if(!Object.values)
-{
-	Object.values = function(obj)
-	{
-		var result = [];
-
-		Object.keys(obj).forEach(function(key)
-		{
-			result.push(obj[key]);
+			if(shallow)
+				result[k] = v;
+			else
+				result[k] = (Array.isArray(v) ? v.clone() : (Object.isObject(v) ? Object.clone(v, skipKeys) : v));
 		});
-
 		return result;
 	};
 }
 
+// Returns an array of the vaules for this object
+if(!Object.values)
+{
+	Object.values = function values(obj)
+	{
+		const r = [];
+		Object.keys(obj).forEach(key => r.push(obj[key]));
+		return r;
+	};
+}
+
+// Allows you to iterate over entries in an object calling cb with [key, value] entries
 if(!Object.forEach)
 {
-	Object.forEach = function(obj, cb)
+	Object.forEach = function forEach(o, cb)
 	{
 		if(!cb)
 			return;
 
-		Object.keys(obj).forEach(function(key, i)
-		{
-			cb(key, obj[key], i);
-		});
+		Object.keys(o).forEach((key, i) => cb(key, o[key], i));
 	};
 }
 
+// Filters out keys from an object by calling cb(key, value, i) and deleting entries when that cb() returns a falsy value. Modifies the object directly.
 if(!Object.filter)
 {
-	Object.filter = function(obj, cb)
+	Object.filter = function filter(o, cb)
 	{
 		if(!cb)
-			return obj;
+			return o;
 
-		var keysToDelete = [];
+		const keysToDelete = [];
 
-		Object.keys(obj).forEach(function(key, i)
+		Object.keys(o).forEach((k, i) =>
 		{
-			if(!cb(key, obj[key], i))
-				keysToDelete.push(key);
+			if(!cb(k, o[k], i))
+				keysToDelete.push(k);
 		});
 
-		keysToDelete.forEach(function(keyToDelete)
-		{
-			delete obj[keyToDelete];
-		});
-
-		return obj;
+		keysToDelete.forEach(keyToDelete => { delete o[keyToDelete]; });
+		return o;
 	};
 }
 
+// Returns true if every key/value pair passed to cb() returns a truthy value
 if(!Object.every)
 {
-	Object.every = function(obj, cb)
+	Object.every = function every(o, cb)
 	{
 		if(!cb)
 			return true;
 
-		var matches = true;
-		Object.keys(obj).forEach(function(key, i)
+		let matches = true;
+		Object.keys(o).forEach((k, i) =>
 		{
 			if(!matches)
 				return;
 			
-			matches = cb(key, obj[key], i);
+			matches = cb(k, o[k], i);
 		});
 
 		return matches;
 	};
 }
 
-if(!Object.mutate)
+// Returns a new object by calling cb(k, v) and expects a result of either 'newVal' or [newKey, newVal]
+if(!Object.map)
 {
-	Object.mutate = function(obj, cb, startResult)
+	Object.map = function map(o, cb)
 	{
 		if(!cb)
-			return;
+			return o;
 
-		var result = ((typeof startResult!=="undefined") ? startResult : undefined);
+		const result = {};
 
-		Object.keys(obj).forEach(function(key)
+		Object.forEach(o, (k, v) =>
 		{
-			result = cb(key, obj[key], result);
+			const r = cb(k, v);
+			if(!Array.isArray(r))
+				result[k] = r;
+			else if(r.length===1)
+				result[k] = r[0];
+			else
+				result[r[0]] = r[1];
 		});
 
 		return result;
 	};
 }
 
-if(!Object.mutateOnce)
+// Returns a new object with the key/values swapped
+if(!Object.swapKeyValues)
 {
-	Object.mutateOnce = function(obj, cb, startResult)
+	Object.swapKeyValues = function swapKeyValues(o)
 	{
-		if(!cb)
-			return;
-
-		var result = ((typeof startResult!=="undefined") ? startResult : undefined);
-
-		Object.keys(obj).forEach(function(key)
-		{
-			if(typeof result!=="undefined")
-				return;
-			
-			result = cb(key, obj[key], result);
-		});
-
-		return result;
+		const newObj = {};
+		Object.forEach(o, (k, v) => { newObj[v] = k; });
+		return newObj;
 	};
 }
 
+// Returns an array of [key, val] sub arrays
+if(!Object.entries)
+{
+	Object.entries = function entries(o)
+	{
+		const ownProps = Object.keys(o);
+		let i=ownProps.length;
+		const resArray = new Array(i);
+		while(i--)
+			resArray[i] = [ownProps[i], o[ownProps[i]]];
+
+		return resArray;
+	};
+}
+
+// Shorthand for Object.entries
+if(!Object.toArray)
+	Object.toArray = Object.entries;
+
+// Merges the key/values from o2 into o1. Overwriting same key names unless dupHandler cb exists then it sets the value to the result returned from dupHandler(o1Value, o2Value, key)
+// Can pass an array of onlyKeys and any keys not in that array won't be merged
 if(!Object.merge)
 {
-	Object.merge = function(o1, o2, dupHandler, onlyKeys)
+	Object.merge = function merge(o1, o2, dupHandler, onlyKeys)
 	{
-		var hop = Object.prototype.hasOwnProperty;
+		const hop = Object.prototype.hasOwnProperty;
 
-		Object.forEach(o2, function(key)
+		Object.forEach(o2, key =>
 		{
 			if(onlyKeys && onlyKeys.indexOf(key)===-1)
 				return;
@@ -204,183 +210,58 @@ if(!Object.merge)
 	};
 }
 
-if(!Object.map)
-{
-	Object.map = function(obj, cb)
-	{
-		if(!cb)
-			return obj;
-
-		var result = {};
-
-		Object.forEach(obj, function(key, value)
-		{
-			var r = cb(key, value);
-			if(!Array.isArray(r))
-				result[key] = r;
-			else if(r.length===1)
-				result[key] = r[0];
-			else
-				result[r[0]] = r[1];
-		});
-
-		return result;
-	};
-}
-
-if(!Object.isObject)
-{
-	Object.isObject = function (arg)
-	{
-		return arg!==null && !Array.isArray(arg) && typeof arg==="object";
-	};
-}
-
-if(!Object.swapKeyValues)
-{
-	Object.swapKeyValues = function(obj)
-	{
-		var newObj = {};
-		Object.forEach(obj, function(key, val)
-		{
-			newObj[val] = key;
-		});
-
-		return newObj;
-	};
-}
-
-if(!Object.clone)
-{
-	Object.clone = function(src, skipKeys, shallow)
-	{
-		skipKeys = skipKeys || [];
-
-		var result = {};
-		Object.forEach(src, function(key, val)
-		{
-			if(skipKeys.contains(key))
-				return;
-
-			if(shallow)
-				result[key] = val;
-			else
-				result[key] = (Array.isArray(val) ? val.clone() : (Object.isObject(val) ? Object.clone(val, skipKeys) : val));
-		});
-		return result;
-	};
-}
-
-if(!Object.entries)
-{
-	Object.entries = function(obj)
-	{
-		var ownProps = Object.keys(obj), i=ownProps.length, resArray = new Array(i);
-		while(i--)
-		{
-			resArray[i] = [ownProps[i], obj[ownProps[i]]];
-		}
-
-		return resArray;
-	};
-}
-
-if(!Object.toArray)
-{
-	Object.toArray = Object.entries;
-}
-
+// Renames a key in the object with a new name. Returns the object for chaining
 if(!Object.renameKey)
 {
-	Object.renameKey = function(obj, oldKey, newKey)
+	Object.renameKey = function renameKey(o, oldKey, newKey)
 	{
 		if(oldKey===newKey)
-			return obj;
+			return o;
 
-		if(obj.hasOwnProperty(oldKey))
+		if(o.hasOwnProperty(oldKey))
 		{
-			obj[newKey] = obj[oldKey];
-			delete obj[oldKey];
+			o[newKey] = o[oldKey];
+			delete o[oldKey];
 		}
 
-		return obj;
+		return o;
 	};
 }
 
-if(!Object.defineProperties)
+// Reduce an object into something else, similar to Array.reduce
+if(!Object.reduce)
 {
-	Object.defineProperties = function(obj, properties)
+	Object.reduce = function reduce(o, cb, startResult)
 	{
-		function convertToDescriptor(desc)
+		if(!cb)
+			return;
+
+		let result = ((typeof startResult!=="undefined") ? startResult : undefined);
+
+		Object.keys(o).forEach(key => { result = cb(key, o[key], result); });
+
+		return result;
+	};
+}
+
+// Just like Object.reduce but stops once it gets a non-undefined result
+if(!Object.reduceOnce)
+{
+	Object.reduceOnce = function reduceOnce(o, cb, startResult)
+	{
+		if(!cb)
+			return;
+
+		let result = ((typeof startResult!=="undefined") ? startResult : undefined);
+
+		Object.keys(o).forEach(key =>
 		{
-			function hasProperty(obj, prop)
-			{
-				return Object.prototype.hasOwnProperty.call(obj, prop);
-			}
-
-			function isCallable(v)
-			{
-				// NB: modify as necessary if other values than functions are callable.
-				return typeof v === 'function';
-			}
-
-			if(typeof desc !== 'object' || desc === null)
-				throw new TypeError('bad desc');
-
-			var d = {};
-
-			if(hasProperty(desc, 'enumerable'))
-				d.enumerable = !!desc.enumerable;
-			if(hasProperty(desc, 'configurable'))
-				d.configurable = !!desc.configurable;
-			if(hasProperty(desc, 'value'))
-				d.value = desc.value;
-			if(hasProperty(desc, 'writable'))
-				d.writable = !!desc.writable;
-			if(hasProperty(desc, 'get'))
-			{
-				var g = desc.get;
-
-				if(!isCallable(g) && typeof g!=='undefined')
-					throw new TypeError('bad get');
+			if(typeof result!=="undefined")
+				return;
 			
-				d.get = g;
-			}
-			
-			if(hasProperty(desc, 'set'))
-			{
-				var s = desc.set;
-				if(!isCallable(s) && typeof s!=='undefined')
-					throw new TypeError('bad set');
-			
-				d.set = s;
-			}
+			result = cb(key, o[key], result);
+		});
 
-			if(('get' in d || 'set' in d) && ('value' in d || 'writable' in d))
-				throw new TypeError('identity-confused descriptor');
-
-			return d;
-		}
-
-		if(typeof obj !== 'object' || obj === null)
-			throw new TypeError('bad obj');
-
-		properties = Object(properties);
-
-		var keys = Object.keys(properties);
-		var descs = [];
-		var i;
-
-		for(i=0;i<keys.length;i++)
-		{
-			descs.push([keys[i], convertToDescriptor(properties[keys[i]])]);
-		}
-
-		for(i=0;i<descs.length;i++)
-		{
-			Object.defineProperty(obj, descs[i][0], descs[i][1]);
-		}
-
-		return obj;
+		return result;
 	};
 }

@@ -1,11 +1,39 @@
 "use strict";
 
+// Returns true if the string starts with the given match
+if(!String.prototype.startsWith)
+{
+	String.prototype.startsWith = function startsWith(match)
+	{
+		return this.indexOf(match)===0;
+	};
+}
+
+// Returns true if the string ends with the given match
+if(!String.prototype.endsWith)
+{
+	String.prototype.endsWith = function endsWith(match)
+	{
+		return this.reverse().startsWith(match.reverse());
+	};
+}
+
+// Returns true if the string contains the given match
+if(!String.prototype.contains)
+{
+	String.prototype.contains = function contains(match)
+	{
+		return this.indexOf(match)!==-1;
+	};
+}
+
+// Reverses a string, character by character
 if(!String.prototype.reverse)
 {
-	String.prototype.reverse = function()
+	String.prototype.reverse = function reverse()
 	{
-		var i = this.length;
-		var result = "";
+		let i = this.length;
+		let result = "";
 
 		while(i>0)
 		{
@@ -17,131 +45,85 @@ if(!String.prototype.reverse)
 	};
 }
 
-if(!String.prototype.startsWith)
-{
-	String.prototype.startsWith = function(match)
-	{
-		return this.indexOf(match)===0;
-	};
-}
-
-if(!String.prototype.endsWith)
-{
-	String.prototype.endsWith = function(match)
-	{
-		return this.reverse().startsWith(match.reverse());
-	};
-}
-
-if(!String.prototype.contains)
-{
-	String.prototype.contains = function(match)
-	{
-		return this.indexOf(match)!==-1;
-	};
-}
-
-// Always over-rides the existing trim() with my version
-String.prototype.trim = function(chars)
-{
-	if(!chars)
-		chars = "\\s\\u200B";
-
-	if(Array.isArray(chars))
-		chars = chars.join("");
-
-	return this.replace(new RegExp("^[" + chars + "]+|[" + chars + "]+$", "g"), "");
-};
-
+// Replace all occurencs of match with replaceWith
 if(!String.prototype.replaceAll)
 {
-	String.prototype.replaceAll = function(match, replaceWith)
+	String.prototype.replaceAll = function replaceAll(match, replaceWith)
 	{
 		return this.replace(new RegExp(match, "g"), replaceWith);
 	};
 }
 
+// Strips out the given chars from the string
 if(!String.prototype.strip)
 {
-	String.prototype.strip = function()
+	String.prototype.strip = function strip(_chars)
 	{
-		var chars = Array.isArray(arguments[0]) ? arguments[0].join() : Array.prototype.slice.call(arguments).join();
+		const chars = Array.isArray(_chars) ? _chars.join() : Array.prototype.slice.call(arguments).join();	// eslint-disable-line prefer-rest-params
 		return this.replace(new RegExp("[" + chars + "]", "g"), "");
 	};
 }
 
-if(!String.prototype.innerTrim)
-{
-	String.prototype.innerTrim = function()
-	{
-		var text = this;
-		var re = new RegExp(/\s\s/g);
-		while(text.search(re)!==-1)
-		{
-			text = text.replace(re, " ");
-		}
-
-		return text;
-	};
-}
-
+// Capitalizes the first letter of the string
 if(!String.prototype.capitalize)
 {
-	String.prototype.capitalize = function ()
+	String.prototype.capitalize = function capitalize()
 	{
 		return this.charAt(0).toUpperCase() + this.substr(1);
 	};
 }
 
+// Converts a string to proper case, capitilizing the first letter of each word and lowercasing the rest of the word
 if(!String.prototype.toProperCase)
 {
-	String.prototype.toProperCase = function()
+	String.prototype.toProperCase = function toProperCase()
 	{
-		return this.replace(/\w\S*/g, function(txt)
-		{
-			return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
-		});
+		return this.replace(/\w\S*/g, txt => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase());
 	};
 }
 
+// Splits a given string into an array of chars
 if(!String.prototype.toArray)
 {
-	String.prototype.toArray = function()
+	String.prototype.toArray = function toArray()
 	{
 		return this.split("");
 	};
 }
 
-String.prototype.repeat = function(count, seperator)
+// Repeats a given string count times. I always over-ride the ES2015 version because I added a seperator argument
+String.prototype.repeat = function repeat(count, seperator)
 {
-	var result = "";
-	for(var i=0;i<count;i++)
+	let result = "";
+	for(let i=0;i<count;i++)
 	{
 		if(i>0 && seperator)
 			result += seperator;
 		
-		result += this;
+		result += this;	// eslint-disable-line consistent-this
 	}
 
 	return result;
 };
 
+// Repeat the given string count times, but as an array
 if(!String.prototype.repeatAsArray)
 {
-	String.prototype.repeatAsArray = function(count)
+	String.prototype.repeatAsArray = function repeatAsArray(count)
 	{
-		var result = [];
+		const result = [];
 		result.pushMany(""+this, count);	// The ""+ is needed for IE9, it oddly passes 'object' rather than a string.
 		return result;
 	};
 }
 
+// Pads the start of the given string to targetLength with the given padString
 if(!String.prototype.padStart)
 {
-	String.prototype.padStart = function padStart(targetLength, padString)
+	String.prototype.padStart = function padStart(_targetLength, _padString)
 	{
-		targetLength = targetLength>>0; //floor if number or convert non-number to 0;
-		padString = String(padString || " ");
+		let targetLength = _targetLength >> 0; // eslint-disable-line no-bitwise
+		let padString = String(_padString || " ");
 		if(this.length>targetLength)
 			return String(this);
 		
@@ -153,12 +135,13 @@ if(!String.prototype.padStart)
 	};
 }
 
+// Pads the end of the given string to targetLength with the given padString
 if(!String.prototype.padEnd)
 {
-	String.prototype.padEnd = function padEnd(targetLength, padString)
+	String.prototype.padEnd = function padEnd(_targetLength, _padString)
 	{
-		targetLength = targetLength>>0; //floor if number or convert non-number to 0;
-		padString = String(padString || " ");
+		let targetLength = _targetLength >> 0; // eslint-disable-line no-bitwise
+		let padString = String(_padString || " ");
 		if(this.length>targetLength)
 			return String(this);
 	
@@ -170,35 +153,51 @@ if(!String.prototype.padEnd)
 	};
 }
 
+// Returns the last index location of the given substring txt
+if(!String.prototype.lastIndexOf)
+{
+	String.prototype.lastIndexOf = function lastIndexOf(txt)
+	{
+		const loc = this.reverse().indexOf(txt);
+		if(loc===-1)
+			return -1;
+
+		return this.length-loc;
+	};
+}
+
+// Replaces a single character at a given index with a different char
 if(!String.prototype.replaceCharAt)
 {
-	String.prototype.replaceCharAt = function(index, c)
+	String.prototype.replaceCharAt = function replaceCharAt(index, c)
 	{
 		return this.substring(0, index) + c + this.substring(index+1);
 	};
 }
 
-if(!String.prototype.shorten)
+// Shortens a string BY the given len
+if(!String.prototype.shortenBy)
 {
-	String.prototype.shorten = function(c)
+	String.prototype.shortenBy = function shortenBy(len)
 	{
-		return this.substring(0, this.length-c);
+		return this.substring(0, this.length-len);
 	};
 }
 
+// Returns true if the string contains nothing but whitespace
 if(!String.prototype.isWhiteSpace)
 {
-	String.prototype.isWhiteSpace = function()
+	String.prototype.isWhiteSpace = function isWhiteSpace()
 	{
-		for(var i=0;i<this.length;i++)
+		for(let i=0, len=this.length;i<len;i++)
 		{
-			if(this.charAt(i)==='\t')
+			if(this.charAt(i)==="\t")
 				continue;
-			if(this.charAt(i)==='\n')
+			if(this.charAt(i)==="\n")
 				continue;
-			if(this.charAt(i)==='\r')
+			if(this.charAt(i)==="\r")
 				continue;
-			if(this.charAt(i)===' ')
+			if(this.charAt(i)===" ")
 				continue;
 			if(this.charCodeAt(i)===160)	// nbsp
 				continue;
@@ -210,14 +209,16 @@ if(!String.prototype.isWhiteSpace)
 	};
 }
 
-if(!String.prototype.lastIndexOf)
+// Replaces any extra whitespace from within the middle of a string
+if(!String.prototype.innerTrim)
 {
-	String.prototype.lastIndexOf = function(txt)
+	String.prototype.innerTrim = function innerTrim()
 	{
-		var loc = this.reverse().indexOf(txt);
-		if(loc===-1)
-			return -1;
+		let text = this;	// eslint-disable-line consistent-this
+		const re = new RegExp(/\s\s/g);
+		while(text.search(re)!==-1)
+			text = text.replace(re, " ");
 
-		return this.length-loc;
+		return text;
 	};
 }
