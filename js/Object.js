@@ -265,3 +265,13 @@ if(!Object.reduceOnce)
 		return result;
 	};
 }
+
+// Clear an object. Useful to clear an object that is 'const'
+if(!Object.clear)
+{
+	Object.clear = function clear(o)
+	{
+		Object.keys(o).forEach(k => { delete o[k]; });
+		return o;
+	};
+}

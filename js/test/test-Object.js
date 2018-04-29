@@ -113,5 +113,11 @@ a = {hello : "world", abc : 123, kittyIsCute : true};
 r = ["world", "hello"];
 assert.ok(r.containsAll(Object.reduceOnce(a, (k, v, res) => { res.push(v, k); return res; }, [])));
 
+TESTNAME = "clear";
+a = {hello : "world", abc : 123, kittyIsCute : true};
+r = {};
+assert.strictEqual(JSON.stringify(r), JSON.stringify(Object.clear(a)));
+assert.strictEqual(JSON.stringify(r), JSON.stringify(a));
+
 console.log("ALL TESTS PASSED");
 
