@@ -1,0 +1,4 @@
+https://gist.github.com/gavinhungry/7a67174c18085f4a23eb
+https://www.owasp.org/index.php/TLS_Cipher_String_Cheat_Sheet
+Google Search
+
