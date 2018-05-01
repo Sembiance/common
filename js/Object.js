@@ -189,7 +189,7 @@ if(!Object.toArray)
 
 // Merges the key/values from o2 into o1. Overwriting same key names unless dupHandler cb exists then it sets the value to the result returned from dupHandler(o1Value, o2Value, key)
 // Can pass an array of onlyKeys and any keys not in that array won't be merged
-if(!Object.merge)
+if(!Object.merge || typeof Object.merge!=="function")
 {
 	Object.merge = function merge(o1, o2, dupHandler, onlyKeys)
 	{
