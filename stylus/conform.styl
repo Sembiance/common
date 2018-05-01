@@ -16,12 +16,6 @@ box-sizing()
 	-o-box-sizing arguments
 	box-sizing arguments
 
-opacity(n)
-	opacity n
-	if support-for-ie
-		-ms-filter "progid:DXImageTransform.Microsoft.Alpha(Opacity=" + round(n * 100) + ")"
-		filter unquote("progid:DXImageTransform.Microsoft.Alpha(Opacity=" + round(n * 100) + ")")
-
 box-shadow()
 	-webkit-box-shadow arguments
 	-moz-box-shadow arguments
