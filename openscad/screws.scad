@@ -24,3 +24,10 @@ module drywallScrewSlideDiff(depth, trackLength=drywallScrewSlideTrackLength(), 
 
 	translate([0, trackLength+(drywallScrewHeadDiameter()/2), depth-drywallScrewHeadDepth()]) cylinder(d=drywallScrewHeadDiameter(), h=drywallScrewHeadDepth());
 }
+
+module drywallScrewDiff(depth, $fn=128)
+{
+	translate([0, 0, depth-drywallScrewHeadDepth()]) cylinder(d=drywallScrewHeadDiameter(), h=drywallScrewHeadDepth());
+
+	cylinder(d=drywallScrewShaftDiameter(), h=depth);
+}

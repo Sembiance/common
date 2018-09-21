@@ -1,0 +1,36 @@
+@import "conform"
+
+table.table
+	width 100%
+	max-width 100%
+	height unquote("calc(100% - 1.25em)")
+	display inline-block
+	margin-top 1.25em
+	border-collapse collapse
+	overflow-x hidden
+	
+	&.twoHeaderRows
+		height unquote("calc(100% - 2.50em)")
+		margin-top 2.50em
+		
+	th
+		position absolute
+		top 0
+		height 1.25em
+		box-sizing border-box
+		
+		&.doubleHeight
+			height 2.50em
+
+	// Uncomment this section for a visual debug of header cell and data cell alignment
+	/*thead tr
+		th:nth-child(even)
+			background-color green
+		th:nth-child(odd)
+			background-color brown
+
+	tbody tr
+		td:nth-child(even)
+			background-color brown
+		td:nth-child(odd)
+			background-color green*/
