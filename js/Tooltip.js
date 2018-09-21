@@ -3,6 +3,8 @@
 
 (function _Tooltip()
 {
+	let tooltipsDisabled = false;
+
 	class Tooltip
 	{
 		constructor(node, text, extraClass, delay=base.SECOND*0.5, options={})
@@ -62,7 +64,7 @@
 		// Shows the tooltip
 		show(e)
 		{
-			if(this.disabled || this.visible || this.skipNextShow)
+			if(this.disabled || this.visible || this.skipNextShow || tooltipsDisabled)
 				return (this.skipNextShow = false), undefined;
 
 			document.body.addEventListener("mousemove", this.boundMouseMoveHandler);
@@ -143,6 +145,18 @@
 		enable()
 		{
 			this.disabled = false;
+		}
+
+		// Call this to disable all tooltips
+		static disableTooltips()
+		{
+			tooltipsDisabled = true;
+		}
+
+		// Call this to re-enable all tooltips
+		static enableTooltips()
+		{
+			tooltipsDisabled = false;
 		}
 	}
 

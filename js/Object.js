@@ -157,6 +157,29 @@ if(!Object.map)
 	};
 }
 
+// Maps object values in place by calling cb(k, v) and expects a result of either 'newVal' or [newKey, newVal]
+if(!Object.mapInPlace)
+{
+	Object.mapInPlace = function mapInPlace(o, cb)
+	{
+		if(!cb)
+			return o;
+
+		Object.forEach(o, (k, v) =>
+		{
+			const r = cb(k, v);
+			if(!Array.isArray(r))
+				o[k] = r;
+			else if(r.length===1)
+				o[k] = r[0];
+			else
+				o[r[0]] = r[1];
+		});
+
+		return o;
+	};
+}
+
 // Returns a new object with the key/values swapped
 if(!Object.swapKeyValues)
 {

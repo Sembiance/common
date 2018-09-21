@@ -115,7 +115,7 @@ if(!Array.prototype.mapInPlace)
 	};
 }
 
-// Returns an object where the keys are the values in the array and the values are the result of cb(val)
+// Returns an object where the keys are the values in the array and the values are the result of cb(val, i)
 if(!Array.prototype.mapToObject)
 {
 	Array.prototype.mapToObject = function mapToObject(cb, thisArg)
@@ -123,7 +123,7 @@ if(!Array.prototype.mapToObject)
 		const r = {};
 
 		for(let i=0, len=this.length;i<len;i++)
-			r[this[i]] = cb.call(thisArg, this[i]);
+			r[this[i]] = cb.call(thisArg, this[i], i);
 
 		return r;
 	};
@@ -186,7 +186,7 @@ if(!Array.prototype.count)
 	};
 }
 
-// Removes the first occurence of the passed in val from the array
+// Removes the first occurence of the passed in val from the array. Modifies array in place.
 if(!Array.prototype.remove)
 {
 	Array.prototype.remove = function remove(val)
@@ -201,7 +201,7 @@ if(!Array.prototype.remove)
 	};
 }
 
-// Removes every occurrence of the passed in val (or array of vals) from the array
+// Removes every occurrence of the passed in val (or array of vals) from the array. Modifies array in place.
 if(!Array.prototype.removeAll)
 {
 	Array.prototype.removeAll = function removeAll(_vals)
@@ -216,7 +216,7 @@ if(!Array.prototype.removeAll)
 	};
 }
 
-// Clears the array and returns itself
+// Clears the array and returns itself. Modifies the array in place.
 if(!Array.prototype.clear)
 {
 	Array.prototype.clear = function clear()
@@ -553,16 +553,18 @@ if(!Array.prototype.multiSort)
 {
 	Array.prototype.multiSort = function multiSort(_sorters, reverse)
 	{
-		const sorters = Array.toArray(_sorters);
+		const sorters = Array.toArray(_sorters).filterEmpty();
+		if(sorters.length===0)
+			sorters.push(v => v);
 
 		this.sort((a, b) =>
 		{
 			for(let i=0, len=sorters.length;i<len;i++)
 			{
-				const sort = sorters[i];
+				const sorter = sorters[i];
 
-				const aVal = sort(a);
-				const bVal = sort(b);
+				const aVal = sorter(a);
+				const bVal = sorter(b);
 
 				if(typeof aVal==="string")
 				{
@@ -784,7 +786,7 @@ if(!Array.prototype.batch)
 	{
 		Array.prototype.parallelForEach = function parallelForEach(fun, cb, atOnce, minInterval)
 		{
-			(new CBIterator(this, fun, atOnce||3, minInterval||0)).go(cb);
+			(new CBIterator(this, fun, atOnce||5, minInterval||0)).go(cb);
 		};
 	}
 })();
