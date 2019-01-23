@@ -15,7 +15,7 @@
 			window.addEventListener("resize", this.debouncedResizeHandler, (typeof Modernizr!=="undefined" && Modernizr.passiveeventlisteners) ? { passive : true } : undefined);
 
 			if((!this.t.parentNode || this.t.parentNode.getComputedStyle().position==="static"))
-				console.error("Table [%s] parent must have a position other than static. Otherwise the headers will be positioned incorrectly.", Array.toArray(this.t.classList).join(" "));
+				console.error("Table [%s] parent must have a position other than static. Otherwise the headers will be positioned incorrectly.", Array.from(this.t.classList).join(" "));
 		}
 
 		// Called to destroy this dialog
@@ -27,9 +27,9 @@
 		// Will resize things correctly
 		resize()
 		{
-			const tdWidths = Array.toArray(this.t.querySelectorAll("tbody tr:first-child td")).map(td => td.getWidth());
+			const tdWidths = Array.from(this.t.querySelectorAll("tbody tr:first-child td")).map(td => td.getWidth());
 
-			const headerRows = Array.toArray(this.t.querySelectorAll("thead tr"));
+			const headerRows = Array.from(this.t.querySelectorAll("thead tr"));
 			if(headerRows.length>1)
 				this.t.classList.add("twoHeaderRows");
 
@@ -39,7 +39,7 @@
 			{
 				let rowspanCounter = 0;
 				let colCounter = 0;
-				Array.toArray(tr.querySelectorAll("th")).forEach(th =>
+				Array.from(tr.querySelectorAll("th")).forEach(th =>
 				{
 					const colspan = ((+(th.getAttribute("colspan") || "1")) || 1);
 					const rowspan = ((+(th.getAttribute("rowspan") || "1")) || 1);

@@ -88,7 +88,7 @@
 
 			touch.target.dispatchEvent(simulatedEvent);
 
-			if(touch.target.nodeName && ["input", "select"].contains(touch.target.nodeName.toLowerCase()))
+			if(touch.target.nodeName && ["input", "select"].includes(touch.target.nodeName.toLowerCase()))
 				touch.target.focus();
 		}
 	}

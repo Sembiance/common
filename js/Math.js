@@ -35,14 +35,14 @@ if(!Math.randomIntExcluding)
 {
 	Math.randomIntExcluding = function randomIntExcluding(min, max, _excluding)
 	{
-		const excluding = Array.toArray(_excluding).map(i => i.truncate()).filter(i => (i>=min && i<=max)).uniqueBySort();
+		const excluding = (Array.isArray(_excluding) ? _excluding : [_excluding]).map(i => i.truncate()).filter(i => (i>=min && i<=max)).uniqueBySort();
 		if(excluding.length===((max-min)+1))
 			throw new RangeError("randomIntExcluding called with excluding all nums, no possible return value");
 		
 		let num = undefined;
 		do
 			num = Math.randomInt(min, max);
-		while(excluding.contains(num));
+		while(excluding.includes(num));
 
 		return num;
 	};

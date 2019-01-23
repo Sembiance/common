@@ -1,5 +1,23 @@
 "use strict";
 
+////////////////////
+//// Polyfills /////
+////////////////////
+
+//// ES2015
+if(!String.prototype.includes)
+{
+	String.prototype.includes = function includes(match)
+	{
+		return this.indexOf(match)!==-1;
+	};
+}
+
+
+////////////////
+//// Custom ////
+////////////////
+
 // Returns true if the string starts with the given match
 if(!String.prototype.startsWith)
 {
@@ -15,15 +33,6 @@ if(!String.prototype.endsWith)
 	String.prototype.endsWith = function endsWith(match)
 	{
 		return this.reverse().startsWith(match.reverse());
-	};
-}
-
-// Returns true if the string contains the given match
-if(!String.prototype.contains)
-{
-	String.prototype.contains = function contains(match)
-	{
-		return this.indexOf(match)!==-1;
 	};
 }
 

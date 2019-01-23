@@ -19,12 +19,12 @@
 		require("./Number");
 		require("./JSON");
 
-		exports.IS_DEV = !process.argv.contains("--staging") && !process.argv.contains("--production");
-		exports.IS_STAGING = !!process.argv.contains("--staging");
+		exports.IS_DEV = !process.argv.includes("--staging") && !process.argv.includes("--production");
+		exports.IS_STAGING = !!process.argv.includes("--staging");
 	}
 	else
 	{
-		exports.IS_DEV = window.location.hostname.startsWith("dev.") || window.location.href.contains("dev=true");
+		exports.IS_DEV = window.location.hostname.startsWith("dev.") || window.location.href.includes("dev=true");
 	}
 
 	exports.SECOND = 1000;
@@ -71,4 +71,4 @@
 
 		process.exit(0);
 	};
-})(typeof exports==="undefined" ? window.base={} : exports);
+})(typeof window!=="undefined" ? window.base={} : exports);

@@ -18,13 +18,6 @@ x = {notArray : true};
 assert.ok(Array.isArray(a), TESTNAME);
 assert.ok(!Array.isArray(x), TESTNAME);
 
-TESTNAME = "toArray";
-a = 3;
-b = [3];
-r = [3];
-assert.ok(r.equals(Array.toArray(a)), TESTNAME);
-assert.ok(r.equals(Array.toArray(b)), TESTNAME);
-
 TESTNAME = "equals";
 a = [1, 2, 3, 4, 5];
 b = [1, 2, 3, 4, 5];
@@ -59,10 +52,10 @@ a = ["red", "green", "yellow"];
 r = {red : 3, green : 5, yellow : 6};
 assert.ok(Object.equals(a.mapToObject(v => v.length), r), TESTNAME);
 
-TESTNAME = "contains";
+TESTNAME = "includes";
 a = [1, 2, 3, 4, 5];
-assert.ok(a.contains(3), TESTNAME);
-assert.ok(!a.contains(7), TESTNAME);
+assert.ok(a.includes(3), TESTNAME);
+assert.ok(!a.includes(7), TESTNAME);
 
 TESTNAME = "containsAll";
 a = [1, 2, 3, 4, 5];
@@ -288,23 +281,26 @@ assert.ok(r.equals(a), TESTNAME);
 
 TESTNAME = "pickRandom";
 a = [1];
-r = 1;
-assert.strictEqual(r, a.pickRandom(1, 7), TESTNAME);
-assert.strictEqual(r, a.pickRandom(1), TESTNAME);
+assert.ok([1].equals(a.pickRandom(1, [7])), TESTNAME);
+assert.ok(a.equals(a.pickRandom(1)), TESTNAME);
 a = [].pushSequence(0, 1000);
 r = [].pushSequence(0, 1000);
 assert.ok(!r.equals(a.pickRandom(1000)), TESTNAME);	// In theory this could shuffle all 10,000 elements the same, but highly unlikely.
 assert.ok(r.equals(a), TESTNAME);
 a = [1, 2, 3, 4, 5];
-assert.ok(Number.isNumber(a.pickRandom()), TESTNAME);
-assert.ok(a.contains(a.pickRandom()), TESTNAME);
-assert.ok(Number.isNumber(a.pickRandom(1)), TESTNAME);
-assert.ok(a.contains(a.pickRandom(1)), TESTNAME);
+assert.ok(Number.isNumber(a.pickRandom()[0]), TESTNAME);
+assert.ok(a.includes(a.pickRandom()[0]), TESTNAME);
+assert.ok(Number.isNumber(a.pickRandom(1)[0]), TESTNAME);
+assert.ok(a.includes(a.pickRandom(1)[0]), TESTNAME);
 assert.strictEqual(3, a.pickRandom(3).length, TESTNAME);
 assert.ok(a.containsAll(a.pickRandom(3)), TESTNAME);
+r = a.pickRandom(2, [1, 3, 5]);
+assert.ok(r.includes(2), TESTNAME);
+assert.ok(r.includes(4), TESTNAME);
+assert.strictEqual(2, r.length, TESTNAME);
 for(let i=0;i<10000;i++)
 {
-	assert.ok(!a.pickRandom(4, 3).contains(3), TESTNAME);
+	assert.ok(!a.pickRandom(4, [3]).includes(3), TESTNAME);
 	assert.ok(!a.pickRandom(3, [1, 5]).containsAny([1, 5]), TESTNAME);
 }
 

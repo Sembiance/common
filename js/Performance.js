@@ -31,6 +31,7 @@ if(typeof window.performance.now==="undefined")
 			}, 1200);
 		}
 
+		// Returns the number of milliseconds since the web page first loaded
 		window.performance.now = function now()
 		{
 			if(ac)

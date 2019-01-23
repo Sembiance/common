@@ -50,7 +50,7 @@
 			this.thumb.classList.toggle("left");
 			this.thumb.classList.toggle("right");
 
-			Array.toArray(this.node.querySelectorAll(".segment")).forEach(segment => segment.classList.toggle("selected"));
+			Array.from(this.node.querySelectorAll(".segment")).forEach(segment => segment.classList.toggle("selected"));
 
 			if(this.onChange && !skipNotification)
 				this.onChange(this.getSelectedSegment());

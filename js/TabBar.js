@@ -29,7 +29,7 @@
 		// Will switch to a specific tabid
 		switchToTab(tabid)
 		{
-			const tab = Array.toArray(this.node.querySelectorAll(".tab")).reduceOnce(v => (v.getAttribute("data-tabid")===tabid ? v : undefined));
+			const tab = Array.from(this.node.querySelectorAll(".tab")).reduceOnce(v => (v.getAttribute("data-tabid")===tabid ? v : undefined));
 			if(!tab || tab.classList.contains("selected"))
 				return;
 
@@ -37,7 +37,7 @@
 			this.node.parentNode.querySelector(".tabContent.selected").classList.remove("selected");
 
 			tab.classList.add("selected");
-			Array.toArray(this.node.parentNode.querySelectorAll(".tabContent")).find(t => t.getAttribute("data-tabid")===tabid).classList.add("selected");
+			Array.from(this.node.parentNode.querySelectorAll(".tabContent")).find(t => t.getAttribute("data-tabid")===tabid).classList.add("selected");
 
 			if(this.onTabChanged)
 				this.onTabChanged(tabid);

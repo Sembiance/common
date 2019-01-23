@@ -21,9 +21,9 @@ TESTNAME = "endsWith";
 a = "Hello there my good Kitty";
 assert.ok(a.endsWith("Kitty"), TESTNAME);
 
-TESTNAME = "contains";
+TESTNAME = "includes";
 a = "Hello there my good Kitty";
-assert.ok(a.contains("good"), TESTNAME);
+assert.ok(a.includes("good"), TESTNAME);
 
 TESTNAME = "reverse";
 a = "hello";

@@ -1,35 +1,70 @@
 "use strict";
 
-// This polyfill does NOT support IE<9 or Safari<4
+////////////////////
+//// Polyfills /////
+////////////////////
 
-// Returns true if the passed value is an array
+//// ES2016 ////
+if(!Array.prototype.includes)
+	Array.prototype.includes = function includes(valueToFind, fromIndex) { return this.indexOf(valueToFind, fromIndex)!==-1; };
+
+//// ES2015 ////
 if(!Array.isArray)
+	Array.isArray = function isArray(value) { return Object.prototype.toString.call(value)==="[object Array]"; };
+
+if(!Array.from)
 {
-	Array.isArray = function isArray(val)
+	Array.from = function from(arrayLike, mapFn, thisArg)
 	{
-		return Object.prototype.toString.call(val)==="[object Array]";
+		const len = ("length" in arrayLike) ? Number(arrayLike.length) : 0;
+		const r=[];
+		for(let i=0;i<len;i++)
+			r.push(mapFn ? mapFn.call((thisArg || undefined), arrayLike[i], i) : arrayLike[i]);
+
+		return r;
 	};
 }
 
-// Converts the passed in value to an array. Can convert things that act "like" arrays (like HTML collections) into actual proper arrays
-if(!Array.toArray)
-{
-	Array.toArray = function toArray(val)
-	{
-		if(Array.isArray(val))
-			return val;
+////////////////
+//// Custom ////
+////////////////
 
-		if(Object.isObject(val) && "length" in val)
-		{
-			const r=[];
-			for(let i=0, len=val.length;i<len;i++)
-				r.push(val[i]);
-			return r;
-		}
-	
-		return [val];
+// Returns an array of 1 or more random values from an array. Can pass an array of values to exclude
+if(!Array.prototype.pickRandom)
+{
+	Array.prototype.pickRandom = function pickRandom(num=1, excludedItems=[])
+	{
+		if(excludedItems.length===0 && num===1)
+			return [this[Math.floor(Math.random()*this.length)]];
+		
+		if(excludedItems.length===0 && num>=this.length)
+			return this.slice().shuffle();
+
+		const excludedIndexes = excludedItems.map(excludedItem => this.indexOf(excludedItem)).unique().filter(v => v!==-1);
+
+		const pickedIndexes=[];
+		for(let i=0;i<num;i++)
+			pickedIndexes.push(Math.randomIntExcluding(0, (this.length-1), [...pickedIndexes, ...excludedIndexes]));
+
+		return pickedIndexes.map(pickedIndex => this[pickedIndex]);
 	};
 }
+
+
+/* eslint-disable*/
+
+
+
+
+
+
+
+
+
+
+
+/* eslint-enable*/
+
 
 // Returns true if the array contains the same values in the same order as another array
 if(!Array.prototype.equals)
@@ -129,21 +164,13 @@ if(!Array.prototype.mapToObject)
 	};
 }
 
-// Returns true if the array contains the passed in value. Same as Array.includes() which is available in ES2016
-if(!Array.prototype.contains)
-{
-	Array.prototype.contains = function contains(val)
-	{
-		return this.indexOf(val)!==-1;
-	};
-}
 
 // Returns true if the array contains all of the values in the passed in array
 if(!Array.prototype.containsAll)
 {
 	Array.prototype.containsAll = function containsAll(_vals)
 	{
-		const vals = Array.toArray(_vals);
+		const vals = Array.isArray(_vals) ? _vals : [_vals];
 		for(let i=0, len=vals.length;i<len;i++)
 		{
 			if(this.indexOf(vals[i])===-1)
@@ -159,7 +186,7 @@ if(!Array.prototype.containsAny)
 {
 	Array.prototype.containsAny = function containsAny(_vals)
 	{
-		const vals = Array.toArray(_vals);
+		const vals = Array.isArray(_vals) ? _vals : [_vals];
 		for(let i=0, len=vals.length;i<len;i++)
 		{
 			if(this.indexOf(vals[i])!==-1)
@@ -206,9 +233,9 @@ if(!Array.prototype.removeAll)
 {
 	Array.prototype.removeAll = function removeAll(_vals)
 	{
-		Array.toArray(_vals).forEach(val =>
+		(Array.isArray(_vals) ? _vals : [_vals]).forEach(val =>
 		{
-			while(this.contains(val))
+			while(this.includes(val))
 				this.remove(val);
 		});
 
@@ -444,7 +471,7 @@ if(!Array.prototype.pullAll)
 {
 	Array.prototype.pullAll = function pullAll(_vals)
 	{
-		const vals = Array.toArray(_vals);
+		const vals = Array.isArray(_vals) ? _vals : [_vals];
 		const results=[];
 		
 		vals.forEach(val =>
@@ -553,7 +580,7 @@ if(!Array.prototype.multiSort)
 {
 	Array.prototype.multiSort = function multiSort(_sorters, reverse)
 	{
-		const sorters = Array.toArray(_sorters).filterEmpty();
+		const sorters = (Array.isArray(_sorters) ? _sorters : [_sorters]).filterEmpty();
 		if(sorters.length===0)
 			sorters.push(v => v);
 
@@ -589,45 +616,6 @@ if(!Array.prototype.multiSort)
 		});
 
 		return this;
-	};
-}
-
-// Returns a random value from the array. If only 1 item requested, it returns that item, otherwise it returns an array of values
-// Can pass an excluded value or array of excluded values
-if(!Array.prototype.pickRandom)
-{
-	Array.prototype.pickRandom = function pickRandom(num=1, _excludedItems=[])
-	{
-		const excludedItems = Array.toArray(_excludedItems);
-
-		if(excludedItems.length===0)
-		{
-			// Saves time and just picks 1 at random
-			if(num===1)
-				return this[Math.floor(Math.random()*this.length)];
-
-			// If we want all our elements, just shuffle em up and return em
-			if(num>=this.length)
-				return this.slice().shuffle();
-		}
-
-		const excludedIndexes=[];
-		if(excludedItems.length>0)
-		{
-			excludedItems.forEach(excludedItem =>
-			{
-				const excludedItemIndex = this.indexOf(excludedItem);
-				if(excludedItemIndex!==-1)
-					excludedIndexes.push(excludedItemIndex);
-			});
-		}
-
-		const pickedIndexes=[];
-		for(let i=0;i<num;i++)
-			pickedIndexes.push(Math.randomIntExcluding(0, (this.length-1), pickedIndexes.concat(excludedIndexes)));
-
-		const r = pickedIndexes.map(pickedIndex => this[pickedIndex]);
-		return (num===1 ? r[0] : r);
 	};
 }
 

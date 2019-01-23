@@ -55,7 +55,7 @@ if(!Object.clone)
 		const result = {};
 		Object.forEach(src, (k, v) =>
 		{
-			if(skipKeys.contains(k))
+			if(skipKeys.includes(k))
 				return;
 
 			if(shallow)
