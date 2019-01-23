@@ -1,5 +1,14 @@
 "use strict";
 
+////////////////////
+//// Polyfills /////
+////////////////////
+
+//------------//
+//// ES2015 ////
+//------------//
+
+// Binds a given function to always execute with a this environment equal to oThis
 if(!Function.prototype.bind)
 {
 	Function.prototype.bind = function bind(oThis)
@@ -7,12 +16,12 @@ if(!Function.prototype.bind)
 		if(typeof this!=="function")
 			throw new TypeError("Function.prototype.bind - what is trying to be bound is not callable");
 
-		var aArgs = Array.prototype.slice.call(arguments, 1),
-			fToBind = this,
-			FNOP = function () {},
-			fBound = function ()
+		const aArgs = Array.prototype.slice.call(arguments, 1),		// eslint-disable-line prefer-rest-params
+			fToBind = this,		// eslint-disable-line consistent-this
+			FNOP = function FNOP() {},
+			fBound = function fBound()
 			{
-				return fToBind.apply(this instanceof FNOP ? this : oThis || window, aArgs.concat(Array.prototype.slice.call(arguments)));
+				return fToBind.apply(this instanceof FNOP ? this : oThis || window, aArgs.concat(Array.prototype.slice.call(arguments)));	// eslint-disable-line prefer-rest-params
 			};
 
 		if(this.prototype)

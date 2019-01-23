@@ -12,6 +12,11 @@ require(path.join(__dirname, "..", "Math.js"));
 // Vars to use below
 let a=null, r=null, TESTNAME=null;
 
+TESTNAME = "trunc";
+a = 13.37;
+r = 13;
+assert.strictEqual(r, Math.trunc(a), TESTNAME);
+
 TESTNAME = "randomInt";
 for(let i=0;i<1000;i++)
 {
@@ -20,15 +25,28 @@ for(let i=0;i<1000;i++)
 	assert.ok(num>=1, TESTNAME);
 }
 
-TESTNAME = "randomIntExcluding";
+TESTNAME = "randomInt w/ exclusions";
 for(let i=0;i<1000;i++)
 {
-	const num = Math.randomIntExcluding(1, 7, [3, 5]);
+	const num = Math.randomInt(1, 7, [3, 5]);
 	assert.ok(num<=7, TESTNAME);
 	assert.ok(num>=1, TESTNAME);
 	assert.ok(num!==3, TESTNAME);
 	assert.ok(num!==5, TESTNAME);
 }
+/* eslint-disable*/
+
+
+
+
+
+
+
+
+
+
+
+/* eslint-enable*/
 
 TESTNAME = "getRotatedDimensions";
 r = [205, 217];

@@ -1,8 +1,59 @@
 "use strict";
 
-// This polyfill does NOT support IE<9 or Safari<5
+////////////////////
+//// Polyfills /////
+////////////////////
 
-// Returns 'true' if the val is an Object and NOT an Array
+//------------//
+//// ES2017 ////
+//------------//
+
+// Returns an array of the vaules for this object
+if(!Object.values)
+{
+	Object.values = function values(obj)
+	{
+		const r = [];
+		Object.keys(obj).forEach(key => r.push(obj[key]));
+		return r;
+	};
+}
+
+// Returns an array of [key, val] arrays
+if(!Object.entries)
+{
+	Object.entries = function entries(o)
+	{
+		const ownProps = Object.keys(o);
+		let i=ownProps.length;
+		const resArray = new Array(i);
+		while(i--)
+			resArray[i] = [ownProps[i], o[ownProps[i]]];
+
+		return resArray;
+	};
+}
+
+
+//-----------------//
+//// ES-Proposed ////
+//-----------------//
+if(!Object.fromEntries)
+{
+	Object.fromEntries = function fromEntries(entries)
+	{
+		const r = {};
+		entries.forEach(entry => { r[entry[0]] = entry[1]; });
+		return r;
+	};
+}
+
+
+////////////////
+//// Custom ////
+////////////////
+
+// Returns 'true' if the val is an Object and NOT an Array. Does nto support IE<9 or Safari<5
 if(!Object.isObject)
 {
 	Object.isObject = function isObject(val)
@@ -50,7 +101,7 @@ if(!Object.equals)
 // Deep copies an object unless shallow is set to true. Can also pass an array of keys to skip
 if(!Object.clone)
 {
-	Object.clone = function clone(src, skipKeys=[], shallow)
+	Object.clone = function clone(src, skipKeys=[], shallow=false)
 	{
 		const result = {};
 		Object.forEach(src, (k, v) =>
@@ -67,18 +118,7 @@ if(!Object.clone)
 	};
 }
 
-// Returns an array of the vaules for this object
-if(!Object.values)
-{
-	Object.values = function values(obj)
-	{
-		const r = [];
-		Object.keys(obj).forEach(key => r.push(obj[key]));
-		return r;
-	};
-}
-
-// Allows you to iterate over entries in an object calling cb with [key, value] entries
+// Allows you to iterate over entries in an object calling cb with arguments: key, value, i  Is friendly than Object.entries().forEach()
 if(!Object.forEach)
 {
 	Object.forEach = function forEach(o, cb)
@@ -91,9 +131,9 @@ if(!Object.forEach)
 }
 
 // Filters out keys from an object by calling cb(key, value, i) and deleting entries when that cb() returns a falsy value. Modifies the object directly.
-if(!Object.filter)
+if(!Object.filterInPlace)
 {
-	Object.filter = function filter(o, cb)
+	Object.filterInPlace = function filterInPlace(o, cb)
 	{
 		if(!cb)
 			return o;
@@ -111,28 +151,7 @@ if(!Object.filter)
 	};
 }
 
-// Returns true if every key/value pair passed to cb() returns a truthy value
-if(!Object.every)
-{
-	Object.every = function every(o, cb)
-	{
-		if(!cb)
-			return true;
-
-		let matches = true;
-		Object.keys(o).forEach((k, i) =>
-		{
-			if(!matches)
-				return;
-			
-			matches = cb(k, o[k], i);
-		});
-
-		return matches;
-	};
-}
-
-// Returns a new object by calling cb(k, v) and expects a result of either 'newVal' or [newKey, newVal]
+// Returns a new object by calling cb(k, v) and expects a result of either 'newVal' or [newKey, newVal].
 if(!Object.map)
 {
 	Object.map = function map(o, cb)
@@ -157,25 +176,12 @@ if(!Object.map)
 	};
 }
 
-// Maps object values in place by calling cb(k, v) and expects a result of either 'newVal' or [newKey, newVal]
-if(!Object.mapInPlace)
+// Clear an object. Useful to clear an object that is 'const'
+if(!Object.clear)
 {
-	Object.mapInPlace = function mapInPlace(o, cb)
+	Object.clear = function clear(o)
 	{
-		if(!cb)
-			return o;
-
-		Object.forEach(o, (k, v) =>
-		{
-			const r = cb(k, v);
-			if(!Array.isArray(r))
-				o[k] = r;
-			else if(r.length===1)
-				o[k] = r[0];
-			else
-				o[r[0]] = r[1];
-		});
-
+		Object.keys(o).forEach(k => { delete o[k]; });
 		return o;
 	};
 }
@@ -190,25 +196,6 @@ if(!Object.swapKeyValues)
 		return newObj;
 	};
 }
-
-// Returns an array of [key, val] sub arrays
-if(!Object.entries)
-{
-	Object.entries = function entries(o)
-	{
-		const ownProps = Object.keys(o);
-		let i=ownProps.length;
-		const resArray = new Array(i);
-		while(i--)
-			resArray[i] = [ownProps[i], o[ownProps[i]]];
-
-		return resArray;
-	};
-}
-
-// Shorthand for Object.entries
-if(!Object.toArray)
-	Object.toArray = Object.entries;
 
 // Merges the key/values from o2 into o1. Overwriting same key names unless dupHandler cb exists then it sets the value to the result returned from dupHandler(o1Value, o2Value, key)
 // Can pass an array of onlyKeys and any keys not in that array won't be merged
@@ -230,24 +217,6 @@ if(!Object.merge || typeof Object.merge!=="function")
 		});
 
 		return o1;
-	};
-}
-
-// Renames a key in the object with a new name. Returns the object for chaining
-if(!Object.renameKey)
-{
-	Object.renameKey = function renameKey(o, oldKey, newKey)
-	{
-		if(oldKey===newKey)
-			return o;
-
-		if(o.hasOwnProperty(oldKey))
-		{
-			o[newKey] = o[oldKey];
-			delete o[oldKey];
-		}
-
-		return o;
 	};
 }
 
@@ -286,15 +255,5 @@ if(!Object.reduceOnce)
 		});
 
 		return result;
-	};
-}
-
-// Clear an object. Useful to clear an object that is 'const'
-if(!Object.clear)
-{
-	Object.clear = function clear(o)
-	{
-		Object.keys(o).forEach(k => { delete o[k]; });
-		return o;
 	};
 }

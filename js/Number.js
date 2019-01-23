@@ -1,20 +1,32 @@
 "use strict";
 
+////////////////////
+//// Polyfills /////
+////////////////////
+
+//------------//
+//// ES1.5 ////
+//------------//
+
+// Returns a string version of the number. Standardized funcation available in almost all implementations, but for those few that don't support, here is this crappy version
+if(!Number.prototype.toLocaleString)
+{
+	Number.prototype.toLocaleString = function toLocaleString()
+	{
+		return this.toString();
+	};
+}
+
+////////////////
+//// Custom ////
+////////////////
+
 // Returns true if this is a number (even if in string format)
 if(!Number.isNumber)
 {
 	Number.isNumber = function isNumber(n)
 	{
 		return !isNaN(parseFloat(n)) && isFinite(n);
-	};
-}
-
-// Returns a string version of the number. Hopefully this version is never used since it's built into most javascript implementations
-if(!Number.prototype.toLocaleString)
-{
-	Number.prototype.toLocaleString = function toLocaleString()
-	{
-		return this.toString();
 	};
 }
 
@@ -183,32 +195,5 @@ if(!Number.prototype.flipBit)
 	Number.prototype.flipBit = function flipBit(loc)
 	{
 		return (this.getBit(loc)===1 ? this.clearBit(loc) : this.setBit(loc));
-	};
-}
-
-// Returns a string at least width long, padding the front with zeros as needed
-if(!Number.prototype.zeroPad)
-{
-	Number.prototype.zeroPad = function zeroPad(_width)
-	{
-		const n = +this;
-
-		const width = _width - n.toString().length;
-		if(width>0)
-			return new Array( width + (/\./.test(n) ? 2 : 1) ).join("0") + n;
-
-		return n + "";
-	};
-}
-
-// Truncates a number, ceiling it if it's less than zero and flooring it if greater than 0
-if(!Number.prototype.truncate)
-{
-	Number.prototype.truncate = function truncate()
-	{
-		if(this<0)
-			return Math.ceil(this);
-
-		return Math.floor(this);
 	};
 }

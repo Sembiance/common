@@ -1,5 +1,27 @@
 "use strict";
 
+////////////////////
+//// Polyfills /////
+////////////////////
+
+//------------//
+//// ES2015 ////
+//------------//
+
+// Drops anything after the decimal. Similar to Math.floor but doesn't matter for negatives
+if(!Math.trunc)
+{
+	Math.trunc = function trunc(x)
+	{
+		x = +x;	// eslint-disable-line no-param-reassign
+		return (x-(x%1)) || (!isFinite(x) || x===0 ? x : (x<0 ? -0 : 0));
+	};
+}
+
+////////////////
+//// Custom ////
+////////////////
+
 // Returns a truly random number, taking advantage of window.crypto if available
 if(!Math.trueRandom)
 {
@@ -21,21 +43,15 @@ if(!Math.trueRandom)
 	};
 }
 
-// Returns a random integer between min and max inclusive
+// Returns a random integer between min and max inclusive. Optional array of numbers to exclude
 if(!Math.randomInt)
 {
-	Math.randomInt = function randomInt(min, max)
+	Math.randomInt = function randomInt(min, max, _excluding)
 	{
-		return Math.floor(Math.trueRandom() * (max - min + 1)) + min;
-	};
-}
-
-// Returns a random integer between min and max inclusive, exclusing any numbers in the array excluding
-if(!Math.randomIntExcluding)
-{
-	Math.randomIntExcluding = function randomIntExcluding(min, max, _excluding)
-	{
-		const excluding = (Array.isArray(_excluding) ? _excluding : [_excluding]).map(i => i.truncate()).filter(i => (i>=min && i<=max)).uniqueBySort();
+		if(!_excluding || !Array.isArray(_excluding) || _excluding.length===0)
+			return Math.floor(Math.trueRandom() * (max - min + 1)) + min;
+		
+		const excluding = (Array.isArray(_excluding) ? _excluding : [_excluding]).map(i => Math.trunc(i)).filter(i => (i>=min && i<=max)).unique();
 		if(excluding.length===((max-min)+1))
 			throw new RangeError("randomIntExcluding called with excluding all nums, no possible return value");
 		

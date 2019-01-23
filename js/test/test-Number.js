@@ -20,7 +20,7 @@ assert.ok(Number.isNumber(a));
 assert.ok(Number.isNumber(b));
 assert.ok(Number.isNumber(c));
 
-TESTNAME = "randomInt";
+TESTNAME = "toLocaleString";
 a = Number(1000);
 b = 1234.56;
 r = "1,000";
@@ -75,18 +75,4 @@ r = Number(39);
 assert.strictEqual(r, a.flipBit(3), TESTNAME);
 assert.strictEqual(a, a.flipBit(3).flipBit(3), TESTNAME);
 
-TESTNAME = "zeroPad";
-a = Number(47);
-r = "047";
-assert.strictEqual(r, a.zeroPad(3), TESTNAME);
-
-TESTNAME = "truncate";
-a = -9.99;
-b = 3.14;
-r = -9;
-r2 = 3;
-assert.strictEqual(r, a.truncate(), TESTNAME);
-assert.strictEqual(r2, b.truncate(), TESTNAME);
-
 console.log("ALL TESTS PASSED");
-
