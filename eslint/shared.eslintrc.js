@@ -10,8 +10,14 @@ module.exports =
 	// 1 == warn
 	// 2 == error
 
+	"plugins" : ["sembiance"],
+
 	"rules" :
 	{
+		// Plugins
+		"sembiance/disfavor-array-concat" : 2,
+		"sembiance/no-array-contains"     : 2,
+		
 		// New
 		"multiline-comment-style"     : 0,
 		"implicit-arrow-linebreak"    : 0,
@@ -115,6 +121,7 @@ module.exports =
 		"no-unused-expressions"        : 2,
 		"no-unused-labels"             : 2,
 		"no-useless-call"              : 2,
+		"no-useless-catch"             : 2,
 		"no-useless-concat"            : 2,
 		"no-useless-escape"            : 2,
 		"no-useless-return"            : 2,
