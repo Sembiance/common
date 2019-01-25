@@ -207,7 +207,7 @@ if(!Object.merge || typeof Object.merge!=="function")
 
 		Object.forEach(o2, key =>
 		{
-			if(onlyKeys && onlyKeys.indexOf(key)===-1)
+			if(onlyKeys && !onlyKeys.includes(key))
 				return;
 			
 			if(!hop.call(o1, key) || !dupHandler)

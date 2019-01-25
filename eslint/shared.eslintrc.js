@@ -16,7 +16,7 @@ module.exports =
 	{
 		// Plugins
 		"sembiance/disfavor-array-concat" : 2,
-		"sembiance/no-array-contains"     : 2,
+		"sembiance/favor-includes"        : 2,
 		
 		// New
 		"multiline-comment-style"     : 0,

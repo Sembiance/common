@@ -13,7 +13,7 @@ if(!String.prototype.includes)
 {
 	String.prototype.includes = function includes(match)
 	{
-		return this.indexOf(match)!==-1;
+		return this.indexOf(match)!==-1;	// eslint-disable-line sembiance/favor-includes
 	};
 }
 

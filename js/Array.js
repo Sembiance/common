@@ -10,7 +10,7 @@
 
 // Returns true if the valueToFind can be located in the array
 if(!Array.prototype.includes)
-	Array.prototype.includes = function includes(valueToFind, fromIndex) { return this.indexOf(valueToFind, fromIndex)!==-1; };
+	Array.prototype.includes = function includes(valueToFind, fromIndex) { return this.indexOf(valueToFind, fromIndex)!==-1; };		// eslint-disable-line sembiance/favor-includes
 
 //------------//
 //// ES2015 ////
