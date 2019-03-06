@@ -31,8 +31,8 @@ if(!Math.trueRandom)
 		
 		try
 		{
-			if(window && window.chrome && window.crypto && window.crypto.getRandomValues)
-				result = window.crypto.getRandomValues(new Uint32Array(1))[0] / 0x100000000;
+			if(window && window.chrome && window.crypto && window.crypto.getRandomValues)	// eslint-disable-line no-undef
+				result = window.crypto.getRandomValues(new Uint32Array(1))[0] / 0x100000000;	// eslint-disable-line no-undef
 		}
 		catch(err)
 		{

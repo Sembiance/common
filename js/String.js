@@ -179,3 +179,16 @@ if(!String.prototype.strip)
 		return this.replace(new RegExp("[" + chars + "]", "g"), "");
 	};
 }
+
+// Trim specific characters from the front and end of string
+if(!String.prototype.trimChars)
+{
+	String.prototype.trimChars = function trimChars(_chars)
+	{
+		if(!_chars)
+			return this.trim();
+
+		const chars = Array.isArray(_chars) ? _chars.join("") : _chars;
+		return this.replace(new RegExp("^[" + chars + "]+|[" + chars + "]+$", "g"), "");
+	};
+}

@@ -17,7 +17,9 @@ module.exports =
 		// Plugins
 		"sembiance/disfavor-array-concat" : 2,
 		"sembiance/favor-includes"        : 2,
-		
+		"sembiance/tiptoe-suffix-code"    : 2,
+		"sembiance/no-useless-variables"  : 2,
+
 		// New
 		"multiline-comment-style"     : 0,
 		"implicit-arrow-linebreak"    : 0,
@@ -128,6 +130,7 @@ module.exports =
 		"no-void"                      : 2,
 		"no-warning-comments"          : 2,
 		"no-with"                      : 2,
+		"prefer-named-capture-group"   : 0,
 		"prefer-promise-reject-errors" : 0,
 		"radix"                        : 2,
 		"require-await"                : 2,
@@ -177,7 +180,7 @@ module.exports =
 		"id-blacklist"                     : 0,
 		"id-length"                        : 0,
 		"id-match"                         : 0,
-		"indent"                           : [2, "tab"],
+		"indent"                           : [2, "tab", {"SwitchCase" : 1}],
 		"jsx-quotes"                       : 0,
 		"key-spacing"                      : [2, {"beforeColon" : true, "afterColon" : true, "mode" : "minimum"}],
 		"keyword-spacing"                  : 0,

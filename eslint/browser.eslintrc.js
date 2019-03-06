@@ -2,7 +2,7 @@
 module.exports =
 {
 	"extends" : ["/mnt/compendium/DevLab/common/eslint/shared.eslintrc.js"],
-	"env" : { "browser": true },
+	"env" : { "browser" : true },
 	"rules" :
 	{
 		// Best Practices

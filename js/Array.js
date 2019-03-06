@@ -40,7 +40,7 @@ Array.prototype.find = function find(cb)
 {
 	for(let i=0, len=this.length;i<len;i++)
 	{
-		if(cb(this[i], i, this))
+		if(cb(this[i], i, this))	// eslint-disable-line callback-return
 			return this[i];
 	}
 
@@ -378,7 +378,7 @@ if(!Array.prototype.reduceOnce)
 			if(r!==null)
 				return r;
 
-			const cbRes = cb(...args);
+			const cbRes = cb(...args);	// eslint-disable-line callback-return
 			return (typeof cbRes==="undefined" ? null : cbRes);
 		}, null);
 	};

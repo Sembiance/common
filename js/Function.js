@@ -21,7 +21,7 @@ if(!Function.prototype.bind)
 			FNOP = function FNOP() {},
 			fBound = function fBound()
 			{
-				return fToBind.apply(this instanceof FNOP ? this : oThis || window, aArgs.concat(Array.prototype.slice.call(arguments)));	// eslint-disable-line prefer-rest-params
+				return fToBind.apply(this instanceof FNOP ? this : oThis || window, aArgs.concat(Array.prototype.slice.call(arguments)));	// eslint-disable-line prefer-rest-params, no-undef
 			};
 
 		if(this.prototype)
