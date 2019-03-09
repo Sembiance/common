@@ -574,6 +574,8 @@ if(!Array.prototype.pushCopyInPlace)
 
 (function _arrayAsyncFuncs()
 {
+	const performance = (typeof process!=="undefined" && typeof process.versions!=="undefined" && typeof process.versions.node!=="undefined") ? require("perf_hooks").performance : window.performance;	// eslint-disable-line global-require, no-undef
+
 	function CBRunner(_fun, _val, _i, _finish)
 	{
 		this.fun = _fun;
@@ -603,8 +605,9 @@ if(!Array.prototype.pushCopyInPlace)
 		this.results = [];
 		this.i=0;
 		this.running=[];
+		this.lastRanTime = 0;
 		this.minInterval = _minInterval || 0;
-		this.intervalDelay=0;
+		this.scheduledTimeoutid = null;
 
 		CBIterator.prototype.go = function go(cb)
 		{
@@ -617,27 +620,31 @@ if(!Array.prototype.pushCopyInPlace)
 
 		CBIterator.prototype.next = function next()
 		{
-			const toRun = [];
-			while(this.running.length<this.atOnce && this.a.length>0)
+			const timeSinceLast = performance.now()-this.lastRanTime;
+			
+			if(timeSinceLast<this.minInterval)
 			{
-				const curi = this.i++;
-				this.running.push(curi);
-				toRun.push(new CBRunner(this.fun, this.a.shift(), curi, this.finish.bind(this)));
+				this.scheduledTimeoutid = setTimeout(this.next.bind(this), (this.minInterval-timeSinceLast)+1);
+				return;
 			}
 
-			while(toRun.length)
-			{
-				if(this.intervalDelay<this.atOnce)
-					this.intervalDelay++;
+			this.scheduledTimeoutid = null;
 
-				toRun.shift().run(this.intervalDelay*this.minInterval);
-			}
+			if(this.a.length<=0)
+				return;
+
+			const curi = this.i++;
+
+			this.running.push(curi);
+			this.lastRanTime = performance.now();
+			new CBRunner(this.fun, this.a.shift(), curi, this.finish.bind(this)).run();
+
+			if(this.a.length>0 && this.running.length<this.atOnce)
+				this.scheduledTimeoutid = setTimeout(this.next.bind(this), this.minInterval+1);
 		};
 
 		CBIterator.prototype.finish = function finish(err, result, curi)
 		{
-			this.intervalDelay--;
-			
 			if(err)
 				return this.cb(err, this.results);
 
@@ -647,13 +654,14 @@ if(!Array.prototype.pushCopyInPlace)
 			if(this.running.length===0 && this.a.length===0)
 				return this.cb(undefined, this.results);
 
-			this.next();
+			if(this.scheduledTimeoutid===null)
+				this.next();
 		};
 	}
 
 	if(!Array.prototype.serialForEach)
 	{
-		Array.prototype.serialForEach = function parallelForEach(fun, cb)
+		Array.prototype.serialForEach = function serialForEach(fun, cb)
 		{
 			(new CBIterator(this, fun, 1)).go(cb);
 		};

@@ -2,6 +2,11 @@
 module.exports =
 {
 	"env"   : { "es6" : true },
+	"parserOptions" :
+	{
+		"ecmaVersion" : "2018",
+		"sourceType"  : "script"
+	},
 	// Use this comment to disable a rule in a file:	/* eslint-disable <rule> */
 	// Use this comment to disable a rule for a block:	/* eslint-disable <rule> */   <YOUR BLOCK HERE, MULTIPLE LINES FINE>    /* eslint-enable <rule> */
 	// Use this comment to disable a rule on a line:	// eslint-disable-line <rule>
@@ -15,10 +20,11 @@ module.exports =
 	"rules" :
 	{
 		// Plugins
-		"sembiance/disfavor-array-concat" : 2,
-		"sembiance/favor-includes"        : 2,
-		"sembiance/tiptoe-suffix-code"    : 2,
-		"sembiance/no-useless-variables"  : 2,
+		"sembiance/disfavor-array-concat"       : 2,
+		"sembiance/favor-includes"              : 2,
+		"sembiance/tiptoe-suffix-code"          : 2,
+		"sembiance/no-useless-variables"        : 2,
+		"sembiance/no-accounting-format-number" : 2,
 
 		// New
 		"multiline-comment-style"     : 0,
@@ -150,7 +156,7 @@ module.exports =
 		"no-restricted-globals"      : 0,
 		"no-shadow"                  : 2,
 		"no-shadow-restricted-names" : 2,
-		"no-undef"                   : 2,
+		"no-undef"                   : [2, {"typeof" : true}],
 		"no-undef-init"              : 0,
 		"no-undefined"               : 0,
 		"no-unused-vars"             : [2, {"argsIgnorePattern" : "^[iI]gnored$|^e$|^err$", "varsIgnorePattern" : "^base$" }],
