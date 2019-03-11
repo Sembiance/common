@@ -159,7 +159,7 @@ module.exports =
 		"no-undef"                   : [2, {"typeof" : true}],
 		"no-undef-init"              : 0,
 		"no-undefined"               : 0,
-		"no-unused-vars"             : [2, {"argsIgnorePattern" : "^[iI]gnored$|^e$|^err$", "varsIgnorePattern" : "^base$" }],
+		"no-unused-vars"             : [2, {"argsIgnorePattern" : "^[iI]gnored$|^e$|^err$", "varsIgnorePattern" : "^XU$" }],
 		"no-use-before-define"       : [2, {"functions" : false}],
 
 		// Node.js and CommonJS : Handled in parents "node", "browser", "both"

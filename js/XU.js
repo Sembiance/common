@@ -3,7 +3,7 @@
 /* eslint-env node, browser */
 /* eslint-disable global-require */
 
-(function _base(exports)
+(function _XU(exports)
 {
 	const XU = exports;
 
