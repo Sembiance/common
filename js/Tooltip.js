@@ -1,5 +1,5 @@
 "use strict";
-/* global Modernizr, base: true */
+/* global Modernizr, XU: true */
 
 (function _Tooltip()
 {
@@ -7,7 +7,7 @@
 
 	class Tooltip
 	{
-		constructor(node, text, extraClass, delay=base.SECOND*0.5, options={})
+		constructor(node, text, extraClass, delay=XU.SECOND*0.5, options={})
 		{
 			this.node = node;
 			this.text = text;
@@ -160,6 +160,5 @@
 		}
 	}
 
-	window.XU = window.XU || {};
-	window.XU.Tooltip = Tooltip;
+	XU.Tooltip = Tooltip;
 })();

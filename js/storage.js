@@ -1,4 +1,6 @@
 "use strict";
+/*global XU: true*/
+
 (function _storage()
 {
 	const storage = {};
@@ -94,6 +96,5 @@
 		useMem = true;
 	}
 
-	window.XU = window.XU || {};
-	window.XU.storage = storage;
+	XU.storage = storage;
 })();

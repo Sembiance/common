@@ -1,4 +1,5 @@
 "use strict";
+/*global XU: true*/
 
 (function _TabBar()
 {
@@ -57,6 +58,5 @@
 		}
 	}
 
-	window.XU = window.XU || {};
-	window.XU.TabBar = TabBar;
+	XU.TabBar = TabBar;
 })();

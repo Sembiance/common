@@ -1,4 +1,5 @@
 "use strict";
+/*global XU: true*/
 
 (function _PieChart()
 {
@@ -105,6 +106,5 @@
 		}
 	}
 
-	window.XU = window.XU || {};
-	window.XU.PieChart = { render };
+	XU.PieChart = { render };
 })();

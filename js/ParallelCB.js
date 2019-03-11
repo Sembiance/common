@@ -1,4 +1,6 @@
 "use strict";
+/*global XU: true*/
+
 (function _ParallelCB()
 {
 	// A simple class that allows you to create callbacks and then call a final callback when all other callbacks have finished
@@ -46,6 +48,5 @@
 		}
 	}
 
-	window.XU = window.XU || {};
-	window.XU.ParallelCB = ParallelCB;
+	XU.ParallelCB = ParallelCB;
 })();

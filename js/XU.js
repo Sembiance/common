@@ -5,10 +5,10 @@
 
 (function _base(exports)
 {
-	const base = exports;
+	const XU = exports;
 
 	exports.IS_NODE = typeof process!=="undefined" && typeof process.versions!=="undefined" && typeof process.versions.node!=="undefined";
-	if(base.IS_NODE)
+	if(XU.IS_NODE)
 	{
 		require("./Math");
 		require("./Array");
@@ -28,20 +28,20 @@
 	}
 
 	exports.SECOND = 1000;
-	exports.MINUTE = base.SECOND*60;
-	exports.HOUR = base.MINUTE*60;
-	exports.DAY = base.HOUR*24;
-	exports.WEEK = base.DAY*7;
-	exports.MONTH = base.DAY*30.4375;
-	exports.YEAR = base.DAY*365.25;
+	exports.MINUTE = XU.SECOND*60;
+	exports.HOUR = XU.MINUTE*60;
+	exports.DAY = XU.HOUR*24;
+	exports.WEEK = XU.DAY*7;
+	exports.MONTH = XU.DAY*30.4375;
+	exports.YEAR = XU.DAY*365.25;
 	exports.STARTUP_TIME = Date.now();
 
 	exports.BYTE = 1;
-	exports.KB = base.BYTE*1024;
-	exports.MB = base.KB*1024;
-	exports.GB = base.MB*1024;
-	exports.TB = base.GB*1024;
-	exports.PB = base.TB*1024;
+	exports.KB = XU.BYTE*1024;
+	exports.MB = XU.KB*1024;
+	exports.GB = XU.MB*1024;
+	exports.TB = XU.GB*1024;
+	exports.PB = XU.TB*1024;
 
 	exports.UTF8 = {encoding : "utf8"};
 
@@ -57,7 +57,7 @@
 			return o;
 
 		if(recursive)
-			(Object.isObject(o) ? Object.values(o) : o).forEach(v => base.freeze(v, true));
+			(Object.isObject(o) ? Object.values(o) : o).forEach(v => XU.freeze(v, true));
 
 		Object.freeze(o);
 
@@ -71,4 +71,4 @@
 
 		process.exit(0);
 	};
-})(typeof window!=="undefined" ? window.base={} : exports);
+})(typeof window!=="undefined" ? (window.XU ? window.XU : window.XU={}) : exports);

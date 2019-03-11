@@ -1,5 +1,5 @@
 "use strict";
-/* global base: true */
+/* global XU: true */
 
 /* Little helper object to make event handling less verbose */
 
@@ -23,7 +23,6 @@
 		}
 	};
 	
-	window.XU.E = E;
-
-	base.freeze(window.XU.E);
+	XU.E = E;
+	XU.freeze(XU.E);
 })();

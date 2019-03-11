@@ -1,4 +1,6 @@
 "use strict";
+/*global XU: true*/
+
 (function _Cookie()
 {
 	const Cookie = {};
@@ -35,6 +37,5 @@
 		Cookie.set(name, undefined, -1, domain);
 	};
 
-	window.XU = window.XU || {};
-	window.XU.Cookie = Cookie;
+	XU.Cookie = Cookie;
 })();

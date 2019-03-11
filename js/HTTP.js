@@ -1,4 +1,6 @@
 "use strict";
+/*global XU: true*/
+
 (function _HTTP()
 {
 	function httpRequest(method, url, data, cb)
@@ -46,6 +48,5 @@
 		httpRequest("POST", url, data, cb);
 	};
 	
-	window.XU = window.XU || {};
-	window.XU.HTTP = HTTP;
+	XU.HTTP = HTTP;
 })();

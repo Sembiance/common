@@ -1,4 +1,5 @@
 "use strict";
+/*global XU: true*/
 
 (function _SegmentedControl()
 {
@@ -66,6 +67,5 @@
 		}
 	}
 
-	window.XU = window.XU || {};
-	window.XU.SegmentedControl = SegmentedControl;
+	XU.SegmentedControl = SegmentedControl;
 })();
