@@ -574,7 +574,7 @@ if(!Array.prototype.pushCopyInPlace)
 
 (function _arrayAsyncFuncs()
 {
-	const performance = (typeof process!=="undefined" && typeof process.versions!=="undefined" && typeof process.versions.node!=="undefined") ? require("perf_hooks").performance : window.performance;	// eslint-disable-line global-require, no-undef
+	const p = (typeof window!=="undefined" && typeof window.performance!=="undefined") ? window.performance : ((typeof process!=="undefined" && typeof process.versions!=="undefined" && typeof process.versions.node!=="undefined") ? require("perf_hooks").performance : Date);	// eslint-disable-line max-len, no-undef
 
 	function CBRunner(_fun, _val, _i, _finish)
 	{
@@ -620,7 +620,7 @@ if(!Array.prototype.pushCopyInPlace)
 
 		CBIterator.prototype.next = function next()
 		{
-			const timeSinceLast = performance.now()-this.lastRanTime;
+			const timeSinceLast = p.now()-this.lastRanTime;
 			
 			if(timeSinceLast<this.minInterval)
 			{
@@ -636,7 +636,7 @@ if(!Array.prototype.pushCopyInPlace)
 			const curi = this.i++;
 
 			this.running.push(curi);
-			this.lastRanTime = performance.now();
+			this.lastRanTime = p.now();
 			new CBRunner(this.fun, this.a.shift(), curi, this.finish.bind(this)).run();
 
 			if(this.a.length>0 && this.running.length<this.atOnce)
