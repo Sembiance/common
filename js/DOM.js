@@ -72,7 +72,15 @@ if(typeof Element!=="undefined")
 	// Returns the width of one em for this element
 	Element.prototype.getEmWidth = function getEmWidth()
 	{
-		return Number(this.getComputedStyle().fontSize.match(/(\d+(\.\d+)?)px$/)[1]);
+		const computedFontSize = this.getComputedStyle().fontSize;
+		if(!computedFontSize)
+			return 16;
+
+		const matchedParts = computedFontSize.match(/(\d+(\.\d+)?)px$/);
+		if(!matchedParts || matchedParts.length<2 || !matchedParts[1])
+			return 16;
+
+		return Number(matchedParts[1]);
 	};
 
 	// Returns the elements width
