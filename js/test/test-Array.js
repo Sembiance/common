@@ -10,7 +10,7 @@ require(path.join(__dirname, "..", "Array.js"));
 
 
 // Arrays to use below
-let a=null, b=null, c=null, x=null, r=null, r2=null, r3=null, TESTNAME=null;
+let a=null, b=null, c=null, x=null, r=null, r2=null, TESTNAME=null;
 
 TESTNAME = "includes";
 a = [1, 2, 3, 4, 5];
@@ -159,15 +159,17 @@ a = [1, 2, 3, 4, 5];
 r = 5;
 assert.strictEqual(r, a.last(), TESTNAME);
 
-TESTNAME = "flatten";
-a = [1, 2, 3, [4, 5], 6, [7, 8, [9, 10, [11, 12]]], 13, 14];
-r = [1, 2, 3, 4, 5, 6, 7, 8, [9, 10, [11, 12]], 13, 14];
-r2 = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, [11, 12], 13, 14];
-r3 = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
-assert.ok(r.equals(a.flatten()), TESTNAME);
+TESTNAME = "flat";		// Official tests from MDN
+a = [1, 2, [3, 4]];
+r = [1, 2, 3, 4];
+assert.ok(r.equals(a.flat()), TESTNAME);
 assert.ok(!r.equals(a), TESTNAME);
-assert.ok(r2.equals(a.flatten(2)), TESTNAME);
-assert.ok(r3.equals(a.flatten(3)), TESTNAME);
+a = [1, 2, [3, 4, [5, 6]]];
+r = [1, 2, 3, 4, [5, 6]];
+assert.ok(r.equals(a.flat()), TESTNAME);
+a = [1, 2, [3, 4, [5, 6]]];
+r = [1, 2, 3, 4, 5, 6];
+assert.ok(r.equals(a.flat(2)), TESTNAME);
 
 TESTNAME = "multiSort";
 a = [{name : "d", value : 999}, {name : "a", value : 7}, {name : "b", value : 10}, {name : "a", value : 9}];
