@@ -26,11 +26,6 @@ if(typeof Element!=="undefined")
 		return [r.width, r.height];
 	};
 
-	Element.prototype.clear = function clear()
-	{
-		this.innerHTML = "";
-	};
-
 	if(!Element.prototype.remove)
 	{
 		Element.prototype.remove = function remove()
@@ -44,7 +39,7 @@ if(typeof Element!=="undefined")
 	{
 		if(!this.childNodes || this.childNodes.length!==1)
 		{
-			this.clear();
+			this.innerHTML = "";
 			this.appendChild(document.createTextNode(text));
 			return this;
 		}
