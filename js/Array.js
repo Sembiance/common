@@ -280,11 +280,26 @@ if(!Array.prototype.last)
 }
 
 // Flattens an array
-if(!Array.prototype.flatten)
+if(!Array.prototype.flat)
 {
-	Array.prototype.flatten = function flatten(depth=1)
+	Array.prototype.flat = function flat(depth=1)
 	{
-		return this.reduce((a, v) => (Array.isArray(v) && depth>0 ? a.concat(v.flatten((--depth))) : a.concat(v)), []);		// eslint-disable-line no-param-reassign
+		if(depth<1)
+			return Array.prototype.slice.call(this);
+
+		return (function _flat(arr, _depth)
+		{
+			const flattened = [];
+			arr.forEach(v =>
+			{
+				if(Array.isArray(v) && _depth>0)
+					flattened.push(..._flat(v, _depth-1));
+				else
+					flattened.push(v);
+			});
+
+			return flattened;
+		})(this, depth);
 	};
 }
 
