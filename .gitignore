@@ -1,3 +1,4 @@
 nginx/status-htpasswd
 lib
 images
+prometheus
