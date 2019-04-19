@@ -62,7 +62,7 @@
 		}
 
 		// Shows the tooltip
-		show(e)
+		show(e, tooltipText, instant)
 		{
 			if(this.disabled || this.visible || this.skipNextShow || tooltipsDisabled)
 				return (this.skipNextShow = false), undefined;
@@ -70,10 +70,10 @@
 			document.body.addEventListener("mousemove", this.boundMouseMoveHandler);
 			document.body.appendChild(this.tooltip);
 
-			this.tooltipLeft = this.options.alwaysLeft ? true : (this.options.alwaysRight ? false : e.pageX>(document.body.getWidth()/2));
-			this.tooltipBelow = this.options.alwaysBelow ? true : (this.options.alwaysAbove ? false : e.pageY<(document.body.getHeight()/2));
+			this.tooltipLeft = this.options.alwaysLeft ? true : (this.options.alwaysRight ? false : (e ? e.pageX : this.node.getXY()[0])>(document.body.getWidth()/2));
+			this.tooltipBelow = this.options.alwaysBelow ? true : (this.options.alwaysAbove ? false : (e ? e.pageY : this.node.getXY()[1])<(document.body.getHeight()/2));
 
-			this.tooltip.innerHTML = (typeof this.text==="function" ? this.text() : this.text);
+			this.tooltip.innerHTML = (tooltipText || (typeof this.text==="function" ? this.text() : this.text));
 
 			this.visible = true;
 
@@ -83,7 +83,7 @@
 
 				this.tooltip.style.display = "block";
 				this.mouseMoveHandler();
-			}, this.tooltipDelay);
+			}, (instant ? 0 :this.tooltipDelay));
 		}
 
 		// Hides the tooltip
