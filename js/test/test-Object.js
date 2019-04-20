@@ -75,6 +75,16 @@ assert.ok(Object.equals(r, Object.map(a, (k, v) => [v, k])), TESTNAME);
 assert.ok(!Object.equals(r, a), TESTNAME);
 assert.ok(Object.equals(r2, Object.map(a, (k, v) => v.length)), TESTNAME);
 
+TESTNAME = "mapInPlace";
+a = {hello : "world", jon : "super kitty"};
+r = {"super kitty" : "jon", world : "hello"};
+r2 = {hello : 5, jon : 11};
+assert.ok(Object.equals(r, Object.mapInPlace(a, (k, v) => [v, k])), TESTNAME);
+assert.ok(Object.equals(r, a), TESTNAME);
+a = {hello : "world", jon : "super kitty"};
+assert.ok(Object.equals(r2, Object.mapInPlace(a, (k, v) => v.length)), TESTNAME);
+assert.ok(Object.equals(r2, a), TESTNAME);
+
 TESTNAME = "clear";
 a = {hello : "world", abc : 123, kittyIsCute : true};
 r = {};

@@ -177,6 +177,36 @@ if(!Object.map)
 	};
 }
 
+// Replaces key/values in an object by calling cb(k, v) and expects a result of either 'newVal' or [newKey, newVal]. Modifies object directly.
+if(!Object.mapInPlace)
+{
+	Object.mapInPlace = function mapInPlace(o, cb)
+	{
+		if(!cb)
+			return o;
+
+		Object.entries(o).forEach(kv =>
+		{
+			const r = cb(kv[0], kv[1]);
+			if(!Array.isArray(r))
+			{
+				o[kv[0]] = r;
+			}
+			else if(r.length===1)
+			{
+				o[kv[0]] = r[0];
+			}
+			else
+			{
+				delete o[kv[0]];
+				o[r[0]] = r[1];
+			}
+		});
+
+		return o;
+	};
+}
+
 // Clear an object. Useful to clear an object that is 'const'
 if(!Object.clear)
 {
