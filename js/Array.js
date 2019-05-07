@@ -51,6 +51,14 @@ Array.prototype.find = function find(cb)
 //// Custom ////
 ////////////////
 
+if(!Array.force)
+{
+	Array.force = function force(v)
+	{
+		return (Array.isArray(v) ? v : [v]);	// eslint-disable-line sembiance/prefer-array-force
+	};
+}
+
 // Returns an array of 1 or more random values from an array. Can pass an array of values to exclude
 if(!Array.prototype.pickRandom)
 {
@@ -308,7 +316,7 @@ if(!Array.prototype.multiSort)
 {
 	Array.prototype.multiSort = function multiSort(_sorters, reverse)
 	{
-		const sorters = (Array.isArray(_sorters) ? _sorters : [_sorters]).filterEmpty();
+		const sorters = Array.force(_sorters).filterEmpty();
 		if(sorters.length===0)
 			sorters.push(v => v);
 
