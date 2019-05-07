@@ -25,6 +25,8 @@ module.exports =
 		"sembiance/tiptoe-suffix-code"          : 2,
 		"sembiance/no-useless-variables"        : 2,
 		"sembiance/no-accounting-format-number" : 2,
+		"sembiance/no-return-setImmediate-this" : 2,
+		"sembiance/prefer-array-force"          : 2,
 
 		// New
 		"multiline-comment-style"     : 0,
