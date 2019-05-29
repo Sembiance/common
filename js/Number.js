@@ -21,12 +21,18 @@ if(!Number.prototype.toLocaleString)
 //// Custom ////
 ////////////////
 
-// Returns true if this is a number (even if in string format)
-if(!Number.isNumber)
+// Converts a given number of bytes into KB/MB/GB/TB. From: https://stackoverflow.com/questions/15900485/correct-way-to-convert-size-in-bytes-to-kb-mb-gb-in-javascript
+if(!Number.prototype.bytesToSize)
 {
-	Number.isNumber = function isNumber(n)
+	Number.prototype.bytesToSize = function bytesToSize()
 	{
-		return !isNaN(parseFloat(n)) && isFinite(n);
+		const bytes = this;	// eslint-disable-line consistent-this
+		const sizes = ["bytes", "KB", "MB", "GB", "TB"];
+		if(bytes===0)
+			return "0 bytes";
+		
+		const i = +(Math.floor(Math.log(bytes) / Math.log(1024)));
+		return Math.round(bytes / Math.pow(1024, i), 2) + (i===0 ? " " : "") + sizes[i];
 	};
 }
 
@@ -195,5 +201,14 @@ if(!Number.prototype.flipBit)
 	Number.prototype.flipBit = function flipBit(loc)
 	{
 		return (this.getBit(loc)===1 ? this.clearBit(loc) : this.setBit(loc));
+	};
+}
+
+// Maps a number from one scale (in) to another scale (out) similar to how Arduino map() operates
+if(!Number.prototype.map)
+{
+	Number.prototype.map = function map(inMin, inMax, outMin, outMax)
+	{
+		return (((this - inMin) * (outMax - outMin)) / (inMax - inMin)) + outMin;
 	};
 }

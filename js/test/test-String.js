@@ -11,11 +11,23 @@ require(path.join(__dirname, "..", "String.js"));
 
 
 // Vars to use below
-let a=null, b=null, r=null, r2=null, TESTNAME=null;
+let a=null, b=null, c=null, d=null, e=null, r=null, r2=null, TESTNAME=null;
 
 TESTNAME = "includes";
 a = "Hello there my good Kitty";
 assert.ok(a.includes("good"), TESTNAME);
+
+TESTNAME = "isNumber";
+a = "1000";
+b = "1234.56";
+c = "-100";
+d = "100hj";
+e = "hj2000";
+assert.ok(a.isNumber());
+assert.ok(b.isNumber());
+assert.ok(c.isNumber());
+assert.ok(d.isNumber());
+assert.ok(!e.isNumber());
 
 TESTNAME = "startsWith";
 a = "To be, or not to be, that is the question.";

@@ -1,6 +1,7 @@
 "use strict";
+/*global XU: true*/
 
-(function _throttle(exports)
+(function _throttle()
 {
 	function throttle(f, minInterval, reSendLastEvent=false)
 	{
@@ -38,5 +39,5 @@
 		return throttler;
 	}
 
-	exports.throttle = throttle;
-})(typeof exports==="undefined" ? window : exports);
+	XU.throttle = throttle;
+})();

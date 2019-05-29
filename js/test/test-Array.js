@@ -28,6 +28,14 @@ a = [1, 2, 3, 4, 5];
 assert.strictEqual(3, a.find(v => v>2 && v<4), TESTNAME);
 assert.strictEqual(3, a.find((v, i) => i===2), TESTNAME);
 
+TESTNAME = "findAndRemove";
+a = [1, 2, 3, 4, 5];
+r = [1, 2, 4, 5];
+assert.strictEqual(3, a.findAndRemove(v => v>2 && v<4), TESTNAME);
+assert.strictEqual(JSON.stringify(r), JSON.stringify(a));
+assert.strictEqual(4, a.findAndRemove((v, i) => i===2), TESTNAME);
+assert.strictEqual(3, a.length);
+
 TESTNAME = "pickRandom";
 a = [1];
 assert.ok([1].equals(a.pickRandom(1, [7])), TESTNAME);
@@ -37,9 +45,9 @@ r = [].pushSequence(0, 1000);
 assert.ok(!r.equals(a.pickRandom(1000)), TESTNAME);	// In theory this could shuffle all 10,000 elements the same, but highly unlikely.
 assert.ok(r.equals(a), TESTNAME);
 a = [1, 2, 3, 4, 5];
-assert.ok(Number.isNumber(a.pickRandom()[0]), TESTNAME);
+assert.ok(typeof a.pickRandom()[0]==="number", TESTNAME);
 assert.ok(a.includes(a.pickRandom()[0]), TESTNAME);
-assert.ok(Number.isNumber(a.pickRandom(1)[0]), TESTNAME);
+assert.ok(typeof a.pickRandom(1)[0]=="number", TESTNAME);
 assert.ok(a.includes(a.pickRandom(1)[0]), TESTNAME);
 assert.strictEqual(3, a.pickRandom(3).length, TESTNAME);
 assert.ok(a.includesAll(a.pickRandom(3)), TESTNAME);
@@ -318,5 +326,14 @@ a.parallelForEach((v, cb) =>
 	r2 += v;
 	cb();
 }, () => assert.strictEqual(r2, 15, TESTNAME), 3);
+
+a = [].pushSequence(1, 100);
+r = 0;
+setTimeout(() => assert.strictEqual(r, 100), 1000);
+a.parallelForEach((v, cb) =>
+{
+	r++;
+	setTimeout(cb, 5000);
+}, () => assert.strictEqual(r, 100, TESTNAME), 100);
 
 console.log("ALL TESTS PASSED");

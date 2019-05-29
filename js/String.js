@@ -111,6 +111,16 @@ if(!String.prototype.padEnd)
 //// Custom ////
 ////////////////
 
+// Returns true if this is a number
+if(!String.prototype.isNumber)
+{
+	String.prototype.isNumber = function isNumber()
+	{
+		const n = parseFloat(this);
+		return !isNaN(n) && isFinite(n);
+	};
+}
+
 // Reverses a string, character by character
 if(!String.prototype.reverse)
 {

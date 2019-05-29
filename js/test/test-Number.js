@@ -12,14 +12,6 @@ require(path.join(__dirname, "..", "Number.js"));
 // Vars to use below
 let a=null, b=null, c=null, r=null, r2=null, r3=null, TESTNAME=null;
 
-TESTNAME = "isNumber";
-a = Number(1000);
-b = 1234.56;
-c = "100";
-assert.ok(Number.isNumber(a));
-assert.ok(Number.isNumber(b));
-assert.ok(Number.isNumber(c));
-
 TESTNAME = "toLocaleString";
 a = Number(1000);
 b = 1234.56;

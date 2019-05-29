@@ -51,6 +51,19 @@ Array.prototype.find = function find(cb)
 //// Custom ////
 ////////////////
 
+// Calls cb(ele, i, arr) for each element in the array and if cb() returns true then that element is removed from the array. This happens just once.
+Array.prototype.findAndRemove = function findAndRemove(cb)
+{
+	for(let i=0, len=this.length;i<len;i++)
+	{
+		if(cb(this[i], i, this))	// eslint-disable-line callback-return
+			return this.splice(i, 1)[0];
+	}
+
+	return undefined;
+};
+
+// Forces the passed in variable to be an Array. Just returns it if it already is an Array, otherwise it returns [v]
 if(!Array.force)
 {
 	Array.force = function force(v)
@@ -508,7 +521,7 @@ if(!Array.prototype.mapToObject)
 	};
 }
 
-// Replaces all values in the array that match oldVal with newVal
+// Replaces all values in the array that match oldVal with newVal. MODIFIES ARRAY IN PLACE
 if(!Array.prototype.replaceAll)
 {
 	Array.prototype.replaceAll = function replaceAll(oldVal, newVal)
@@ -645,7 +658,7 @@ if(!Array.prototype.pushCopyInPlace)
 		{
 			const timeSinceLast = p.now()-this.lastRanTime;
 			
-			if(timeSinceLast<this.minInterval)
+			if(this.minInterval>0 && timeSinceLast<this.minInterval)
 			{
 				this.scheduledTimeoutid = setTimeout(this.next.bind(this), (this.minInterval-timeSinceLast)+1);
 				return;
@@ -684,9 +697,9 @@ if(!Array.prototype.pushCopyInPlace)
 
 	if(!Array.prototype.serialForEach)
 	{
-		Array.prototype.serialForEach = function serialForEach(fun, cb)
+		Array.prototype.serialForEach = function serialForEach(fun, cb, minInterval)
 		{
-			(new CBIterator(this, fun, 1)).go(cb);
+			(new CBIterator(this, fun, 1, minInterval||0)).go(cb);
 		};
 	}
 
