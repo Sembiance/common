@@ -81,6 +81,11 @@
 		else
 			localStorage.clear();
 	};
+
+	storage.getType = function getType()
+	{
+		return (useMem ? "memory" : "storage");
+	};
 	
 	// Make sure localStorage works, otherwise fall back to using memory
 	try
