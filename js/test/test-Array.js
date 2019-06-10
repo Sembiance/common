@@ -47,7 +47,7 @@ assert.ok(r.equals(a), TESTNAME);
 a = [1, 2, 3, 4, 5];
 assert.ok(typeof a.pickRandom()[0]==="number", TESTNAME);
 assert.ok(a.includes(a.pickRandom()[0]), TESTNAME);
-assert.ok(typeof a.pickRandom(1)[0]=="number", TESTNAME);
+assert.ok(typeof a.pickRandom(1)[0]==="number", TESTNAME);
 assert.ok(a.includes(a.pickRandom(1)[0]), TESTNAME);
 assert.strictEqual(3, a.pickRandom(3).length, TESTNAME);
 assert.ok(a.includesAll(a.pickRandom(3)), TESTNAME);
