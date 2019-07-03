@@ -80,8 +80,8 @@ types
 	application/vnd.oasis.opendocument.text         odt;
 
 	# Web fonts
-	application/font-woff         woff;
-	application/font-woff2        woff2;
+	font/woff         woff;
+	font/woff2        woff2;
 	application/vnd.ms-fontobject eot;
 
 	# Browsers usually ignore the font media types and simply sniff the bytes to figure out the font type.
