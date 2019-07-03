@@ -1,5 +1,5 @@
 "use strict";
-/* global AudioContext, webkitAudioContext: true */
+/* global webkitAudioContext: true */
 
 if(typeof window.performance==="undefined" || !window.performance || !window.performance.now)
 	window.performance = {};

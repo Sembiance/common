@@ -1,5 +1,5 @@
 "use strict";
-/*global TextRectangle, Element: true*/
+/*global TextRectangle: true*/
 
 // Adds several helper methods to the built in DOM elements
 if(typeof Element!=="undefined")

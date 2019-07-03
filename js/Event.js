@@ -1,5 +1,4 @@
 "use strict";
-/*global Element: true*/
 
 // polyfill IE8: addEventListener/removeEventListener
 if(typeof window.addEventListener==="undefined" && typeof window.attachEvent!=="undefined")

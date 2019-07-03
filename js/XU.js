@@ -1,5 +1,4 @@
 "use strict";
-/* global window: true */
 /* eslint-env node, browser */
 /* eslint-disable global-require */
 
