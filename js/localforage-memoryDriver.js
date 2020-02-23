@@ -31,7 +31,7 @@
 		{
 			const dbInfo = {};
 			if(options)
-				Object.merge(dbInfo, options);
+				Object.assign(dbInfo, options);
 
 			const database = storage[dbInfo.name] = storage[dbInfo.name] || {};
 			const table = database[dbInfo.storeName] = database[dbInfo.storeName] || {};

@@ -67,7 +67,7 @@
 	exports.optionscb = function optionscb(options, cb, defaultOptions={})
 	{
 		const r = {};
-		r.options = Object.merge(defaultOptions, (cb ? options : {}));
+		r.options = Object.assign(defaultOptions, (cb ? options : {}));
 		r.cb = cb || options;
 		
 		return r;

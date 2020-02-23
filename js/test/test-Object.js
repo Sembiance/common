@@ -97,19 +97,6 @@ r = {"super kitty" : "jon", world : "hello"};
 assert.ok(Object.equals(r, Object.swapKeyValues(a)), TESTNAME);
 assert.ok(!Object.equals(r, a), TESTNAME);
 
-TESTNAME = "merge";
-a = {hello : "world", jon : "super kitty"};
-b = {abc : 123, kittyIsCute : true, jon : "fluffy"};
-r = {hello : "world", jon : "fluffy", abc : 123, kittyIsCute : true};
-r2 = {hello : "world", jon : "fluffy super kitty", kittyIsCute : true};
-assert.ok(Object.equals(r, Object.merge(a, b)), TESTNAME);
-assert.ok(Object.equals(r, a), TESTNAME);
-a = {hello : "world", jon : "super kitty"};
-b = {abc : 123, kittyIsCute : true, jon : "fluffy"};
-r = {hello : "world", jon : "fluffy super kitty", kittyIsCute : true};
-assert.ok(Object.equals(r, Object.merge(a, b, (v1, v2, k) => (k==="jon" ? (v2 + " " + v1) : v2), ["hello", "jon", "kittyIsCute"])), TESTNAME);
-assert.ok(Object.equals(r, a), TESTNAME);
-
 TESTNAME = "reduce";
 a = {hello : "world", abc : 123, kittyIsCute : true};
 r = ["world", "hello", 123, "abc", true, "kittyIsCute"];
