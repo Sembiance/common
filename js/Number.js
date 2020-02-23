@@ -32,7 +32,7 @@ if(!Number.prototype.bytesToSize)
 			return "0 bytes";
 		
 		const i = +(Math.floor(Math.log(bytes) / Math.log(1024)));
-		return Math.round(bytes / Math.pow(1024, i), 2) + (i===0 ? " " : "") + sizes[i];
+		return Math.round(bytes / (1024 ** i), 2) + (i===0 ? " " : "") + sizes[i];
 	};
 }
 
@@ -205,10 +205,119 @@ if(!Number.prototype.flipBit)
 }
 
 // Maps a number from one scale (in) to another scale (out) similar to how Arduino map() operates
-if(!Number.prototype.map)
+if(!Number.prototype.scale)
 {
-	Number.prototype.map = function map(inMin, inMax, outMin, outMax)
+	Number.prototype.scale = function scale(inMin, inMax, outMin, outMax)
 	{
 		return (((this - inMin) * (outMax - outMin)) / (inMax - inMin)) + outMin;
 	};
+}
+
+// Eases a number
+if(!Number.prototype.ease)
+{
+	/* eslint-disable no-mixed-operators */
+	// Visual explanations of various easing types: https://easings.net/en
+	Number.prototype.ease = function ease(type)
+	{
+		const x = this;		// eslint-disable-line consistent-this
+
+		if(type==="easeInQuad")
+			return x*x;
+
+		if(type==="easeInCubic")
+			return x*x*x;
+
+		if(type==="easeInQuart")
+			return x*x*x*x;
+
+		if(type==="easeInQuint")
+			return x*x*x*x*x;
+
+		if(type==="easeOutQuad")
+			return 1-(1-x)*(1-x);
+
+		if(type==="easeOutCubic")
+			return 1-((1-x) ** 3);
+
+		if(type==="easeOutQuart")
+			return 1-((1-x) ** 4);
+
+		if(type==="easeInOutQuad")
+			return x<0.5 ? (2*x*x) : (1 - ((-2*x+2) ** 2)/2);
+
+		if(type==="easeOutQuint")
+			return 1-((1-x) ** 5);
+
+		if(type==="easeInOutCubic")
+			return x<0.5 ? (4*x*x*x) : (1-((-2*x+2) ** 3)/2);
+
+		if(type==="easeInOutQuart")
+			return x<0.5 ? (8*x*x*x*x) : (1-((-2*x+2) ** 4)/2);
+
+		if(type==="easeInOutQuint")
+			return x<0.5 ? (16*x*x*x*x*x) : (1-((-2*x+2) ** 5)/2);
+
+		if(type==="easeInSine")
+			return 1-Math.cos(x* Math.PI/2);
+
+		if(type==="easeInOutSine")
+			return -(Math.cos(Math.PI*x)-1)/2;
+
+		if(type==="easeInExpo")
+			return x===0 ? 0 : (2 ** (10*x-10));
+
+		if(type==="easeOutExpo")
+			return x===1 ? 1 : 1-(2 ** (-10*x));
+
+		if(type==="easeInOutExpo")
+			return x===0 ? 0 : (x===1 ? 1 : (x<0.5 ? ((2 ** (20*x-10))/2) : ((2-(2 * (-20*x+10)))/2)));
+
+		if(type==="easeInCirc")
+			return 1-Math.sqrt(1-(x ** 2));
+
+		if(type==="easeOutCirc")
+			return Math.sqrt(1-((x-1) ** 2));
+
+		if(type==="easeInOutCirc")
+			return x<0.5 ? ((1-Math.sqrt(1-((2*x) ** 2)))/2) : ((Math.sqrt(1-((-2*x+2) ** 2))+1)/2);
+
+		const c1 = 1.70158;
+		const c2 = c1*1.525;
+		const c3 = c1+1;
+		const c4 = (2*Math.PI)/3;
+		const c5 = (2*Math.PI)/4.5;
+
+		if(type==="easeInBack")
+			return c3 * x * x * x - c1 * x * x;
+
+		if(type==="easeOutBack")
+			return 1+c3*((x-1) ** 3)+c1*((x-1) ** 2);
+
+		if(type==="easeInOutBack")
+			return x<0.5 ? ((((2*x) ** 2)*((c2+1)*2*x-c2))/2) : ((((2*x-2) ** 2)*((c2+1)*(x*2-2)+c2)+2)/2);
+
+		if(type==="easeInElastic")
+			return x===0 ? 0 : (x===1 ? 1 : (-(2 ** (10*x-10))*Math.sin((x*10-10.75)*c4)));
+		
+		if(type==="easeOutElastic")
+			return x===0 ? 0 : (x===1 ? 1 : ((2 ** (-10*x))*Math.sin((x*10-0.75)*c4)+1));
+		
+		if(type==="easeInOutElastic")
+			return x===0 ? 0 : (x===1 ? 1 : (x<0.5 ? (-((2 ** (20*x-10))*Math.sin((20*x-11.125)*c5))/2) : ((2 ** (-20*x+10))*Math.sin((20*x-11.125)*c5)/2+1)));
+
+		if(type==="easeInBounce")
+			return 1-(Number(1-x).ease("bounceOut"));
+
+		if(type==="easeOutBounce")
+			return this.ease("bounceOut");
+
+		if(type==="easeInOutBounce")
+			return x<0.5 ? (1-Number(1-2*x).ease("bounceOut"))/2 : (1+Number(2*x-1).ease("bounceOut"))/2;
+
+		// Default is "easeOutSine"
+		return Math.sin(x*Math.PI/2);
+	};
+
+	/* eslint-enable no-mixed-operators */
 }

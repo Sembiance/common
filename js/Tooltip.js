@@ -17,15 +17,11 @@
 			if(extraClass)
 				this.tooltip.classList.add(extraClass);
 			this.tooltipOffset = 15;
-			this.tooltipLeft = false;
-			this.tooltipBelow = false;
+			this.tooltipLeft = this.tooltipBelow = false;
 			this.tooltipDelay = delay;
 			this.tooltipDelayTimeout = null;
-			this.lastPageX = null;
-			this.lastPageY = null;
-			this.visible = false;
-			this.disabled = false;
-			this.skipNextShow = false;
+			this.lastPageX = this.lastPageY = null;
+			this.visible = this.disabled = this.skipNextShow = false;
 
 			this.boundMouseEnterHandler = this.mouseEnterHandler.bind(this);
 			this.boundMouseLeaveHandler = this.mouseLeaveHandler.bind(this);

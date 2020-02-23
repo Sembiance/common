@@ -63,6 +63,16 @@
 		return o;
 	};
 
+	// Given an options and cb parameters, assigns default options and handles the fact that 'options' might be the callback
+	exports.optionscb = function optionscb(options, cb, defaultOptions={})
+	{
+		const r = {};
+		r.options = Object.merge(defaultOptions, (cb ? options : {}));
+		r.cb = cb || options;
+		
+		return r;
+	};
+
 	exports.FINISH = function finish(err)
 	{
 		if(err)

@@ -241,17 +241,29 @@ r = [4, 5, 1, 2, 3];
 assert.ok(r.equals(a.rotateInPlace(3)), TESTNAME);
 assert.ok(r.equals(a), TESTNAME);
 
-TESTNAME = "subtract";
+TESTNAME = "subtractAll";
 a = [1, 2, 3, 4, 5];
 b = [2, 4];
 r = [1, 3, 5];
 r2 = [1, 2, 3, 4, 5];
-assert.ok(r.equals(a.subtract(b)), TESTNAME);
+assert.ok(r.equals(a.subtractAll(b)), TESTNAME);
 assert.ok(r2.equals(a), TESTNAME);
 a = [1, 2, 2, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5, 5];
 b = [1, 3, 4];
 r = [2, 2, 5, 5, 5, 5, 5];
-assert.ok(r.equals(a.subtract(b)), TESTNAME);
+assert.ok(r.equals(a.subtractAll(b)), TESTNAME);
+
+TESTNAME = "subtractOnce";
+a = [1, 2, 3, 4, 5];
+b = [2, 4];
+r = [1, 3, 5];
+r2 = [1, 2, 3, 4, 5];
+assert.ok(r.equals(a.subtractOnce(b)), TESTNAME);
+assert.ok(r2.equals(a), TESTNAME);
+a = [1, 2, 2, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5, 5];
+b = [1, 3, 4];
+r = [2, 2, 3, 3, 4, 4, 4, 5, 5, 5, 5, 5];
+assert.ok(r.equals(a.subtractOnce(b)), TESTNAME);
 
 TESTNAME = "batch";
 a = [1, 2, 3, 4, 5, 6, 7];

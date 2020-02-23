@@ -251,7 +251,7 @@ if(!Object.merge || typeof Object.merge!=="function")
 	};
 }
 
-// Reduce an object into something else, similar to Array.reduce
+// Reduce an object into something else, similar to Array.reduce. I think I used to call this mutate
 if(!Object.reduce)
 {
 	Object.reduce = function reduce(o, cb, startResult)

@@ -1,5 +1,4 @@
 "use strict";
-
 // COPIED AND MODIFIED FROM: https://github.com/component/debounce/blob/master/index.js
 
 (function _debounce(exports)
