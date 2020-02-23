@@ -6,7 +6,7 @@
 	"commaSpace"             : "always",
 	"commentSpace"           : false,
 	"cssLiteral"             : "never",
-	"customProperties"       : ["transition-box-shadow", "background-linear-gradient"],
+	"customProperties"       : ["transition-box-shadow", "background-linear-gradient", "font-display"],
 	"depthLimit"             : 8,
 	"duplicates"             : true,
 	"efficient"              : "always",
