@@ -15,20 +15,29 @@ module.exports =
 	// 1 == warn
 	// 2 == error
 
-	"plugins" : ["sembiance"],
+	"plugins" : ["sembiance", "array-func"],
 
 	"rules" :
 	{
 		// Plugins
-		"sembiance/disfavor-array-concat"           : 2,
-		"sembiance/favor-includes"                  : 2,
-		"sembiance/tiptoe-suffix-code"              : 2,
-		"sembiance/no-useless-variables"            : 2,
-		"sembiance/no-accounting-format-number"     : 2,
-		"sembiance/no-return-setImmediate-this"     : 2,
-		"sembiance/prefer-array-force"              : 2,
-		"sembiance/no-url-parse"                    : 2,
-		"sembiance/shorter-arrow-funs"              : 2,
+		"sembiance/disfavor-array-concat"        : 2,
+		"sembiance/favor-includes"               : 2,
+		"sembiance/tiptoe-suffix-code"           : 2,
+		"sembiance/no-useless-variables"         : 2,
+		"sembiance/no-accounting-format-number"  : 2,
+		"sembiance/no-return-setImmediate-this"  : 2,
+		"sembiance/prefer-array-force"           : 2,
+		"sembiance/no-url-parse"                 : 2,
+		"sembiance/shorter-arrow-funs"           : 2,
+		"sembiance/prefer-object-destructuring"  : 2,
+		"sembiance/prefer-require-destructuring" : 2,
+		"sembiance/favor-fileutil"               : 2,
+
+		"array-func/from-map"                : 2,
+		"array-func/no-unnecessary-this-arg" : 2,
+		"array-func/avoid-reverse"           : 2,
+		"array-func/prefer-flat-map"         : 2,
+		"array-func/prefer-flat"             : 2,
 
 		// New
 		"multiline-comment-style"     : 0,
@@ -287,7 +296,7 @@ module.exports =
 		"object-shorthand"        : [2, "always"],
 		"prefer-arrow-callback"   : [2, {"allowNamedFunctions" : true}],
 		"prefer-const"            : 2,
-		"prefer-destructuring"    : 0,
+		"prefer-destructuring"    : 0,	// We have our own prefer-object-destructuring which behaves more how I want it to
 		"prefer-numeric-literals" : 2,
 		"prefer-rest-params"      : 2,
 		"prefer-spread"           : 2,
