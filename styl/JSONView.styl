@@ -1,0 +1,112 @@
+////// JSONView //////
+.jsonview
+	font-family "Terminus (TTF)"
+	color #808080
+	overflow auto
+	max-height 30.0em
+
+	&.hidemeta .item .meta
+		display none
+
+	.title
+		font-size 1.5em
+		font-weight bold
+		text-decoration underline
+		margin 0.1em
+		color #eee
+
+	.item
+		display block
+		white-space nowrap
+		color #aaa
+		padding 0.5px 0
+
+		.key, .meta, .value, .punctuation
+			display inline-block
+			white-space pre
+			overflow hidden
+			text-overflow ellipsis
+		
+		.punctuation
+			color #00ffff
+
+		.meta
+			margin-left 0.5em
+			color #00ee00
+
+		&.type-object, &.type-array
+			.value
+				color #fff
+
+		&.type-boolean .value
+			color #fff
+		
+		&.type-string .value
+			color #ee00ee
+
+		&.clickable
+			cursor pointer
+			&:hover
+				background-color #222
+		
+		&::before
+			content "│"
+			position relative
+			left -0.5em
+			display inline-block
+			white-space pre
+			overflow hidden
+			text-overflow ellipsis
+			color #00ffff
+		
+		&.lastItem::before
+			content "╰"
+			position relative
+			left -0.5em
+			display inline-block
+			white-space pre
+			overflow hidden
+			text-overflow ellipsis
+			color #00ffff
+		
+		&:first-child::before
+			display none
+
+		&.indent1
+			margin-left 1.5em
+		&.indent2
+			margin-left 3.0em
+		&.indent3
+			margin-left 4.5em
+		&.indent4
+			margin-left 6.0em
+		&.indent5
+			margin-left 7.5em
+		&.indent6
+			margin-left 9.0em
+		&.indent7
+			margin-left 10.5em
+		&.indent8
+			margin-left 12.0em
+		&.indent9
+			margin-left 13.5em
+		&.indent10
+			margin-left 15.0em
+		&.indent11
+			margin-left 16.5em
+		&.indent12
+			margin-left 18.0em
+		&.indent13
+			margin-left 19.5em
+		&.indent14
+			margin-left 21.0em
+		&.indent15
+			margin-left 22.5em
+		&.indent16
+			margin-left 24.0em
+		&.indent17
+			margin-left 25.5em
+		&.indent18
+			margin-left 27.0em
+		&.indent19
+			margin-left 28.5em
