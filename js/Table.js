@@ -27,7 +27,7 @@
 		// Will resize things correctly
 		resize()
 		{
-			const tdWidths = Array.from(this.t.querySelectorAll("tbody tr:first-child td")).map(td => td.getWidth());
+			const tdWidths = Array.from(this.t.querySelectorAll("tbody tr:first-child td"), td => td.getWidth());
 
 			const headerRows = Array.from(this.t.querySelectorAll("thead tr"));
 			if(headerRows.length>1)

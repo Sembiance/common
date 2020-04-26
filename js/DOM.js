@@ -49,6 +49,36 @@ if(typeof Element!=="undefined")
 		return this;
 	};
 
+	// Returns the first prev sibling that the passed in function returns true to upon receiving it passed in
+	Element.prototype.getPreviousSibling = function getPreviousSibling(f)
+	{
+		for(let c=this;c;c=c.previousSibling)	// eslint-disable-line consistent-this
+		{
+			if(f(c))
+				return c;
+
+			if(c.nodeName.toLowerCase()==="html")
+				return null;
+		}
+
+		return null;
+	};
+
+	// Returns the first sibling that the passed in function returns true to upon receiving it passed in
+	Element.prototype.getNextSibling = function getNextSibling(f)
+	{
+		for(let c=this.nextSibling;c;c=c.nextSibling)	// eslint-disable-line consistent-this
+		{
+			if(f(c))
+				return c;
+
+			if(c.nodeName.toLowerCase()==="html")
+				return null;
+		}
+
+		return null;
+	};
+
 	// Returns the first ancestor that the passed in function returns true to upon receiving it passed in
 	Element.prototype.getAncestor = function getAncestor(f)
 	{
@@ -140,6 +170,12 @@ if(typeof Element!=="undefined")
 		const thisBottomOffset = (this.offsetTop + thisHeight);
 		if(scrollParent.scrollTop>thisBottomOffset || (scrollParent.scrollTop+scrollParent.getHeight())<thisBottomOffset)
 			scrollParent.scrollTop = this.offsetTop - ((scrollParent.getHeight()-thisHeight)/2);
+	};
+
+	// Alias classList.includes() to classList.contains() to match the standard way of doing things with Array/String
+	DOMTokenList.prototype.includes = function includes(...args)
+	{
+		return this.contains(...args);
 	};
 }
 

@@ -171,6 +171,15 @@ if(!String.prototype.capitalize)
 	};
 }
 
+// Reverses a string
+if(!String.prototype.reverse)
+{
+	String.prototype.reverse = function reverse()
+	{
+		return this.split("").reverse().join("");
+	};
+}
+
 // Converts a string to proper case, capitilizing the first letter of each word and lowercasing the rest of the word
 if(!String.prototype.toProperCase)
 {

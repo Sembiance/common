@@ -42,7 +42,7 @@
 			const longestWord = text.split(" ").sort((a, b) => b.length-a.length)[0];
 			const noWrapResult = fitText(longestWord, dim, false, classNames);
 			if(noWrapResult.fontSize<fontSize)
-				fontSize = noWrapResult.fontSize;
+				fontSize = noWrapResult.fontSize;	// eslint-disable-line prefer-destructuring
 		}
 
 		return { lineHeight, fontSize };
