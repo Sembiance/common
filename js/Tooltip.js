@@ -64,7 +64,7 @@
 				return (this.skipNextShow = false), undefined;
 
 			document.body.addEventListener("mousemove", this.boundMouseMoveHandler);
-			document.body.appendChild(this.tooltip);
+			document.body.append(this.tooltip);
 
 			this.tooltipLeft = this.options.alwaysLeft ? true : (this.options.alwaysRight ? false : (e ? e.pageX : this.node.getXY()[0])>(document.body.getWidth()/2));
 			this.tooltipBelow = this.options.alwaysBelow ? true : (this.options.alwaysAbove ? false : (e ? e.pageY : this.node.getXY()[1])<(document.body.getHeight()/2));

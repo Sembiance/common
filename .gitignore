@@ -1,3 +1,5 @@
 nginx/status-htpasswd
 lib
 images
+stylus/*.css
+stylus/*.css.map

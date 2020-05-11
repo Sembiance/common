@@ -1,0 +1,9 @@
+{
+	"name"         : "js",
+	"version"      : "0.0.1",
+	"description"  : "enter description here",
+	"author"       : "Robert Schultz <robert@cosmicrealms.com>",
+	"private"      : true,
+	"license"      : "UNLICENSED",
+	"engines"      : { "node" : ">=14" }
+}

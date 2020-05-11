@@ -47,6 +47,49 @@
 			this.clickItem(item);
 		}
 
+		// Expands the tree to the given path. Note, this makes assumptions about the data (bunch of object key/value pairs) specific to retormission. Sigh. Don't want to spend the time to make it more generic right now.
+		expandTo(path)
+		{
+			//Array.from(this.container.querySelectorAll(".item.highlighted")).forEach(item => item.classList.remove("highlighted"));
+
+			const firstItem = this.container.querySelector(".item");
+			if(firstItem.classList.includes("expanded"))
+				this.clickItem(firstItem);
+
+			if(!firstItem.classList.includes("expanded"))
+				this.clickItem(firstItem);
+
+			let failedToFindPath = false;
+			let prevIndent = 0;
+			const parts = path.split("/");
+			parts.forEach(part =>
+			{
+				if(failedToFindPath)
+					return;
+
+				const nextItemKeys = Array.from(this.container.querySelectorAll(".key")).filter(item => item.textContent===JSON.stringify(part));
+				if(nextItemKeys.length===0)
+				{
+					failedToFindPath = true;
+					return;
+				}
+
+				nextItemKeys.forEach(nextItemKey =>
+				{
+					const nextItem = nextItemKey.parentNode;
+					if(nextItem.JSONViewData.indent<=prevIndent)
+						return;
+					
+					prevIndent = nextItem.JSONViewData.indent;//spanish pack n°1 by llfb/slides/ebsiul/§dg51dbsl.dms/§dg51dbsl.adf/DG#51 DRAGON BALL Z/§DBZ042/DBZ042
+
+					nextItem.classList.add("highlighted");
+					if(!nextItem.classList.includes("expanded"))
+						this.clickItem(nextItem);
+					nextItem.scrollIntoView({block : "center"});
+				});
+			});
+		}
+
 		clickItem(item)
 		{
 			const itemValue = item.JSONViewData.value;
@@ -81,11 +124,15 @@
 			if(item.classList.includes("type-object"))
 			{
 				const subItemsLength = Object.keys(itemValue).length;
+				const minKeyWidth = Object.keys(itemValue).map(k => JSON.stringify(k).length).multiSort().last();
 				Object.forEach(itemValue, (k, v, i) =>
 				{
 					const key = document.createElement("key");
 					key.classList.add("key");
-					key.append(JSON.stringify(k));
+					if(this.options.rightAlignKeys)
+						key.append(JSON.stringify(k).padStart(minKeyWidth, " "));
+					else
+						key.append(JSON.stringify(k));
 
 					const subItem = this.renderItemValue(v, {indent : curIndent+1});
 
@@ -120,7 +167,10 @@
 
 			const valueContainer = document.createElement("span");
 			valueContainer.classList.add("value");
-			valueContainer.append(value);
+			if(Array.isArray(value))
+				valueContainer.append(...value);
+			else
+				valueContainer.append(value);
 
 			const suffixContainer = document.createElement("span");
 			suffixContainer.classList.add("punctuation");
@@ -140,6 +190,7 @@
 			item.JSONViewData = {value : itemValue, indent : options.indent};
 
 			const value = document.createElement("span");
+			value.append("\u200E");		// Adds the &lrm; which is non-printable but fixes issues with direction: rtl; showing unicode chars from the front, on the back
 			value.classList.add("value");
 
 			const meta = document.createElement("span");
@@ -199,25 +250,39 @@
 			}
 			else if(Object.isObject(itemValue))
 			{
-				item.classList.add("type-object");
-
 				const objectLength = Object.keys(itemValue).length;
+				const firstKV = objectLength>0 ? Object.entries(itemValue)[0] : null;
 
-				if(!this.options.dontExpandSingleSimples || objectLength>1)
+				if(this.options.dontExpandSingleSimples && objectLength===1 && (["string", "number", "boolean"].includes(typeof firstKV[1])))
 				{
-					item.classList.add("clickable");
-					meta.append("// " + objectLength.toLocaleString().padStart(this.options.metaCountMinWidth || 0) + " item" + (objectLength===1 ? "" : "s"));
-					item.append(meta);
-				}
-
-				if(options.valueText)
-				{
-					value.append(options.valueText);
-					item.prepend(value);
+					item.classList.add("type-" + typeof firstKV[1]);
+					if(options.valueText)
+					{
+						value.append(options.valueText);
+						item.prepend(value);
+					}
+					else
+					{
+						item.prepend(...this.punctuate("{", firstKV[0] + ":" + this.renderItemValue(firstKV[1]).querySelector(".value").textContent, "]"));
+					}
 				}
 				else
 				{
-					item.prepend(...this.punctuate("{", "…", "}"));
+					item.classList.add("type-object");
+
+					item.classList.add("clickable");
+					meta.append("// " + objectLength.toLocaleString().padStart(this.options.metaCountMinWidth || 0) + " item" + (objectLength===1 ? "" : "s"));
+					item.append(meta);
+
+					if(options.valueText)
+					{
+						value.append(options.valueText);
+						item.prepend(value);
+					}
+					else
+					{
+						item.prepend(...this.punctuate("{", "…", "}"));
+					}
 				}
 			}
 			else
@@ -227,6 +292,9 @@
 				item.prepend(value);
 			}
 
+			value.append("\u200E");		// Again, adds the &lrm; which is non-printable but fixes issues with direction: rtl; This time fixes showing trailing punctuation like underscores on the front
+			if(this.options.classNames)
+				Array.force(this.options.classNames(value.textContent.trimChars("\u200E")) || []).forEach(cn => value.classList.add(cn));
 			
 			return item;
 		}

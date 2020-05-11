@@ -26,6 +26,7 @@ if(typeof Element!=="undefined")
 		return [r.width, r.height];
 	};
 
+	// Polyfill for NODE.remove()
 	if(!Element.prototype.remove)
 	{
 		Element.prototype.remove = function remove()
@@ -40,7 +41,7 @@ if(typeof Element!=="undefined")
 		if(!this.childNodes || this.childNodes.length!==1)
 		{
 			this.innerHTML = "";
-			this.appendChild(document.createTextNode(text));
+			this.appendChild(document.createTextNode(text));	// eslint-disable-line sembiance/prefer-append-prepend
 			return this;
 		}
 
@@ -48,6 +49,15 @@ if(typeof Element!=="undefined")
 
 		return this;
 	};
+
+	// PolyFill for NODE.append()
+	if(!Element.prototype.append)
+	{
+		Element.prototype.append = function append(...args)
+		{
+			args.forEach(arg => this.appendChild((typeof arg==="string" ? document.createTextNode(arg) : arg)));	// eslint-disable-line sembiance/prefer-append-prepend
+		};
+	}
 
 	// Returns the first prev sibling that the passed in function returns true to upon receiving it passed in
 	Element.prototype.getPreviousSibling = function getPreviousSibling(f)

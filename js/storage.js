@@ -62,7 +62,7 @@
 		for(let i=localStorage.length-1;i>=0;i--)
 		{
 			const k = localStorage.key(i);
-			cb(k, storage.get(k));
+			cb(k, storage.get(k));	// eslint-disable-line node/callback-return
 		}
 	};
 

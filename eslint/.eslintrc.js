@@ -1,0 +1,1 @@
+/mnt/compendium/DevLab/common/eslint/both.eslintrc.js

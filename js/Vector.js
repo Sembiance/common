@@ -60,4 +60,4 @@
 	}
 
 	exports.Vector = Vector;
-})(typeof exports==="undefined" ? window : exports);
+})(typeof exports==="undefined" ? window : exports);	// eslint-disable-line no-undef

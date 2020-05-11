@@ -1,6 +1,9 @@
 "use strict";
 /*global XU: true*/
 
+// For styling, the container box should be positioned (so relative or absolute) and have box-sizing border-box with at least padding 2.0em
+// All .pieChartLabel should be position absolute and white-space nowrap
+
 (function _PieChart()
 {
 	const PIE_COLORS = ["#7cb5ec", "#90ed7d", "#f7a35c", "#5668E2", "#f15c80", "#e4d354", "#ad6673", "#91e8e1"];
@@ -70,10 +73,10 @@
 
 			const chartLabelGameName = document.createElement("span");
 			chartLabelGameName.classList.add("label");
-			chartLabelGameName.appendChild(document.createTextNode(data[i][0]));
-			chartLabel.appendChild(chartLabelGameName);
+			chartLabelGameName.append(data[i][0]);
+			chartLabel.append(chartLabelGameName);
 
-			chartLabel.appendChild(document.createTextNode(": " + Math.floor(percentage) + "%"));
+			chartLabel.append(": " + Math.floor(percentage) + "%");
 
 			canvas.parentNode.insertBefore(chartLabel, canvas.parentNode.lastChild);
 

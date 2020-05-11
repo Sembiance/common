@@ -1,7 +1,7 @@
 "use strict";
 module.exports =
 {
-	"env"   : { "es6" : true },
+	"env" : { "es6" : true },
 	"parserOptions" :
 	{
 		"ecmaVersion" : "2018",
@@ -20,23 +20,29 @@ module.exports =
 	"rules" :
 	{
 		// Plugins
-		"sembiance/disfavor-array-concat"        : 2,
-		"sembiance/favor-includes"               : 2,
-		"sembiance/tiptoe-suffix-code"           : 2,
-		"sembiance/no-useless-variables"         : 2,
-		"sembiance/no-accounting-format-number"  : 2,
-		"sembiance/no-return-setImmediate-this"  : 2,
-		"sembiance/prefer-array-force"           : 2,
-		"sembiance/no-url-parse"                 : 2,
-		"sembiance/shorter-arrow-funs"           : 2,
-		"sembiance/prefer-object-destructuring"  : 2,
-		"sembiance/prefer-require-destructuring" : 2,
-		"sembiance/favor-fileutil"               : 2,
+		"sembiance/disfavor-array-concat"             : 2,
+		"sembiance/favor-includes"                    : 2,
+		"sembiance/tiptoe-suffix-code"                : 2,
+		"sembiance/no-useless-variables"              : 2,
+		"sembiance/no-accounting-format-number"       : 2,
+		"sembiance/no-return-setImmediate-this"       : 2,
+		"sembiance/prefer-array-force"                : 2,
+		"sembiance/no-url-parse"                      : 2,
+		"sembiance/shorter-arrow-funs"                : 2,
+		"sembiance/prefer-object-destructuring"       : 2,
+		"sembiance/prefer-require-destructuring"      : 2,
+		"sembiance/prefer-append-prepend"             : 2,
+		"sembiance/prefer-array-flat-map"             : 2,
+		"sembiance/prefer-array-unshift"              : 2,
+		"sembiance/this-in-tiptoe-in-class"           : 2,
+		"sembiance/tiptoe-shorter-finish-wrap"        : 2,
+		"sembiance/prefer-parameter-context-matching" : 0,
 
 		"array-func/from-map"                : 2,
 		"array-func/no-unnecessary-this-arg" : 2,
+		"array-func/prefer-array-from"       : 2,
 		"array-func/avoid-reverse"           : 2,
-		"array-func/prefer-flat-map"         : 2,
+		"array-func/prefer-flat-map"         : 0,	// It doesn't understand that flatMap only works if .flat() has no argument https://github.com/freaktechnik/eslint-plugin-array-func/issues/61
 		"array-func/prefer-flat"             : 2,
 
 		// New
@@ -80,6 +86,7 @@ module.exports =
 		"no-unreachable"                : 2,
 		"no-unsafe-finally"             : 2,
 		"no-unsafe-negation"            : 2,
+		"no-useless-backreference"      : 2,
 		"require-atomic-updates"        : 2,
 		"use-isnan"                     : 2,
 		"valid-typeof"                  : 2,
@@ -92,7 +99,8 @@ module.exports =
 		"complexity"                   : 0,
 		"consistent-return"            : 0,
 		"curly"                        : [2, "multi-or-nest", "consistent"],
-		"default-case"                 : 0,
+		"default-case"                 : 2,
+		"default-case-last"            : 2,
 		"default-param-last"           : 0,
 		"dot-location"                 : [2, "object"],
 		"dot-notation"                 : [2, {"allowKeywords" : false}],
@@ -287,6 +295,7 @@ module.exports =
 		"no-dupe-class-members"   : 2,
 		"no-duplicate-imports"    : 2,
 		"no-new-symbol"           : 2,
+		"no-restricted-exports"   : 0,
 		"no-restricted-imports"   : 0,
 		"no-this-before-super"    : 2,
 		"no-useless-computed-key" : 2,

@@ -1,5 +1,5 @@
 "use strict";
-/* eslint-disable callback-return */
+/* eslint-disable node/callback-return */
 
 ////////////////////
 //// Polyfills /////

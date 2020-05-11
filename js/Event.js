@@ -39,18 +39,18 @@ if(!Event.prototype.stopImmediatePropagation)
 		const oldAddEventListener = Element.prototype.addEventListener;
 		const oldRemoveEventListener = Element.prototype.removeEventListener;
 
-		Element.prototype.addEventListener = function addEventListener(type, callback, capture)
+		Element.prototype.addEventListener = function addEventListener(type, cb, capture)
 		{
-			oldAddEventListener.call(this, type, callback.hijackedCallback || (callback.hijackedCallback = function hijackedCallback(event)
+			oldAddEventListener.call(this, type, cb.hijackedCallback || (cb.hijackedCallback = function hijackedCallback(event)
 			{
 				if(!event.immediatePropagationStopped)
-					callback(event);
+					cb(event);	// eslint-disable-line node/callback-return
 			}), capture);
 		};
 
-		Element.prototype.removeEventListener = function removeEventListener(type, callback, capture)
+		Element.prototype.removeEventListener = function removeEventListener(type, cb, capture)
 		{
-			oldRemoveEventListener.call(this, type, callback.hijackedCallback || callback, capture);
+			oldRemoveEventListener.call(this, type, cb.hijackedCallback || cb, capture);
 		};
 	})();
 
