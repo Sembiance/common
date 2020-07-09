@@ -32,7 +32,19 @@ if(typeof Element!=="undefined")
 		Element.prototype.remove = function remove()
 		{
 			if(this.parentNode!==null)
-				this.parentNode.removeChild(this);
+				this.parentNode.removeChild(this);	// eslint-disable-line unicorn/prefer-node-remove
+		};
+	}
+
+	// Polyfill for NODE.before()
+	if(!Element.prototype.before)
+	{
+		Element.prototype.before = function before(...args)
+		{
+			if(this.parentNode===null)
+				return;
+				
+			args.forEach(arg => this.parentNode.insertBefore((typeof arg==="string" ? document.createTextNode(arg) : arg), this));
 		};
 	}
 
@@ -41,7 +53,7 @@ if(typeof Element!=="undefined")
 		if(!this.childNodes || this.childNodes.length!==1)
 		{
 			this.innerHTML = "";
-			this.appendChild(document.createTextNode(text));	// eslint-disable-line sembiance/prefer-append-prepend
+			this.appendChild(document.createTextNode(text));	// eslint-disable-line unicorn/prefer-node-append
 			return this;
 		}
 
@@ -55,7 +67,7 @@ if(typeof Element!=="undefined")
 	{
 		Element.prototype.append = function append(...args)
 		{
-			args.forEach(arg => this.appendChild((typeof arg==="string" ? document.createTextNode(arg) : arg)));	// eslint-disable-line sembiance/prefer-append-prepend
+			args.forEach(arg => this.appendChild((typeof arg==="string" ? document.createTextNode(arg) : arg)));	// eslint-disable-line unicorn/prefer-node-append
 		};
 	}
 

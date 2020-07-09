@@ -11,7 +11,7 @@
 
 // Returns true if the valueToFind can be located in the array
 if(!Array.prototype.includes)
-	Array.prototype.includes = function includes(valueToFind, fromIndex) { return this.indexOf(valueToFind, fromIndex)!==-1; };		// eslint-disable-line sembiance/favor-includes
+	Array.prototype.includes = function includes(valueToFind, fromIndex) { return this.indexOf(valueToFind, fromIndex)!==-1; };		// eslint-disable-line unicorn/prefer-includes
 
 //------------//
 //// ES2015 ////
@@ -623,7 +623,7 @@ if(!Array.prototype.pushCopyInPlace)
 
 (function _arrayAsyncFuncs()
 {
-	const p = (typeof window!=="undefined" && typeof window.performance!=="undefined") ? window.performance : ((typeof process!=="undefined" && typeof process.versions!=="undefined" && typeof process.versions.node!=="undefined") ? require("perf_hooks").performance : Date);	// eslint-disable-line max-len, no-undef, node/global-require
+	const p = (typeof window!=="undefined" && typeof window.performance!=="undefined") ? window.performance : ((typeof process!=="undefined" && typeof process.versions!=="undefined" && typeof process.versions.node!=="undefined") ? require("perf_hooks").performance : Date);	// eslint-disable-line max-len, no-undef, node/global-require, node/no-unsupported-features/node-builtins
 
 	function CBRunner(_fun, _val, _i, _finish)
 	{
@@ -669,12 +669,14 @@ if(!Array.prototype.pushCopyInPlace)
 
 		CBIterator.prototype.next = function next()
 		{
-			const timeSinceLast = p.now()-this.lastRanTime;
-			
-			if(this.minInterval>0 && timeSinceLast<this.minInterval)
+			if(this.minInterval>0)
 			{
-				this.scheduledTimeoutid = setTimeout(this.next.bind(this), (this.minInterval-timeSinceLast)+1);
-				return;
+				const timeSinceLast = p.now()-this.lastRanTime;
+				if(timeSinceLast<this.minInterval)
+				{
+					this.scheduledTimeoutid = setTimeout(this.next.bind(this), (this.minInterval-timeSinceLast)+1);
+					return;
+				}
 			}
 
 			this.scheduledTimeoutid = null;
@@ -685,7 +687,8 @@ if(!Array.prototype.pushCopyInPlace)
 			const curi = this.i++;
 
 			this.running.push(curi);
-			this.lastRanTime = p.now();
+			if(this.minInterval>0)
+				this.lastRanTime = p.now();
 			new CBRunner(this.fun, this.a.shift(), curi, this.finish.bind(this)).run();		// eslint-disable-line sembiance/tiptoe-shorter-finish-wrap
 
 			if(this.a.length>0 && this.running.length<this.atOnce)
@@ -726,7 +729,7 @@ if(!Array.prototype.pushCopyInPlace)
 		Array.prototype.parallelForEach = function parallelForEach(fun, cb, _options)
 		{
 			const atOnce = typeof _options==="number" ? _options : ((_options || {}).atOnce || 5);
-			const minInterval = typeof _options==="object" ? (_options.atOnce || 0) : 0;
+			const minInterval = typeof _options==="object" ? (_options.minInterval || 0) : 0;
 			const tick = typeof _options==="object" ? _options.tick : undefined;
 			(new CBIterator(this, fun, atOnce, minInterval, tick)).go(cb);
 		};

@@ -91,7 +91,7 @@
 			this.visible = false;
 
 			document.body.removeEventListener("mousemove", this.boundMouseMoveHandler);
-			document.body.removeChild(this.tooltip);
+			this.tooltip.remove();
 
 			this.tooltip.style.display = "none";
 

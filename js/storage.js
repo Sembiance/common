@@ -19,7 +19,7 @@
 		{
 			r = JSON.parse(v);
 		}
-		catch(e)
+		catch(err)
 		{
 			r = v;
 		}

@@ -10,6 +10,9 @@
 		{
 			this.data = _data;
 			this.container = _container;
+			if(!this.container)
+				return;
+
 			this.options = Object.assign({}, _options);
 
 			this.boundClickHandler = this.clickHandler.bind(this);
@@ -110,7 +113,7 @@
 						return;
 					}
 
-					this.container.removeChild(subItem);
+					subItem.remove();
 				});
 
 				return;

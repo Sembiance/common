@@ -73,11 +73,99 @@
 		return r;
 	};
 
+	// Convience method for including as the last step of a tiptoe function
 	exports.FINISH = function finish(err)
 	{
 		if(err)
-			process.exit(console.error(err));
+			process.exit(console.error(err), 1);
 
 		process.exit(0);
+	};
+
+	const cc = t => (XU.IS_NODE && process.stdout && process.stdout.hasColors && process.stdout.hasColors() ? t : "");
+	/* eslint-disable unicorn/escape-case, unicorn/no-hex-escape */
+	// https://en.wikipedia.org/wiki/ANSI_escape_code#Colors
+	exports.c =
+	{
+		reset     : cc("\x1b[0m"),
+		bold      : cc("\x1b[1m"),
+		dim       : cc("\x1b[2m"),
+		italic    : cc("\x1b[3m"),
+		underline : cc("\x1b[4m"),
+		blink     : cc("\x1b[5m"),
+		reverse   : cc("\x1b[7m"),
+		strike    : cc("\x1b[9m"),
+		bg        :
+		{
+			black   : cc("\x1b[40m"),
+			red     : cc("\x1b[41m"),
+			green   : cc("\x1b[42m"),
+			yellow  : cc("\x1b[43m"),
+			blue    : cc("\x1b[44m"),
+			magenta : cc("\x1b[45m"),
+			cyan    : cc("\x1b[46m"),
+			white   : cc("\x1b[47m"),
+			peach   : cc("\x1b[48;5;203m"),
+			orange  : cc("\x1b[48;5;208m"),
+			violet  : cc("\x1b[48;5;93m")
+		},
+		fg :
+		{
+			black   : cc("\x1b[90m"),
+			red     : cc("\x1b[91m"),
+			green   : cc("\x1b[92m"),
+			yellow  : cc("\x1b[93m"),
+			blue    : cc("\x1b[94m"),
+			magenta : cc("\x1b[95m"),
+			cyan    : cc("\x1b[96m"),
+			white   : cc("\x1b[97m"),
+			peach   : cc("\x1b[38;5;203m"),
+			orange  : cc("\x1b[38;5;208m"),
+			violet  : cc("\x1b[38;5;93m")
+		}
+	};
+	/* eslint-enable unicorn/escape-case, unicorn/no-hex-escape */
+
+	// Better than console.log() automatically colorizes strings, numbers, arrays, etc that are includeed as template values
+	exports.log = function log(strs, ...vals)
+	{
+		const c = exports.c;
+
+		function val2string(val)	// eslint-disable-line no-inner-declarations
+		{
+			if(typeof val==="string")
+				return c.fg.magenta + val + c.reset;
+			
+			if(typeof val==="number")
+				return c.fg.white + val.toLocaleString().split(",").join(c.reset + c.fg.cyan + "," + c.fg.white).split(".").join(c.reset + c.fg.cyan + "." + c.fg.white) + c.reset;
+			
+			if(typeof val==="boolean")
+				return c.fg.yellow + (val ? "true" : "false") + c.reset;
+			
+			if(val instanceof Error)
+				return "\n" + val.stack;
+			
+			if(val instanceof RegExp)
+				return val.toString();
+
+			if(Array.isArray(val))
+				return c.fg.cyan + "[" + c.reset + val.map(val2string).join(c.fg.cyan + ", " + c.reset) + c.fg.cyan + "]" + c.reset;
+			
+			if(Object.isObject(val))
+				return c.fg.cyan + "{" + c.reset + Object.entries(val).map(([k, v]) => (k + c.fg.cyan + " : " + c.reset + val2string(v))).join(", ") + c.fg.cyan + "}" + c.reset;
+
+			return JSON.stringify(val);
+		}
+
+		const r = [];
+		strs.forEach(str =>
+		{
+			r.push(str);
+
+			if(vals.length>0)
+				r.push(val2string(vals.shift()));
+		});
+
+		console.log(r.join(""));
 	};
 })(typeof window!=="undefined" ? (window.XU ? window.XU : window.XU={}) : exports);

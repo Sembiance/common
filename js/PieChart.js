@@ -8,7 +8,7 @@
 {
 	const PIE_COLORS = ["#7cb5ec", "#90ed7d", "#f7a35c", "#5668E2", "#f15c80", "#e4d354", "#ad6673", "#91e8e1"];
 
-	function render(canvas, data)
+	function render(canvas, data, options={})
 	{
 		const ctx = canvas.getContext("2d");
 		const canvasDim = [canvas.width, canvas.height];
@@ -77,6 +77,13 @@
 			chartLabel.append(chartLabelGameName);
 
 			chartLabel.append(": " + Math.floor(percentage) + "%");
+			if(options.showValues)
+			{
+				const countLabel = document.createElement("span");
+				countLabel.classList.add("count");
+				countLabel.append(data[i][1].toLocaleString());
+				chartLabel.append(countLabel);
+			}
 
 			canvas.parentNode.insertBefore(chartLabel, canvas.parentNode.lastChild);
 

@@ -18,7 +18,7 @@
 		getSelectedTab()
 		{
 			const selectedTab = this.node.querySelector(".tab.selected");
-			return selectedTab ? selectedTab.getAttribute("data-tabid") : null;
+			return selectedTab ? selectedTab.dataset.tabid : null;
 		}
 
 		// Called to destroy this tooltip
@@ -30,7 +30,7 @@
 		// Will switch to a specific tabid
 		switchToTab(tabid)
 		{
-			const tab = Array.from(this.node.querySelectorAll(".tab")).reduceOnce(v => (v.getAttribute("data-tabid")===tabid ? v : undefined));
+			const tab = Array.from(this.node.querySelectorAll(".tab")).reduceOnce(v => (v.dataset.tabid===tabid ? v : undefined));
 			if(!tab || tab.classList.contains("selected"))
 				return;
 
@@ -38,7 +38,7 @@
 			this.node.parentNode.querySelector(".tabContent.selected").classList.remove("selected");
 
 			tab.classList.add("selected");
-			Array.from(this.node.parentNode.querySelectorAll(".tabContent")).find(t => t.getAttribute("data-tabid")===tabid).classList.add("selected");
+			Array.from(this.node.parentNode.querySelectorAll(".tabContent")).find(t => t.dataset.tabid===tabid).classList.add("selected");
 
 			if(this.onTabChanged)
 				this.onTabChanged(tabid);
@@ -54,7 +54,7 @@
 			if(!tab)
 				return;
 
-			this.switchToTab(tab.getAttribute("data-tabid"));
+			this.switchToTab(tab.dataset.tabid);
 		}
 	}
 

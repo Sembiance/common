@@ -1,5 +1,5 @@
 "use strict";
-/* eslint-disable no-underscore-dangle, no-void */
+/* eslint-disable no-underscore-dangle, no-void, no-restricted-syntax */
 
 (function _localforageMemoryDriver()
 {
@@ -18,7 +18,7 @@
 	function executeCallback(promise, cb)
 	{
 		if(cb)
-			promise.then(result => cb(null, result), error => cb(error));
+			promise.then(result => cb(null, result), err => cb(err));
 	}
 
 	const storage = {};

@@ -3,3 +3,4 @@ lib
 images
 stylus/*.css
 stylus/*.css.map
+nginx/modules/

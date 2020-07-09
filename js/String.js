@@ -13,7 +13,7 @@ if(!String.prototype.includes)
 {
 	String.prototype.includes = function includes(match)
 	{
-		return this.indexOf(match)!==-1;	// eslint-disable-line sembiance/favor-includes
+		return this.indexOf(match)!==-1;	// eslint-disable-line unicorn/prefer-includes
 	};
 }
 
@@ -139,12 +139,12 @@ if(!String.prototype.reverse)
 	};
 }
 
-// Replace all occurencs of match with replaceWith
+// Replace all occurencs of match with replaceWith - Currently is a TC39 draft proposal: https://github.com/tc39/proposal-string-replaceall
 if(!String.prototype.replaceAll)
 {
 	String.prototype.replaceAll = function replaceAll(match, replaceWith)
 	{
-		return this.replace(new RegExp(match, "g"), replaceWith);
+		return this.split(match).join(replaceWith);
 	};
 }
 
@@ -177,6 +177,21 @@ if(!String.prototype.reverse)
 	String.prototype.reverse = function reverse()
 	{
 		return this.split("").reverse().join("");
+	};
+}
+
+// Reverses a string
+if(!String.prototype.innerTruncate)
+{
+	String.prototype.innerTruncate = function innerTruncate(_maxLen)
+	{
+		if(this.length<=_maxLen)
+			return this;
+		
+		const maxLen = _maxLen-1;
+		const trimSideLength = Math.floor((this.length-maxLen)/2);
+		const midPoint = Math.floor(this.length/2);
+		return this.substring(0, midPoint-trimSideLength) + "…" + this.substring(midPoint+(trimSideLength+((this.length-(trimSideLength*2))-maxLen)));
 	};
 }
 

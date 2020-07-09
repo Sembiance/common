@@ -31,8 +31,8 @@ if(!Number.prototype.bytesToSize)
 		if(bytes===0)
 			return "0 bytes";
 		
-		const i = +(Math.floor(Math.log(bytes) / Math.log(1024)));
-		return Math.round(bytes / (1024 ** i), 2) + (i===0 ? " " : "") + sizes[i];
+		const i = +(Math.floor(Math.log(bytes) / Math.log(1000)));
+		return Math.round(bytes / (1000 ** i), 2) + (i===0 ? " " : "") + sizes[i];
 	};
 }
 
