@@ -1,4 +1,5 @@
 "use strict";
+/* eslint-disable prefer-template */
 
 ////////////////////
 //// Polyfills /////
@@ -204,6 +205,15 @@ if(!String.prototype.toProperCase)
 	};
 }
 
+// Converts a string to camel case
+if(!String.prototype.toCamelCase)
+{
+	String.prototype.toCamelCase = function toCamelCase()
+	{
+		return this.replace(/(?:^\w|[A-Z]|\b\w)/g, (word, index) => (index === 0 ? word.toLowerCase() : word.toUpperCase())).replace(/\s+/g, "");	// eslint-disable-line unicorn/better-regex
+	};
+}
+
 // Strips out the given chars from the string
 if(!String.prototype.strip)
 {
@@ -226,3 +236,19 @@ if(!String.prototype.trimChars)
 		return this.replace(new RegExp("^[" + chars + "]+|[" + chars + "]+$", "g"), "");
 	};
 }
+
+// Escape the string for HTML/XML and other markup language documents
+if(!String.prototype.escapeXML)
+{
+	String.prototype.escapeXML = function escapeXML()
+	{
+		return this.
+			replaceAll("&", "&amp;").
+			replaceAll("<", "&lt;").
+			replaceAll(">", "&gt;").
+			replaceAll('"', "&quot;").
+			replaceAll("'", "&#039;");
+	};
+}
+
+String.prototype.escapeHTML = String.prototype.escapeXML;

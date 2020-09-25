@@ -1,6 +1,6 @@
 "use strict";
 /* eslint-env node, browser */
-/* eslint-disable node/global-require, node/no-missing-require */
+/* eslint-disable node/global-require, node/no-missing-require, prefer-template */
 
 (function _XU(exports)
 {
@@ -25,6 +25,8 @@
 	{
 		exports.IS_DEV = window.location.hostname.startsWith("dev.") || window.location.href.includes("dev=true");
 	}
+
+	const util = XU.IS_NODE ? require("util") : null;
 
 	exports.SECOND = 1000;
 	exports.MINUTE = XU.SECOND*60;
@@ -82,6 +84,13 @@
 		process.exit(0);
 	};
 
+	// Simple function I can stick on the end of tiptoe chains I don't really care too much about
+	exports.NOOP = function NOOP(err)
+	{
+		if(err)
+			console.error(err);
+	};
+
 	const cc = t => (XU.IS_NODE && process.stdout && process.stdout.hasColors && process.stdout.hasColors() ? t : "");
 	/* eslint-disable unicorn/escape-case, unicorn/no-hex-escape */
 	// https://en.wikipedia.org/wiki/ANSI_escape_code#Colors
@@ -126,6 +135,39 @@
 	};
 	/* eslint-enable unicorn/escape-case, unicorn/no-hex-escape */
 
+	// This will convert the above exports.c so you can call XU.cf.fg.cyan("Cyan Color")
+	exports.cf = {};
+	function functionizeColors(src, dest)
+	{
+		Object.forEach(src, (key, val) =>
+		{
+			if(Object.isObject(val))
+				functionizeColors(val, dest[key] = {});
+			else
+				dest[key] = str => `${src[key]}${str}`;
+		});
+	}
+	functionizeColors(exports.c, exports.cf);
+
+	// Allows you to easily include multi-line strings and each line will be trimmed
+	exports.trim = function trim(strs, ...vals)
+	{
+		const r = [];
+		strs.forEach(str =>
+		{
+			const rVals = [str];
+			if(vals.length>0)
+			{
+				const val = vals.shift();
+				rVals.push((typeof val==="object" ? JSON.stringify(val) : ""+val));
+			}
+
+			r.push(...rVals.map(rVal => rVal.split("\n").map(line => line.trim()).join("\n")));
+		});
+
+		return r.join("");
+	};
+
 	// Better than console.log() automatically colorizes strings, numbers, arrays, etc that are includeed as template values
 	exports.log = function log(strs, ...vals)
 	{
@@ -143,7 +185,7 @@
 				return c.fg.yellow + (val ? "true" : "false") + c.reset;
 			
 			if(val instanceof Error)
-				return "\n" + val.stack;
+				return util ? util.inspect(val, {colors : true, depth : Infinity}) : ("\n" +val.stack);
 			
 			if(val instanceof RegExp)
 				return val.toString();

@@ -1,5 +1,6 @@
 "use strict";
 /*global XU: true*/
+/* eslint-disable prefer-template */
 
 // For styling, the container box should be positioned (so relative or absolute) and have box-sizing border-box with at least padding 2.0em
 // All .pieChartLabel should be position absolute and white-space nowrap

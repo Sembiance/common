@@ -10,7 +10,7 @@ require(path.join(__dirname, "..", "Array.js"));
 
 
 // Arrays to use below
-let a=null, b=null, c=null, x=null, r=null, r2=null, TESTNAME=null;
+let a=null, b=null, c=null, x=null, r=null, r2=null, r3=null, TESTNAME=null;
 
 TESTNAME = "includes";
 a = [1, 2, 3, 4, 5];
@@ -336,8 +336,15 @@ r2=0;
 a.parallelForEach((v, cb) =>
 {
 	r2 += v;
+	setImmediate(cb);
+}, () => assert.strictEqual(r2, 15, TESTNAME), 2);
+
+r3=0;
+a.parallelForEach((v, cb) =>
+{
+	r3 += v;
 	cb();
-}, () => assert.strictEqual(r2, 15, TESTNAME), 3);
+}, () => assert.strictEqual(r3, 15, TESTNAME), 2);
 
 a = [].pushSequence(1, 100);
 r = 0;
@@ -348,4 +355,3 @@ a.parallelForEach((v, cb) =>
 	setTimeout(cb, 5000);
 }, () => assert.strictEqual(r, 100, TESTNAME), 100);
 
-console.log("ALL TESTS PASSED");

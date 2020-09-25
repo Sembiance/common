@@ -1,4 +1,5 @@
 "use strict";
+/* eslint-disable prefer-template */
 
 if(!JSON.stringifyJS)
 {

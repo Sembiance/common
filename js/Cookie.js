@@ -1,5 +1,6 @@
 "use strict";
 /*global XU: true*/
+/* eslint-disable prefer-template */
 
 (function _Cookie()
 {

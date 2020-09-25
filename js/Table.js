@@ -1,5 +1,6 @@
 "use strict";
 /*global Modernizr, debounce, XU: true*/
+/* eslint-disable prefer-template */
 
 // This only supports 1 or 2 header rows. More than 2 then weird things may happen or break.
 (function _Table()

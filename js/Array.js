@@ -325,7 +325,7 @@ if(!Array.prototype.flat)
 	};
 }
 
-// Sorts an array, in place, based on the values returned by the sorter cb functions passed in. reverse can be `true` or an array of booleans corresponding to each sorter cb
+// Sorts an array, IN PLACE, based on the values returned by the sorter cb functions passed in. reverse can be `true` or an array of booleans corresponding to each sorter cb
 if(!Array.prototype.multiSort)
 {
 	Array.prototype.multiSort = function multiSort(_sorters, reverse)

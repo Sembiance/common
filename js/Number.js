@@ -1,5 +1,5 @@
 "use strict";
-
+/* eslint-disable prefer-template */
 ////////////////////
 //// Polyfills /////
 ////////////////////
