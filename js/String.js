@@ -77,7 +77,7 @@ if(!String.prototype.padStart)
 {
 	String.prototype.padStart = function padStart(_targetLength, _padString)
 	{
-		let targetLength = _targetLength >> 0; // eslint-disable-line no-bitwise
+		let targetLength = _targetLength >> 0; // eslint-disable-line no-bitwise, unicorn/prefer-math-trunc
 		let padString = String(_padString || " ");
 		if(this.length>targetLength)
 			return String(this);
@@ -95,7 +95,7 @@ if(!String.prototype.padEnd)
 {
 	String.prototype.padEnd = function padEnd(_targetLength, _padString)
 	{
-		let targetLength = _targetLength >> 0; // eslint-disable-line no-bitwise
+		let targetLength = _targetLength >> 0; // eslint-disable-line no-bitwise, unicorn/prefer-math-trunc
 		let padString = String(_padString || " ");
 		if(this.length>targetLength)
 			return String(this);

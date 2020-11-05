@@ -396,6 +396,30 @@ if(!Array.prototype.unique)
 	};
 }
 
+// Returns a NEW array containing just unique items from this array. Does it via sorting first
+if(!Array.prototype.uniqueBySort)
+{
+	Array.prototype.uniqueBySort = function uniqueBySort()
+	{
+		this.sort();
+
+		const out = [];
+		const len = this.length-1;
+		if(len>=0)
+		{
+			for(let i=0;i<len;i++)
+			{
+				if(this[i]!==this[i+1])
+					out.push(this[i]);
+			}
+
+			out.push(this[len]);
+		}
+
+		return out;
+	};
+}
+
 // Returns a NEW array with any "empty" elements removed. Any element that has "falsy" truthiness is removed.
 if(!Array.prototype.filterEmpty)
 {

@@ -1,12 +1,11 @@
 "use strict";
 
-const assert = require("assert"),
-	path = require("path");
+const assert = require("assert");
 
-require(path.join(__dirname, "..", "Math.js"));
-require(path.join(__dirname, "..", "Number.js"));
-require(path.join(__dirname, "..", "Array.js"));
-require(path.join(__dirname, "..", "Object.js"));
+require("../Math.js");
+require("../Number.js");
+require("../Array.js");
+require("../Object.js");
 
 
 // Vars to use below

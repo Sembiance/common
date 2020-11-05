@@ -4,9 +4,13 @@
 module.exports =
 {
 	"env"     : { "node" : true },
-	"plugins" : ["node"],
+	"plugins" : ["sembiance", "node"],
 	"rules"   :
 	{
+		// Plugins
+		"sembiance/prefer-require-destructuring" : 2,
+		"sembiance/prefer-relative-require"      : 2,
+
 		// Best Practices (core)
 		"no-implicit-globals" : 0,
 
