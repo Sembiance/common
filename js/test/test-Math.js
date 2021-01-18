@@ -33,19 +33,6 @@ for(let i=0;i<1000;i++)
 	assert.ok(num!==3, TESTNAME);
 	assert.ok(num!==5, TESTNAME);
 }
-/* eslint-disable*/
-
-
-
-
-
-
-
-
-
-
-
-/* eslint-enable*/
 
 TESTNAME = "getRotatedDimensions";
 r = [205, 217];

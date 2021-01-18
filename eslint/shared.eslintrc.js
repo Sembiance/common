@@ -1,10 +1,13 @@
 "use strict";
 module.exports =
 {
-	"env" : { "es6" : true },
+	"env" :
+	{
+		"es2021" : true
+	},
+	"parser"        : "@typescript-eslint/parser",
 	"parserOptions" :
 	{
-		"ecmaVersion" : "2018",
 		"sourceType"  : "script"
 	},
 	// Use this comment to disable a rule in a file:	/* eslint-disable <rule> */
@@ -15,7 +18,7 @@ module.exports =
 	// 1 == warn
 	// 2 == error
 
-	"plugins" : ["sembiance", "array-func", "unicorn"],
+	"plugins" : ["sembiance", "array-func", "unicorn", "@typescript-eslint", "eslint-comments", "no-constructor-bind"],
 
 	"rules" :
 	{
@@ -32,7 +35,11 @@ module.exports =
 		"sembiance/prefer-dataset"                    : 2,
 		"sembiance/prefer-char-at"                    : 2,
 
-		// eslint-plugin-array-func : https://github.com/freaktechnik/eslint-plugin-array-func
+		// typescript-eslint : https://github.com/typescript-eslint/typescript-eslint/tree/master/packages/eslint-plugin
+		// NOTE: Due to the rules being coded in typescript, they are not included in the checkESLint app
+		"@typescript-eslint/prefer-optional-chain"    : 2,
+
+		// array-func : https://github.com/freaktechnik/eslint-plugin-array-func
 		"array-func/from-map"                : 2,
 		"array-func/no-unnecessary-this-arg" : 2,
 		"array-func/prefer-array-from"       : 2,
@@ -40,11 +47,27 @@ module.exports =
 		"array-func/prefer-flat-map"         : 0,	// It doesn't understand that flatMap only works if .flat() has no argument https://github.com/freaktechnik/eslint-plugin-array-func/issues/61  So I use unicorn/prefer-flat-map instead
 		"array-func/prefer-flat"             : 2,
 
+		// eslint-comments : https://github.com/mysticatea/eslint-plugin-eslint-comments/tree/master/docs/rules
+		"eslint-comments/disable-enable-pair"   : 0,
+		"eslint-comments/no-aggregating-enable" : 2,
+		"eslint-comments/no-duplicate-disable"  : 2,
+		"eslint-comments/no-unlimited-disable"  : 2,
+		"eslint-comments/no-unused-disable"     : 2,
+		"eslint-comments/no-unused-enable"      : 2,
+		"eslint-comments/no-restricted-disable" : 0,
+		"eslint-comments/no-use"                : 0,
+		"eslint-comments/require-description"   : 0,
+
+		// no-constructor-bind : https://github.com/markalfred/eslint-plugin-no-constructor-bind
+		"no-constructor-bind/no-constructor-bind"  : 2,
+		"no-constructor-bind/no-constructor-state" : 2,
+
 		// unicorn : https://github.com/sindresorhus/eslint-plugin-unicorn
 		"unicorn/better-regex"                      : [2, {sortCharacterClasses : false}],
 		"unicorn/catch-error-name"                  : [2, {name : "err"}],
 		"unicorn/consistent-function-scoping"       : 0,
 		"unicorn/custom-error-definition"           : 2,
+		"unicorn/empty-brace-spaces"                : 2,
 		"unicorn/error-message"                     : 2,
 		"unicorn/escape-case"                       : 2,
 		"unicorn/expiring-todo-comments"            : 0,
@@ -54,19 +77,20 @@ module.exports =
 		"unicorn/import-style"                      : 0,
 		"unicorn/new-for-builtins"                  : 2,
 		"unicorn/no-abusive-eslint-disable"         : 0,
-		"unicorn/no-array-instanceof"               : 2,
+		"unicorn/no-array-callback-reference"       : 0,
+		"unicorn/no-array-reduce"                   : 0,
 		"unicorn/no-console-spaces"                 : 0,
-		"unicorn/no-fn-reference-in-iterator"       : 0,
 		"unicorn/no-for-loop"                       : 0,
 		"unicorn/no-hex-escape"                     : 2,
+		"unicorn/no-instanceof-array"               : 2,
 		"unicorn/no-keyword-prefix"                 : 0,
+		"unicorn/no-lonely-if"                      : 2, // Better than the eslint base rule
 		"unicorn/no-nested-ternary"                 : 0,
 		"unicorn/no-new-buffer"                     : 0,
 		"unicorn/no-null"                           : 0,
 		"unicorn/no-object-as-default-parameter"    : 0,
 		"unicorn/no-process-exit"                   : 0,
-		"unicorn/no-reduce"                         : 0,
-		"unicorn/no-unreadable-array-destructuring" : 2,
+		"unicorn/no-unreadable-array-destructuring" : 0,
 		"unicorn/no-unsafe-regex"                   : 0,
 		"unicorn/no-unused-properties"              : 2,
 		"unicorn/no-useless-undefined"              : 0,
@@ -75,27 +99,30 @@ module.exports =
 		"unicorn/numeric-separators-style"          : 0,
 		"unicorn/prefer-add-event-listener"         : 2,
 		"unicorn/prefer-array-find"                 : 2,
-		"unicorn/prefer-dataset"                    : 0, // Only handles setAttribute. My version sembiance/prefer-dataset handles both get and set and remove
-		"unicorn/prefer-event-key"                  : 2,
-		"unicorn/prefer-flat-map"                   : 2,
+		"unicorn/prefer-array-flat-map"             : 2,
+		"unicorn/prefer-array-some"                 : 2,
+		"unicorn/prefer-date-now"                   : 2,
+		"unicorn/prefer-default-parameters"         : 2,
+		"unicorn/prefer-dom-node-append"            : 2,
+		"unicorn/prefer-dom-node-dataset"           : 0, // Only handles setAttribute. My version sembiance/prefer-dataset handles both get and set and remove
+		"unicorn/prefer-dom-node-remove"            : 2,
+		"unicorn/prefer-dom-node-text-content"      : 2,
 		"unicorn/prefer-includes"                   : 2,
+		"unicorn/prefer-keyboard-event-key"         : 2,
 		"unicorn/prefer-math-trunc"                 : 2,
 		"unicorn/prefer-modern-dom-apis"            : 2,
 		"unicorn/prefer-negative-index"             : 2,
-		"unicorn/prefer-node-append"                : 2,
-		"unicorn/prefer-node-remove"                : 2,
 		"unicorn/prefer-number-properties"          : 0,
 		"unicorn/prefer-optional-catch-binding"     : 0,
 		"unicorn/prefer-query-selector"             : 2,
 		"unicorn/prefer-reflect-apply"              : 2,
-		"unicorn/prefer-replace-all"                : 2,
 		"unicorn/prefer-set-has"                    : 0,
-		"unicorn/prefer-spread"                     : 0,	// Array.from() is better as it has a mapFn built in and is covered by array-func/prefer-array-from
-		"unicorn/prefer-starts-ends-with"           : 2,
+		"unicorn/prefer-spread"                     : 0, // Array.from() is better as it has a mapFn built in and is covered by array-func/prefer-array-from
+		"unicorn/prefer-string-replace-all"         : 2,
 		"unicorn/prefer-string-slice"               : 0,
+		"unicorn/prefer-string-starts-ends-with"    : 2,
+		"unicorn/prefer-string-trim-start-end"      : 2,
 		"unicorn/prefer-ternary"                    : 2,
-		"unicorn/prefer-text-content"               : 2,
-		"unicorn/prefer-trim-start-end"             : 2,
 		"unicorn/prefer-type-error"                 : 2,
 		"unicorn/prevent-abbreviations"             : 0,
 		"unicorn/string-content"                    : 0,
@@ -145,6 +172,7 @@ module.exports =
 		"no-unreachable-loop"           : 2,
 		"no-unsafe-finally"             : 2,
 		"no-unsafe-negation"            : 2,
+		"no-unsafe-optional-chaining"   : 2,
 		"no-useless-backreference"      : 2,
 		"require-atomic-updates"        : 2,
 		"use-isnan"                     : 2,
@@ -197,6 +225,7 @@ module.exports =
 		"no-new"                       : 2,
 		"no-new-func"                  : 2,
 		"no-new-wrappers"              : 2,
+		"no-nonoctal-decimal-escape"   : 2,
 		"no-octal"                     : 2,
 		"no-octal-escape"              : 2,
 		"no-param-reassign"            : 2,
@@ -296,7 +325,7 @@ module.exports =
 		"no-bitwise"                       : 2,
 		"no-continue"                      : 0,
 		"no-inline-comments"               : 0,
-		"no-lonely-if"                     : 2,
+		"no-lonely-if"                     : 0,	// Handled better by unicorn/no-lonely-if
 		"no-mixed-operators"               : 2,
 		"no-mixed-spaces-and-tabs"         : [2, "smart-tabs"],
 		"no-multi-assign"                  : 0,
@@ -309,7 +338,7 @@ module.exports =
 		"no-tabs"                          : 0,
 		"no-ternary"                       : 0,
 		"no-trailing-spaces"               : [2, {"skipBlankLines" : true}],
-		"no-underscore-dangle"             : [2, { "allow" : ["_gsTransform"]}],
+		"no-underscore-dangle"             : [0],
 		"no-unneeded-ternary"              : 2,
 		"no-whitespace-before-property"    : 2,
 		"nonblock-statement-body-position" : [2, "below"],

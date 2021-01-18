@@ -1,4 +1,5 @@
 "use strict";
+/* eslint-env browser */
 /* eslint-disable node/callback-return */
 
 ////////////////////
@@ -526,9 +527,10 @@ if(!Array.prototype.batch)
 {
 	Array.prototype.batch = function batch(x=1)
 	{
+		const a = this.slice();
 		const batches = [];
-		while(this.length>0)
-			batches.push(this.splice(0, x));
+		while(a.length>0)
+			batches.push(a.splice(0, x));
 
 		return batches;
 	};
@@ -636,7 +638,7 @@ if(!Array.prototype.pushCopyInPlace)
 {
 	Array.prototype.pushCopyInPlace = function pushCopyInPlace(_x)
 	{
-		const x = (_x || 1);
+		const x = (_x || 1);	// eslint-disable-line unicorn/prefer-default-parameters
 		const copy = this.slice();
 		for(let i=0;i<x;i++)
 			this.push(...copy);
@@ -647,7 +649,7 @@ if(!Array.prototype.pushCopyInPlace)
 
 (function _arrayAsyncFuncs()
 {
-	const p = (typeof window!=="undefined" && typeof window.performance!=="undefined") ? window.performance : ((typeof process!=="undefined" && typeof process.versions!=="undefined" && typeof process.versions.node!=="undefined") ? require("perf_hooks").performance : Date);	// eslint-disable-line max-len, no-undef, node/global-require, node/no-unsupported-features/node-builtins
+	const p = (typeof window!=="undefined" && typeof window.performance!=="undefined") ? window.performance : ((typeof process!=="undefined" && typeof process.versions!=="undefined" && typeof process.versions.node!=="undefined") ? require("perf_hooks").performance : Date);	// eslint-disable-line max-len, node/global-require
 
 	function CBRunner(_fun, _val, _i, _finish)
 	{

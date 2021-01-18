@@ -1,6 +1,5 @@
 "use strict";
 /* global bowser: true */
-/* eslint-disable indent */
 
 // This will handle simulating mouse events for when the Apple pencil is being used
 (function applePencil()

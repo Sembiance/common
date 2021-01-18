@@ -32,7 +32,7 @@ if(typeof Element!=="undefined")
 		Element.prototype.remove = function remove()
 		{
 			if(this.parentNode!==null)
-				this.parentNode.removeChild(this);	// eslint-disable-line unicorn/prefer-node-remove
+				this.parentNode.removeChild(this);	// eslint-disable-line unicorn/prefer-dom-node-remove
 		};
 	}
 
@@ -53,7 +53,7 @@ if(typeof Element!=="undefined")
 		if(!this.childNodes || this.childNodes.length!==1)
 		{
 			this.innerHTML = "";
-			this.appendChild(document.createTextNode(text));	// eslint-disable-line unicorn/prefer-node-append
+			this.appendChild(document.createTextNode(text));	// eslint-disable-line unicorn/prefer-dom-node-append
 			return this;
 		}
 
@@ -67,7 +67,7 @@ if(typeof Element!=="undefined")
 	{
 		Element.prototype.append = function append(...args)
 		{
-			args.forEach(arg => this.appendChild((typeof arg==="string" ? document.createTextNode(arg) : arg)));	// eslint-disable-line unicorn/prefer-node-append
+			args.forEach(arg => this.appendChild((typeof arg==="string" ? document.createTextNode(arg) : arg)));	// eslint-disable-line unicorn/prefer-dom-node-append
 		};
 	}
 
@@ -89,7 +89,7 @@ if(typeof Element!=="undefined")
 	// Returns the first sibling that the passed in function returns true to upon receiving it passed in
 	Element.prototype.getNextSibling = function getNextSibling(f)
 	{
-		for(let c=this.nextSibling;c;c=c.nextSibling)	// eslint-disable-line consistent-this
+		for(let c=this.nextSibling;c;c=c.nextSibling)
 		{
 			if(f(c))
 				return c;

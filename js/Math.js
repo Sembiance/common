@@ -1,4 +1,5 @@
 "use strict";
+/* eslint-env browser */
 
 ////////////////////
 //// Polyfills /////
@@ -31,8 +32,8 @@ if(!Math.trueRandom)
 		
 		try
 		{
-			if(window && window.chrome && window.crypto && window.crypto.getRandomValues)	// eslint-disable-line no-undef
-				result = window.crypto.getRandomValues(new Uint32Array(1))[0] / 0x100000000;	// eslint-disable-line no-undef
+			if(window && window.chrome && window.crypto && window.crypto.getRandomValues)	// eslint-disable-line @typescript-eslint/prefer-optional-chain
+				result = window.crypto.getRandomValues(new Uint32Array(1))[0] / 0x100000000;
 		}
 		catch(err)
 		{

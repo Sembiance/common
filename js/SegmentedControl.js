@@ -1,5 +1,6 @@
 "use strict";
 /*global XU: true*/
+/* eslint-disable no-constructor-bind/no-constructor-bind */
 
 (function _SegmentedControl()
 {

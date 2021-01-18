@@ -1,7 +1,5 @@
 "use strict";
 /*global XU: true*/
-/* eslint-disable prefer-template */
-
 (function _HTTP()
 {
 	function httpRequest(method, url, data, cb)
@@ -29,7 +27,7 @@
 		xhr.onreadystatechange = () =>
 		{
 			if(xhr.readyState===4 && cb)
-				cb(((xhr.status!==200 && (xhr.status!==0 || !xhr.responseText)) ? new Error("Invalid HTTP status code (" + xhr.status + ") for URL: " + url) : undefined), xhr.responseText);	// eslint-disable-line node/callback-return
+				cb(((xhr.status!==200 && (xhr.status!==0 || !xhr.responseText)) ? new Error(`Invalid HTTP status code (${xhr.status}) for URL: ${url}`) : undefined), xhr.responseText);	// eslint-disable-line node/callback-return
 		};
 	}
 

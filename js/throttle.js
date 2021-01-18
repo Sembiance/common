@@ -14,7 +14,7 @@
 			if(timePassed<minInterval)
 			{
 				if(reSendLastEvent)
-					scheduleNextThrottle(args, (minInterval-timePassed)+1);	// eslint-disable-line no-use-before-define
+					scheduleNextThrottle(args, (minInterval-timePassed)+1);
 				return;
 			}
 

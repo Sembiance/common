@@ -1,6 +1,5 @@
 "use strict";
 /*global XU: true*/
-/* eslint-disable prefer-template */
 
 // This only supports 1 or 2 header rows. More than 2 then weird things may happen or break.
 (function _Table()
@@ -16,13 +15,11 @@
 
 			this.options = Object.assign({}, _options);
 
-			this.boundClickHandler = this.clickHandler.bind(this);
-
 			this.container.classList.add("jsonview");
 			if(this.options.hideMeta)
 				this.container.classList.add("hidemeta");
 
-			this.container.addEventListener("click", this.boundClickHandler);
+			this.container.addEventListener("click", this.clickHandler);
 
 			if(this.options.title)
 			{
@@ -42,9 +39,9 @@
 				this.clickItem(this.container.querySelector(".item"));
 		}
 
-		clickHandler(e)
+		clickHandler = e =>
 		{
-			const item = e.target.getAncestor(node => node && node.classList.includes("item"));
+			const item = e.target.getAncestor(node => node?.classList.includes("item"));
 			if(!item || !item.classList.includes("clickable"))
 				return;
 
@@ -123,7 +120,7 @@
 			// Otherwise, time to expand
 			item.classList.add("expanded");
 
-			const nextNode = item.getNextSibling(n => n && n.classList.includes("item"));
+			const nextNode = item.getNextSibling(n => n?.classList.includes("item"));
 
 			if(item.classList.includes("type-object"))
 			{
@@ -190,7 +187,7 @@
 
 			const item = document.createElement("span");
 			item.classList.add("item");
-			item.classList.add("indent" + options.indent);
+			item.classList.add(`indent${options.indent}`);
 			item.JSONViewData = {value : itemValue, indent : options.indent};
 
 			const value = document.createElement("span");
@@ -222,7 +219,7 @@
 			{
 				if(this.options.dontExpandSingleSimples && itemValue.length===1 && (["string", "number", "boolean"].includes(typeof itemValue[0])))
 				{
-					item.classList.add("type-" + typeof itemValue[0]);
+					item.classList.add(`type-${typeof itemValue[0]}`);
 					if(options.valueText)
 					{
 						value.append(options.valueText);
@@ -238,7 +235,7 @@
 					item.classList.add("type-array");
 
 					item.classList.add("clickable");
-					meta.append("// " + itemValue.length.toLocaleString().padStart(this.options.metaCountMinWidth || 0) + " item" + (itemValue.length===1 ? "" : "s"));
+					meta.append(`// ${itemValue.length.toLocaleString().padStart(this.options.metaCountMinWidth || 0)} item${itemValue.length===1 ? "" : "s"}`);
 					item.append(meta);
 
 					if(options.valueText)
@@ -259,7 +256,7 @@
 
 				if(this.options.dontExpandSingleSimples && objectLength===1 && (["string", "number", "boolean"].includes(typeof firstKV[1])))
 				{
-					item.classList.add("type-" + typeof firstKV[1]);
+					item.classList.add(`type-${typeof firstKV[1]}`);
 					if(options.valueText)
 					{
 						value.append(options.valueText);
@@ -267,7 +264,7 @@
 					}
 					else
 					{
-						item.prepend(...this.punctuate("{", firstKV[0] + ":" + this.renderItemValue(firstKV[1]).querySelector(".value").textContent, "]"));
+						item.prepend(...this.punctuate("{", `${firstKV[0]}:${this.renderItemValue(firstKV[1]).querySelector(".value").textContent}`, "]"));
 					}
 				}
 				else
@@ -275,7 +272,7 @@
 					item.classList.add("type-object");
 
 					item.classList.add("clickable");
-					meta.append("// " + objectLength.toLocaleString().padStart(this.options.metaCountMinWidth || 0) + " item" + (objectLength===1 ? "" : "s"));
+					meta.append(`// ${objectLength.toLocaleString().padStart(this.options.metaCountMinWidth || 0)} item${objectLength===1 ? "" : "s"}`);
 					item.append(meta);
 
 					if(options.valueText)

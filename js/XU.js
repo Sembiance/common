@@ -1,6 +1,6 @@
 "use strict";
 /* eslint-env node, browser */
-/* eslint-disable node/global-require, node/no-missing-require, prefer-template */
+/* eslint-disable node/global-require */
 
 (function _XU(exports)
 {
@@ -9,14 +9,12 @@
 	exports.IS_NODE = typeof process!=="undefined" && typeof process.versions!=="undefined" && typeof process.versions.node!=="undefined";
 	if(XU.IS_NODE)
 	{
-		require("./Math");
-		require("./Array");
-		require("./String");
-		require("./Object");
-		require("./Date");
-		require("./Function");
-		require("./Number");
-		require("./JSON");
+		require("./Math.js");
+		require("./Array.js");
+		require("./String.js");
+		require("./Object.js");
+		require("./Function.js");	// eslint-disable-line node/no-missing-require -- don't remove this line even though it appears un-used in VSCode
+		require("./Number.js");
 
 		exports.IS_DEV = !process.argv.includes("--staging") && !process.argv.includes("--production");
 		exports.IS_STAGING = !!process.argv.includes("--staging");
@@ -159,7 +157,7 @@
 			if(vals.length>0)
 			{
 				const val = vals.shift();
-				rVals.push((typeof val==="object" ? JSON.stringify(val) : ""+val));
+				rVals.push((typeof val==="object" ? JSON.stringify(val) : `${val}`));
 			}
 
 			r.push(...rVals.map(rVal => rVal.split("\n").map(line => line.trim()).join("\n")));
@@ -173,28 +171,28 @@
 	{
 		const c = exports.c;
 
-		function val2string(val)	// eslint-disable-line no-inner-declarations
+		function val2string(val)
 		{
 			if(typeof val==="string")
 				return c.fg.magenta + val + c.reset;
 			
 			if(typeof val==="number")
-				return c.fg.white + val.toLocaleString().split(",").join(c.reset + c.fg.cyan + "," + c.fg.white).split(".").join(c.reset + c.fg.cyan + "." + c.fg.white) + c.reset;
+				return c.fg.white + val.toLocaleString().split(",").join(`${c.reset + c.fg.cyan},${c.fg.white}`).split(".").join(`${c.reset + c.fg.cyan}.${c.fg.white}`) + c.reset;
 			
 			if(typeof val==="boolean")
 				return c.fg.yellow + (val ? "true" : "false") + c.reset;
 			
 			if(val instanceof Error)
-				return util ? util.inspect(val, {colors : true, depth : Infinity}) : ("\n" +val.stack);
+				return util ? util.inspect(val, {colors : true, depth : Infinity}) : (`\n${val.stack}`);
 			
 			if(val instanceof RegExp)
 				return val.toString();
 
 			if(Array.isArray(val))
-				return c.fg.cyan + "[" + c.reset + val.map(val2string).join(c.fg.cyan + ", " + c.reset) + c.fg.cyan + "]" + c.reset;
+				return `${c.fg.cyan}[${c.reset}${val.map(val2string).join(`${c.fg.cyan}, ${c.reset}`)}${c.fg.cyan}]${c.reset}`;
 			
 			if(Object.isObject(val))
-				return c.fg.cyan + "{" + c.reset + Object.entries(val).map(([k, v]) => (k + c.fg.cyan + " : " + c.reset + val2string(v))).join(", ") + c.fg.cyan + "}" + c.reset;
+				return `${c.fg.cyan}{${c.reset}${Object.entries(val).map(([k, v]) => (`${k + c.fg.cyan} : ${c.reset}${val2string(v)}`)).join(", ")}${c.fg.cyan}}${c.reset}`;
 
 			return JSON.stringify(val);
 		}
@@ -209,5 +207,17 @@
 		});
 
 		console.log(r.join(""));
+	};
+
+	exports.parseJSON = function parseJSON(raw, defaultValue)
+	{
+		try
+		{
+			return JSON.parse(raw);
+		}
+		catch(err)
+		{
+			return defaultValue;
+		}
 	};
 })(typeof window!=="undefined" ? (window.XU ? window.XU : window.XU={}) : exports);

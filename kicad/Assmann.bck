@@ -1,8 +1,0 @@
-EESchema-DOCLIB  Version 2.0
-#
-$CMP RJ11
-D RJ11 connector 6x6
-K RJ11 connector
-$ENDCMP
-#
-#End Doc Library

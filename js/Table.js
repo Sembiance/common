@@ -1,6 +1,5 @@
 "use strict";
 /*global Modernizr, debounce, XU: true*/
-/* eslint-disable prefer-template */
 
 // This only supports 1 or 2 header rows. More than 2 then weird things may happen or break.
 (function _Table()
@@ -60,8 +59,8 @@
 					if(rowspan>1)
 						th.classList.add("doubleHeight");
 
-					th.style.left = (colCounter===0 ? 0 : tdWidths.slice(0, colCounter).sum()) + "px";
-					th.style.width = tdWidths.slice(colCounter, colCounter+colspan).sum() + "px";
+					th.style.left = `${colCounter===0 ? 0 : tdWidths.slice(0, colCounter).sum()}px`;
+					th.style.width = `${tdWidths.slice(colCounter, colCounter+colspan).sum()}px`;
 
 					colCounter += colspan;
 				});

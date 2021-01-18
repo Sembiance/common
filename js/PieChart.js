@@ -1,6 +1,5 @@
 "use strict";
 /*global XU: true*/
-/* eslint-disable prefer-template */
 
 // For styling, the container box should be positioned (so relative or absolute) and have box-sizing border-box with at least padding 2.0em
 // All .pieChartLabel should be position absolute and white-space nowrap
@@ -77,7 +76,7 @@
 			chartLabelGameName.append(data[i][0]);
 			chartLabel.append(chartLabelGameName);
 
-			chartLabel.append(": " + Math.floor(percentage) + "%");
+			chartLabel.append(`: ${Math.floor(percentage)}%`);
 			if(options.showValues)
 			{
 				const countLabel = document.createElement("span");
@@ -91,10 +90,10 @@
 			const labelDim = [chartLabel.getWidth(), chartLabel.getHeight()];
 
 			const labelMarginX = (labelLineToX - (labelLineToX<center[0] ? (labelDim[0]+3) : -3));
-			chartLabel.style.marginLeft = "" + labelMarginX + "px";
+			chartLabel.style.marginLeft = `${labelMarginX}px`;
 
 			const labelMarginY = (labelLineToY - (labelLineToY<center[1] ? labelDim[1] : 0));
-			chartLabel.style.marginTop = "" + labelMarginY + "px";
+			chartLabel.style.marginTop = `${labelMarginY}px`;
 
 			// Now fix any labels that run off the side of the container
 			const labelXY = chartLabel.getXY();
@@ -102,16 +101,16 @@
 			const offRightBy = Math.max(0, (labelXY[0]+labelDim[0])-(containerXY[0]+containerWidth));
 			const offLeftBy = Math.max(0, (0-(labelXY[0]-containerXY[0])));
 			if(offLeftBy)
-				chartLabel.style.marginLeft = "" + (labelMarginX + (offLeftBy+3)) + "px";
+				chartLabel.style.marginLeft = `${labelMarginX + (offLeftBy+3)}px`;
 			else
-				chartLabel.style.marginLeft = "" + (labelMarginX - (offRightBy+3)) + "px";
+				chartLabel.style.marginLeft = `${labelMarginX - (offRightBy+3)}px`;
 
 			const offBottomBy = Math.max(0, (labelXY[1]+labelDim[1])-(containerXY[1]+containerHeight));
 			const offTopBy = Math.max(0, (0-(labelXY[1]-containerXY[1])));
 			if(offTopBy)
-				chartLabel.style.marginTop = "" + (labelMarginY + (offTopBy+3)) + "px";
+				chartLabel.style.marginTop = `${labelMarginY + (offTopBy+3)}px`;
 			else
-				chartLabel.style.marginTop = "" + (labelMarginY - (offBottomBy+5)) + "px";
+				chartLabel.style.marginTop = `${labelMarginY - (offBottomBy+5)}px`;
 
 			sofar += value;
 		}

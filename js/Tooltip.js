@@ -1,6 +1,6 @@
 "use strict";
 /* global Modernizr, XU: true */
-/* eslint-disable prefer-template */
+/* eslint-disable prefer-template, no-constructor-bind/no-constructor-bind */
 
 (function _Tooltip()
 {

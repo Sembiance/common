@@ -1,5 +1,4 @@
 "use strict";
-/* eslint-disable prefer-template */
 
 ////////////////////
 //// Polyfills /////
@@ -181,7 +180,7 @@ if(!String.prototype.reverse)
 	};
 }
 
-// Reverses a string
+// Truncates the inner part of a string to maxLen
 if(!String.prototype.innerTruncate)
 {
 	String.prototype.innerTruncate = function innerTruncate(_maxLen)
@@ -192,7 +191,7 @@ if(!String.prototype.innerTruncate)
 		const maxLen = _maxLen-1;
 		const trimSideLength = Math.floor((this.length-maxLen)/2);
 		const midPoint = Math.floor(this.length/2);
-		return this.substring(0, midPoint-trimSideLength) + "…" + this.substring(midPoint+(trimSideLength+((this.length-(trimSideLength*2))-maxLen)));
+		return `${this.substring(0, midPoint-trimSideLength)}…${this.substring(midPoint+(trimSideLength+((this.length-(trimSideLength*2))-maxLen)))}`;
 	};
 }
 
@@ -220,7 +219,7 @@ if(!String.prototype.strip)
 	String.prototype.strip = function strip(_chars)
 	{
 		const chars = Array.isArray(_chars) ? _chars.join() : Array.prototype.slice.call(arguments).join();	// eslint-disable-line prefer-rest-params
-		return this.replace(new RegExp("[" + chars + "]", "g"), "");
+		return this.replace(new RegExp(`[${chars}]`, "g"), "");
 	};
 }
 
@@ -233,7 +232,7 @@ if(!String.prototype.trimChars)
 			return this.trim();
 
 		const chars = Array.isArray(_chars) ? _chars.join("") : _chars;
-		return this.replace(new RegExp("^[" + chars + "]+|[" + chars + "]+$", "g"), "");
+		return this.replace(new RegExp(`^[${chars}]+|[${chars}]+$`, "g"), "");
 	};
 }
 
@@ -252,3 +251,12 @@ if(!String.prototype.escapeXML)
 }
 
 String.prototype.escapeHTML = String.prototype.escapeXML;
+
+if(!String.prototype.escapeURI)
+{
+	String.prototype.escapeURI = function escapeURI()
+	{
+		// WARNING: Not compatible with URL's that contain ?query=params&whatnot=true
+		return this.split("/").map(v => encodeURIComponent(v)).join("/");
+	};
+}

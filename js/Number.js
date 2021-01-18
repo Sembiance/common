@@ -1,5 +1,4 @@
 "use strict";
-/* eslint-disable prefer-template */
 ////////////////////
 //// Polyfills /////
 ////////////////////
@@ -45,16 +44,16 @@ if(!Number.prototype.toClock)
 		let secondsElapsed = this;	// eslint-disable-line consistent-this
 		if(secondsElapsed>=(60*60))
 		{
-			const hourText = "" + parseInt((secondsElapsed / (60*60)), 10);
-			clockText += hourText + ":";
+			const hourText = `${parseInt((secondsElapsed / (60*60)), 10)}`;
+			clockText += `${hourText}:`;
 			secondsElapsed %= (60*60);
 			secondsElapsed = parseInt(secondsElapsed, 10);
 		}
 
 		if(secondsElapsed>=(60))
 		{
-			const minuteText = "" + parseInt((secondsElapsed / 60), 10);
-			clockText += (minuteText.length===0 ? "00" : (minuteText.length===1) ? "0" : "") + minuteText + ":";
+			const minuteText = `${parseInt((secondsElapsed / 60), 10)}`;
+			clockText += `${(minuteText.length===0 ? "00" : (minuteText.length===1) ? "0" : "") + minuteText}:`;
 			secondsElapsed %= 60;
 			secondsElapsed = parseInt(secondsElapsed, 10);
 		}
@@ -63,7 +62,7 @@ if(!Number.prototype.toClock)
 			clockText += "00:";
 		}
 
-		const secondText = "" + Math.floor(secondsElapsed);
+		const secondText = `${Math.floor(secondsElapsed)}`;
 		clockText += (secondText.length===0 ? "00" : (secondText.length===1) ? "0" : "") + secondText;
 
 		return clockText;
@@ -76,6 +75,9 @@ if(!Number.prototype.secondsAsHumanReadable)
 	Number.prototype.secondsAsHumanReadable = function secondsAsHumanReadable(lang="en", short=false)
 	{
 		const secondsElapsed = this;	// eslint-disable-line consistent-this
+		if(secondsElapsed<0)
+			return `${secondsElapsed}ms`;
+			
 		const clock = secondsElapsed.toClock(secondsElapsed<60);
 		const clockParts = clock.split(":");
 		let humanText = "";
@@ -92,7 +94,7 @@ if(!Number.prototype.secondsAsHumanReadable)
 				part = Math.floor(part);
 				if(isNaN(part))
 					part = 0;
-				humanText += part.toLocaleString(lang) + (short ? "y" : (" year" + (part>1 || part===0 ? "s, " : ", ")));
+				humanText += part.toLocaleString(lang) + (short ? "y" : (` year${part>1 || part===0 ? "s, " : ", "}`));
 				
 				part = parseInt(clockParts[0], 10);
 				if(isNaN(part))
@@ -102,7 +104,7 @@ if(!Number.prototype.secondsAsHumanReadable)
 				part = Math.floor(part);
 				if(isNaN(part))
 					part = 0;
-				humanText += part.toLocaleString(lang) + (short ? "d" : (" day" + (part>1 || part===0 ? "s" : "")));
+				humanText += part.toLocaleString(lang) + (short ? "d" : (` day${part>1 || part===0 ? "s" : ""}`));
 			}
 			else if(part>24)
 			{
@@ -110,7 +112,7 @@ if(!Number.prototype.secondsAsHumanReadable)
 				part = Math.floor(part);
 				if(isNaN(part))
 					part = 0;
-				humanText += part.toLocaleString(lang) + (short ? "d" : (" day" + (part>1 || part===0 ? "s, " : ", ")));
+				humanText += part.toLocaleString(lang) + (short ? "d" : (` day${part>1 || part===0 ? "s, " : ", "}`));
 				
 				part = parseInt(clockParts[0], 10);
 				if(isNaN(part))
@@ -119,16 +121,16 @@ if(!Number.prototype.secondsAsHumanReadable)
 				part = Math.floor(part);
 				if(isNaN(part))
 					part = 0;
-				humanText += part.toLocaleString(lang) + (short ? "h" : (" hour" + (part>1 || part===0 ? "s" : "")));
+				humanText += part.toLocaleString(lang) + (short ? "h" : (` hour${part>1 || part===0 ? "s" : ""}`));
 			}
 			else
 			{
-				humanText += part.toLocaleString(lang) + (short ? "h" : (" hour" + (part>1 || part===0 ? "s, " : ", ")));
+				humanText += part.toLocaleString(lang) + (short ? "h" : (` hour${part>1 || part===0 ? "s, " : ", "}`));
 				
 				part = parseInt(clockParts[1], 10);
 				if(isNaN(part))
 					part = 0;
-				humanText += part.toLocaleString(lang) + (short ? "m" : (" minute" + (part>1 || part===0 ? "s" : "")));
+				humanText += part.toLocaleString(lang) + (short ? "m" : (` minute${part>1 || part===0 ? "s" : ""}`));
 			}
 		}
 		else if(clockParts.length===2)
@@ -136,19 +138,19 @@ if(!Number.prototype.secondsAsHumanReadable)
 			part = parseInt(clockParts[0], 10);
 			if(isNaN(part))
 				part = 0;
-			humanText += part.toLocaleString(lang) + (short ? "m" : (" minute" + (part>1 || part===0 ? "s, " : ", ")));
+			humanText += part.toLocaleString(lang) + (short ? "m" : (` minute${part>1 || part===0 ? "s, " : ", "}`));
 			
 			part = parseInt(clockParts[1], 10);
 			if(isNaN(part))
 				part = 0;
-			humanText += part.toLocaleString(lang) + (short ? "s" : (" second" + (part>1 || part===0 ? "s" : "")));
+			humanText += part.toLocaleString(lang) + (short ? "s" : (` second${part>1 || part===0 ? "s" : ""}`));
 		}
 		else if(clockParts.length===1)
 		{
 			part = parseInt(clockParts[0], 10);
 			if(isNaN(part))
 				part = 0;
-			humanText += part.toLocaleString(lang) + (short ? "s" : (" second" + (part>1 || part===0 ? "s" : "")));
+			humanText += part.toLocaleString(lang) + (short ? "s" : (` second${part>1 || part===0 ? "s" : ""}`));
 		}
 
 		return humanText;
@@ -320,4 +322,47 @@ if(!Number.prototype.ease)
 	};
 
 	/* eslint-enable no-mixed-operators */
+}
+
+// Flips the given bit in the number
+if(!Number.prototype.noExponents)
+{
+	Number.prototype.noExponents = function noExponents()
+	{
+		const numStr = String(this);
+
+		const data = numStr.split(/[eE]/);
+		if(data.length===1)
+			return data[0];
+		
+		let z = "";
+		const sign = numStr.slice(0, 1)==="-" ? "-" : "";
+		const str = data[0].replace(".", "");
+		let mag = Number(data[1]) + 1;
+		if(mag<=0)
+		{
+			z = `${sign}0.`;
+			while(!(mag >= 0))
+			{
+				z += "0";
+				++mag;
+			}
+			
+			return (z + str.replace(/^-/, ""));
+		}
+
+		if(str.length<=mag)
+		{
+			mag -= str.length;
+			while(!(mag<=0))
+			{
+				z += 0;
+				--mag;
+			}
+		
+			return str + z;
+		}
+
+		return parseFloat(data[0]) * Math.pow(10, parseInt(data[1], 10));	// eslint-disable-line prefer-exponentiation-operator
+	};
 }
