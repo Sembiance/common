@@ -27,7 +27,7 @@ if(!Object.entries)
 	{
 		const ownProps = Object.keys(o);
 		let i=ownProps.length;
-		const resArray = new Array(i);
+		const resArray = new Array(i);	// eslint-disable-line unicorn/no-new-array
 		while(i--)
 			resArray[i] = [ownProps[i], o[ownProps[i]]];
 

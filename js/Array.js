@@ -260,7 +260,7 @@ if(!Array.prototype.min)
 			return;
 
 		let r=this[0];
-		for(let i=1, len=this.lenghth;i<len;i++)
+		for(let i=1, len=this.length;i<len;i++)
 			r = Math.min(r, this[i]);
 
 		return r;
@@ -683,6 +683,7 @@ if(!Array.prototype.pushCopyInPlace)
 		this.minInterval = _minInterval || 0;
 		this.tick = _tick;
 		this.scheduledTimeoutid = null;
+		this.errors = [];
 
 		CBIterator.prototype.go = function go(cb)
 		{
@@ -727,13 +728,13 @@ if(!Array.prototype.pushCopyInPlace)
 				this.tick();
 
 			if(err)
-				return this.cb(err, this.results);
+				this.errors.push(err);
 
 			this.results[curi] = result;
 			this.running.removeOnce(curi);
 
 			if(this.running.length===0 && this.a.length===0)
-				return this.cb(undefined, this.results);
+				return this.cb(this.errors.length>0 ? (this.errors.length===1 ? this.errors[0] : this.errors) : undefined, this.results);
 
 			if(this.scheduledTimeoutid===null)
 				this.next();

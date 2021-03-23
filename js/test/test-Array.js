@@ -146,12 +146,12 @@ r = 1.5811388300841898;
 assert.strictEqual(r, a.standardDeviation(true), TESTNAME);
 
 TESTNAME = "min";
-a = [1, 2, 3, 4, 5];
+a = [3, 4, 1, 2, 5];
 r = 1;
 assert.strictEqual(r, a.min(), TESTNAME);
 
 TESTNAME = "max";
-a = [1, 2, 3, 4, 5];
+a = [4, 2, 5, 3, 1];
 r = 5;
 assert.strictEqual(r, a.max(), TESTNAME);
 

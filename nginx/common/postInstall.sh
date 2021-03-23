@@ -11,3 +11,6 @@ rm -f /usr/local/nginx/conf/nginx.conf.default
 
 # Don't need the default mime types file, we have our own mime file
 rm -f /usr/local/nginx/conf/mime.types*
+
+# Remove default nginx html files
+rm -rf /usr/local/nginx/html
