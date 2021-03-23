@@ -525,12 +525,29 @@ if(!Array.prototype.subtractOnce)
 // Batches up the values in the array into sub arrays of x length
 if(!Array.prototype.batch)
 {
-	Array.prototype.batch = function batch(x=1)
+	Array.prototype.batch = function batch(num=1, vertical)
 	{
 		const a = this.slice();
 		const batches = [];
-		while(a.length>0)
-			batches.push(a.splice(0, x));
+		if(vertical)
+		{
+			const rowCount = Math.ceil(a.length/num);
+			for(let y=0;y<rowCount;y++)
+			{
+				batches.push([]);
+				for(let x=0;x<num;x++)
+				{
+					const idx = y+(x*rowCount);
+					if(idx<a.length)
+						batches.last().push(a[idx]);
+				}
+			}
+		}
+		else
+		{
+			while(a.length>0)
+				batches.push(a.splice(0, num));
+		}
 
 		return batches;
 	};

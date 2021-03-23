@@ -149,6 +149,9 @@ TESTNAME = "min";
 a = [3, 4, 1, 2, 5];
 r = 1;
 assert.strictEqual(r, a.min(), TESTNAME);
+a = [0.456, 0.197];
+r = 0.197;
+assert.strictEqual(r, a.min(), TESTNAME);
 
 TESTNAME = "max";
 a = [4, 2, 5, 3, 1];
@@ -268,6 +271,12 @@ TESTNAME = "batch";
 a = [1, 2, 3, 4, 5, 6, 7];
 r = [[1, 2], [3, 4], [5, 6], [7]];
 assert.ok(r.equals(a.batch(2)), TESTNAME);
+assert.ok(!r.equals(a), TESTNAME);
+
+TESTNAME = "batch-vertical";
+a = [1, 2, 3, 4, 5, 6, 7];
+r = [[1, 5], [2, 6], [3, 7], [4]];
+assert.ok(r.equals(a.batch(2, true)), TESTNAME);
 assert.ok(!r.equals(a), TESTNAME);
 
 TESTNAME = "replaceAt";
