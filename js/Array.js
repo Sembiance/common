@@ -689,18 +689,19 @@ if(!Array.prototype.pushCopyInPlace)
 		};
 	}
 
-	function CBIterator(_a, _fun, _atOnce, _minInterval, _tick)
+	function CBIterator(_a, _fun, o={})
 	{
 		this.a = _a.slice();
 		this.fun = _fun;
-		this.atOnce = _atOnce || 1;
+		this.atOnce = o.atOnce || 5;
 		this.results = [];
 		this.i = this.lastRunTime = 0;
 		this.running=[];
-		this.minInterval = _minInterval || 0;
-		this.tick = _tick;
+		this.minInterval = o.minInterval || 0;
+		this.tick = o.tick;
 		this.scheduledTimeoutid = null;
 		this.errors = [];
+		this.fillFast = o.fillFast;
 
 		CBIterator.prototype.go = function go(cb)
 		{
@@ -736,7 +737,12 @@ if(!Array.prototype.pushCopyInPlace)
 			new CBRunner(this.fun, this.a.shift(), curi, this.finish.bind(this)).run();		// eslint-disable-line sembiance/tiptoe-shorter-finish-wrap
 
 			if(this.a.length>0 && this.running.length<this.atOnce)
-				this.scheduledTimeoutid = setTimeout(this.next.bind(this), this.minInterval+1);
+			{
+				if(this.fillFast)
+					this.next();
+				else
+					this.scheduledTimeoutid = setTimeout(this.next.bind(this), this.minInterval+1);
+			}
 		};
 
 		CBIterator.prototype.finish = function finish(err, result, curi)
@@ -764,18 +770,15 @@ if(!Array.prototype.pushCopyInPlace)
 		{
 			const minInterval = typeof _options==="number" ? _options : ((_options || {}).minInterval || 0);
 			const tick = typeof _options==="object" ? _options.tick : undefined;
-			(new CBIterator(this, fun, 1, minInterval, tick)).go(cb);
+			(new CBIterator(this, fun, {atOnce : 1, minInterval, tick})).go(cb);
 		};
 	}
 
 	if(!Array.prototype.parallelForEach)
 	{
-		Array.prototype.parallelForEach = function parallelForEach(fun, cb, _options)
+		Array.prototype.parallelForEach = function parallelForEach(fun, cb, o)
 		{
-			const atOnce = typeof _options==="number" ? _options : ((_options || {}).atOnce || 5);
-			const minInterval = typeof _options==="object" ? (_options.minInterval || 0) : 0;
-			const tick = typeof _options==="object" ? _options.tick : undefined;
-			(new CBIterator(this, fun, atOnce, minInterval, tick)).go(cb);
+			(new CBIterator(this, fun, typeof o==="number" ? {atOnce : o} : o)).go(cb);
 		};
 	}
 })();

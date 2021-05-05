@@ -100,17 +100,11 @@
 			
 			const offRightBy = Math.max(0, (labelXY[0]+labelDim[0])-(containerXY[0]+containerWidth));
 			const offLeftBy = Math.max(0, (0-(labelXY[0]-containerXY[0])));
-			if(offLeftBy)
-				chartLabel.style.marginLeft = `${labelMarginX + (offLeftBy+3)}px`;
-			else
-				chartLabel.style.marginLeft = `${labelMarginX - (offRightBy+3)}px`;
+			chartLabel.style.marginLeft = offLeftBy ? `${labelMarginX + (offLeftBy+3)}px` : `${labelMarginX - (offRightBy+3)}px`;
 
 			const offBottomBy = Math.max(0, (labelXY[1]+labelDim[1])-(containerXY[1]+containerHeight));
 			const offTopBy = Math.max(0, (0-(labelXY[1]-containerXY[1])));
-			if(offTopBy)
-				chartLabel.style.marginTop = `${labelMarginY + (offTopBy+3)}px`;
-			else
-				chartLabel.style.marginTop = `${labelMarginY - (offBottomBy+5)}px`;
+			chartLabel.style.marginTop = offTopBy ? `${labelMarginY + (offTopBy+3)}px` : `${labelMarginY - (offBottomBy+5)}px`;
 
 			sofar += value;
 		}

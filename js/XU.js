@@ -89,6 +89,26 @@
 			console.error(err);
 	};
 
+	// Will call fn and checkfn over and over until checkfn returns true
+	exports.waitUntil = function waitUntil(fn, checkfn, _options, _cb)
+	{
+		const {options, cb} = XU.optionscb(_options, _cb, {interval : 100});
+		let i=0;
+
+		function performfn()
+		{
+			fn((err, ...args) =>
+			{
+				if(err || checkfn(...args))
+					setImmediate(() => cb(err, ...args));
+				else
+					setTimeout(performfn, options.interval);
+			}, i++);
+		}
+
+		performfn();
+	};
+
 	const cc = t => (XU.IS_NODE && process.stdout && process.stdout.hasColors && process.stdout.hasColors() ? t : "");
 	/* eslint-disable unicorn/escape-case, unicorn/no-hex-escape */
 	// https://en.wikipedia.org/wiki/ANSI_escape_code#Colors

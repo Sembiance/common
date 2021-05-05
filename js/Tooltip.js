@@ -112,15 +112,8 @@
 				this.lastPageY = e.pageY;
 			}
 
-			if(this.tooltipBelow)
-				this.tooltip.style.top = (this.lastPageY+this.tooltipOffset) + "px";
-			else
-				this.tooltip.style.top = Math.max(((this.lastPageY-this.tooltip.getHeight())-this.tooltipOffset), 0) + "px";
-
-			if(this.tooltipLeft)
-				this.tooltip.style.left = ((this.lastPageX-this.tooltip.getWidth())-this.tooltipOffset) + "px";
-			else
-				this.tooltip.style.left = (this.lastPageX+this.tooltipOffset) + "px";
+			this.tooltip.style.top = this.tooltipBelow ? (this.lastPageY+this.tooltipOffset) + "px" : Math.max(((this.lastPageY-this.tooltip.getHeight())-this.tooltipOffset), 0) + "px";
+			this.tooltip.style.left = this.tooltipLeft ? ((this.lastPageX-this.tooltip.getWidth())-this.tooltipOffset) + "px" : (this.lastPageX+this.tooltipOffset) + "px";
 		}
 
 		// Don't show tooltips for touch interactions

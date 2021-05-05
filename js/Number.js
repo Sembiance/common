@@ -72,88 +72,34 @@ if(!Number.prototype.toClock)
 // Converts a given number of seconds into a human readable value such as 3 days, 45 minutes, 10 seconds or 3d45m10s if short is set to true
 if(!Number.prototype.secondsAsHumanReadable)
 {
-	Number.prototype.secondsAsHumanReadable = function secondsAsHumanReadable(lang="en", short=false)
+	Number.prototype.secondsAsHumanReadable = function secondsAsHumanReadable({lang="en", short=false, maxParts=Infinity}={})
 	{
-		const secondsElapsed = this;	// eslint-disable-line consistent-this
-		if(secondsElapsed<0)
-			return `${secondsElapsed}ms`;
-			
-		const clock = secondsElapsed.toClock(secondsElapsed<60);
-		const clockParts = clock.split(":");
-		let humanText = "";
-		let part = undefined;
-			
-		if(clockParts.length===3)
+		const r = [];
+		let left = this;	// eslint-disable-line consistent-this
+		[
+			{n : "year", v : 31557600},
+			{n : "month", v : 2629800},
+			{n : "day", v : 86400},
+			{n : "hour", v : 3600},
+			{n : "minute", v : 60},
+			{n : "second", v : 1}
+		].forEach(({n, v}) =>
 		{
-			part = parseInt(clockParts[0], 10);
-			if(isNaN(part))
-				part = 0;
-			if(part>8760)
-			{
-				part /= 8760;
-				part = Math.floor(part);
-				if(isNaN(part))
-					part = 0;
-				humanText += part.toLocaleString(lang) + (short ? "y" : (` year${part>1 || part===0 ? "s, " : ", "}`));
-				
-				part = parseInt(clockParts[0], 10);
-				if(isNaN(part))
-					part = 0;
-				part %= 8760;
-				part /= 24;
-				part = Math.floor(part);
-				if(isNaN(part))
-					part = 0;
-				humanText += part.toLocaleString(lang) + (short ? "d" : (` day${part>1 || part===0 ? "s" : ""}`));
-			}
-			else if(part>24)
-			{
-				part /= 24;
-				part = Math.floor(part);
-				if(isNaN(part))
-					part = 0;
-				humanText += part.toLocaleString(lang) + (short ? "d" : (` day${part>1 || part===0 ? "s, " : ", "}`));
-				
-				part = parseInt(clockParts[0], 10);
-				if(isNaN(part))
-					part = 0;
-				part %= 24;
-				part = Math.floor(part);
-				if(isNaN(part))
-					part = 0;
-				humanText += part.toLocaleString(lang) + (short ? "h" : (` hour${part>1 || part===0 ? "s" : ""}`));
-			}
-			else
-			{
-				humanText += part.toLocaleString(lang) + (short ? "h" : (` hour${part>1 || part===0 ? "s, " : ", "}`));
-				
-				part = parseInt(clockParts[1], 10);
-				if(isNaN(part))
-					part = 0;
-				humanText += part.toLocaleString(lang) + (short ? "m" : (` minute${part>1 || part===0 ? "s" : ""}`));
-			}
-		}
-		else if(clockParts.length===2)
-		{
-			part = parseInt(clockParts[0], 10);
-			if(isNaN(part))
-				part = 0;
-			humanText += part.toLocaleString(lang) + (short ? "m" : (` minute${part>1 || part===0 ? "s, " : ", "}`));
+			if(left===0 || left<v)
+				return;
 			
-			part = parseInt(clockParts[1], 10);
-			if(isNaN(part))
-				part = 0;
-			humanText += part.toLocaleString(lang) + (short ? "s" : (` second${part>1 || part===0 ? "s" : ""}`));
-		}
-		else if(clockParts.length===1)
+			const qty = Math.floor(left/v);
+			left -= qty*v;
+			r.push(`${qty.toLocaleString(lang)}${short ? n.charAt(0) : ` ${n}${qty>1 || qty===0 ? "s" : ""}`}`);
+		});
+
+		if(left>0 && r.length===0)
 		{
-			part = parseInt(clockParts[0], 10);
-			if(isNaN(part))
-				part = 0;
-			humanText += part.toLocaleString(lang) + (short ? "s" : (` second${part>1 || part===0 ? "s" : ""}`));
+			const qty = left*1000;
+			r.push(`${qty.toLocaleString(lang)}${short ? "ms" : ` millisecond${qty>1 || qty===0 ? "s" : ""}`}`);
 		}
 
-		return humanText;
+		return r.slice(0, maxParts).join(short ? "" : ", ");
 	};
 }
 
