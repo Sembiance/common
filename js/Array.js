@@ -298,7 +298,7 @@ if(!Array.prototype.last)
 {
 	Array.prototype.last = function last()
 	{
-		return this[this.length-1];
+		return this[this.length-1];	// eslint-disable-line unicorn/prefer-at
 	};
 }
 

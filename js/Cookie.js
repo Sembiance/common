@@ -29,7 +29,7 @@
 
 		cookieText += `;expires=${cookieExpirationDate}`;
 
-	    document.cookie = cookieText;
+	    document.cookie = cookieText;	// eslint-disable-line unicorn/no-document-cookie
 	};
 
 	Cookie.remove = function remove(name, domain)

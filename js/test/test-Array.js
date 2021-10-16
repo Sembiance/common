@@ -140,9 +140,9 @@ assert.strictEqual(r, a.variance(true), TESTNAME);
 
 TESTNAME = "standardDeviation";
 a = [1, 2, 3, 4, 5];
-r = 1.4142135623730951;
+r = 1.414_213_562_373_095_1;
 assert.strictEqual(r, a.standardDeviation(), TESTNAME);
-r = 1.5811388300841898;
+r = 1.581_138_830_084_189_8;
 assert.strictEqual(r, a.standardDeviation(true), TESTNAME);
 
 TESTNAME = "min";

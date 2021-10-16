@@ -33,9 +33,9 @@ if(!Math.trueRandom)
 		try
 		{
 			if(window && window.chrome && window.crypto && window.crypto.getRandomValues)	// eslint-disable-line @typescript-eslint/prefer-optional-chain
-				result = window.crypto.getRandomValues(new Uint32Array(1))[0] / 0x100000000;
+				result = window.crypto.getRandomValues(new Uint32Array(1))[0] / 0x1_00_00_00_00;
 		}
-		catch(err)
+		catch
 		{
 			result = Math.random();
 		}

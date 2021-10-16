@@ -40,16 +40,16 @@ assert.ok(r.equals(Math.getRotatedDimensions(40, 100, 200)), TESTNAME);
 
 TESTNAME = "degreesToRadians";
 a = 45;
-r = 0.7853981633974483;
+r = 0.785_398_163_397_448_3;
 assert.strictEqual(r, Math.degreesToRadians(a), TESTNAME);
 
 TESTNAME = "radiansToDegrees";
-a = 0.7853981633974483;
+a = 0.785_398_163_397_448_3;
 r = 45;
 assert.strictEqual(r, Math.radiansToDegrees(a), TESTNAME);
 
 TESTNAME = "rotatePointInBox";
-r = [416.68584287042086, 248.08657048910064];
+r = [416.685_842_870_420_86, 248.086_570_489_100_64];
 assert.ok(r.equals(Math.rotatePointInBox(15, 20, 120, 300, 500)), TESTNAME);
 
 TESTNAME = "expandToBounds";

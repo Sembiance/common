@@ -89,6 +89,22 @@
 			console.error(err);
 	};
 
+	// Tries the passed in fn, returning whatever it returns. If it fails, will return the fallbackResult
+	exports.tryFallback = function tryFallback(fn, fallbackResult)
+	{
+		let r = null;
+		try
+		{
+			r = fn();
+		}
+		catch
+		{
+			r = fallbackResult;
+		}
+
+		return r;
+	};
+
 	// Will call fn and checkfn over and over until checkfn returns true
 	exports.waitUntil = function waitUntil(fn, checkfn, _options, _cb)
 	{
@@ -107,6 +123,19 @@
 		}
 
 		performfn();
+	};
+
+	// Calls a promise as a callback. We don't use util.callbackify because it has issues with some promises that rely on a consistent 'this'
+	exports.pcb = function pcb(p, cb)
+	{
+		try
+		{
+			p.then((...pargs) => cb(undefined, ...pargs), err => cb(err));	// eslint-disable-line no-restricted-syntax -- don't remove this line even though it appears un-used in VSCode
+		}
+		catch(err)
+		{
+			setImmediate(() => cb(err));
+		}
 	};
 
 	const cc = t => (XU.IS_NODE && process.stdout && process.stdout.hasColors && process.stdout.hasColors() ? t : "");
@@ -191,26 +220,35 @@
 	{
 		const c = exports.c;
 
+		function colorize(val, defaultColor=c.reset)
+		{
+			// If it already includes color ANSI escape sequences, just return the val as is
+			if(val.includes("\x1b["))	// eslint-disable-line unicorn/escape-case, unicorn/no-hex-escape
+				return val;
+
+			return val.replace(/([+!@#&_()[\]%${}:/,.'"|\\=*^`~;?-])/g, `${c.reset}${c.fg.cyan}$1${defaultColor}`);	// eslint-disable-line prefer-named-capture-group
+		}
+
 		function val2string(val)
 		{
 			if(typeof val==="string")
-				return c.fg.magenta + val + c.reset;
-			
+				return c.fg.magenta + colorize(val, c.fg.magenta) + c.reset;
+
 			if(typeof val==="number")
 				return c.fg.white + val.toLocaleString().split(",").join(`${c.reset + c.fg.cyan},${c.fg.white}`).split(".").join(`${c.reset + c.fg.cyan}.${c.fg.white}`) + c.reset;
-			
+
 			if(typeof val==="boolean")
 				return c.fg.yellow + (val ? "true" : "false") + c.reset;
-			
+
 			if(val instanceof Error)
 				return util ? util.inspect(val, {colors : true, depth : Infinity}) : (`\n${val.stack}`);
-			
+
 			if(val instanceof RegExp)
 				return val.toString();
 
 			if(Array.isArray(val))
 				return `${c.fg.cyan}[${c.reset}${val.map(val2string).join(`${c.fg.cyan}, ${c.reset}`)}${c.fg.cyan}]${c.reset}`;
-			
+
 			if(Object.isObject(val))
 				return `${c.fg.cyan}{${c.reset}${Object.entries(val).map(([k, v]) => (`${k + c.fg.cyan} : ${c.reset}${val2string(v)}`)).join(", ")}${c.fg.cyan}}${c.reset}`;
 
@@ -220,7 +258,7 @@
 		const r = [];
 		strs.forEach(str =>
 		{
-			r.push(str);
+			r.push(colorize(str));
 
 			if(vals.length>0)
 				r.push(val2string(vals.shift()));
@@ -235,7 +273,7 @@
 		{
 			return JSON.parse(raw);
 		}
-		catch(err)
+		catch
 		{
 			return defaultValue;
 		}

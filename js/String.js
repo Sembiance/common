@@ -218,7 +218,7 @@ if(!String.prototype.strip)
 {
 	String.prototype.strip = function strip(_chars)
 	{
-		const chars = Array.isArray(_chars) ? _chars.join() : Array.prototype.slice.call(arguments).join();	// eslint-disable-line prefer-rest-params
+		const chars = Array.isArray(_chars) ? _chars.join(",") : Array.prototype.slice.call(arguments).join(",");	// eslint-disable-line prefer-rest-params
 		return this.replace(new RegExp(`[${chars}]`, "g"), "");
 	};
 }
@@ -252,13 +252,26 @@ if(!String.prototype.escapeXML)
 
 String.prototype.escapeHTML = String.prototype.escapeXML;
 
-// Encode a URL path segment, replacing things like # and ? with the proper hex escaping
+// Encode a URL path segment, replacing things like # and ? and % with the proper hex escaping
 if(!String.prototype.encodeURLPath)
 {
-	String.prototype.encodeURLPath = function encodeURLPath(escapeHTMLToo)
+	String.prototype.encodeURLPath = function encodeURLPath({skipEncodePercent}={})
 	{
-		const result = this.replaceAll("#", "%23").replaceAll("?", "%3f").replaceAll("\r", "%0d").replaceAll("\n", "%0a");
-		return escapeHTMLToo ? result.escapeHTML() : result;
+		let r = this;		// eslint-disable-line consistent-this
+		if(!skipEncodePercent)
+			r = r.replaceAll("%", "%25");
+		
+		r = r.replaceAll("#", "%23").replaceAll("?", "%3f").replaceAll("\\", "%5c").replaceAll("\r", "%0d").replaceAll("\n", "%0a");
+		return r;
+	};
+}
+
+// Reverses a string that was encoded with encodeURLPath
+if(!String.prototype.decodeURLPath)
+{
+	String.prototype.decodeURLPath = function decodeURLPath()
+	{
+		return this.replaceAll("%23", "#").replaceAll("%3f", "?").replaceAll("%5c", "\\").replaceAll("%0d", "\r").replaceAll("%0a", "\n").replaceAll("%20", " ").replaceAll("%25", "%");
 	};
 }
 

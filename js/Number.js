@@ -77,20 +77,20 @@ if(!Number.prototype.secondsAsHumanReadable)
 		const r = [];
 		let left = this;	// eslint-disable-line consistent-this
 		[
-			{n : "year", v : 31557600},
-			{n : "month", v : 2629800},
-			{n : "day", v : 86400},
-			{n : "hour", v : 3600},
-			{n : "minute", v : 60},
-			{n : "second", v : 1}
-		].forEach(({n, v}) =>
+			{n : "year", s : "y", v : 31_557_600},
+			{n : "month", s : "mo", v : 2_629_800},
+			{n : "day", s : "d", v : 86400},
+			{n : "hour", s : "h", v : 3600},
+			{n : "minute", s : "m", v : 60},
+			{n : "second", s : "s", v : 1}
+		].forEach(({n, v, s}) =>
 		{
 			if(left===0 || left<v)
 				return;
 			
 			const qty = Math.floor(left/v);
 			left -= qty*v;
-			r.push(`${qty.toLocaleString(lang)}${short ? n.charAt(0) : ` ${n}${qty>1 || qty===0 ? "s" : ""}`}`);
+			r.push(`${qty.toLocaleString(lang)}${short ? s : ` ${n}${qty>1 || qty===0 ? "s" : ""}`}`);
 		});
 
 		if(left>0 && r.length===0)
@@ -106,10 +106,10 @@ if(!Number.prototype.secondsAsHumanReadable)
 // Returns an array of bits that represent the given number
 if(!Number.prototype.getBits)
 {
-	Number.prototype.getBits = function getBits()
+	Number.prototype.getBits = function getBits(len=32)
 	{
 		const bits = [];
-		for(let i=31;i>=0;i--)
+		for(let i=len-1;i>=0;i--)
 			bits.push(this.getBit(i));
 
 		return bits.reverse();
@@ -288,7 +288,7 @@ if(!Number.prototype.noExponents)
 		if(mag<=0)
 		{
 			z = `${sign}0.`;
-			while(!(mag >= 0))
+			while(mag<0)
 			{
 				z += "0";
 				++mag;
@@ -300,7 +300,7 @@ if(!Number.prototype.noExponents)
 		if(str.length<=mag)
 		{
 			mag -= str.length;
-			while(!(mag<=0))
+			while(mag>0)
 			{
 				z += 0;
 				--mag;

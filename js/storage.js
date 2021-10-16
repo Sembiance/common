@@ -19,7 +19,7 @@
 		{
 			r = JSON.parse(v);
 		}
-		catch(err)
+		catch
 		{
 			r = v;
 		}
@@ -44,7 +44,7 @@
 		{
 			localStorage.setItem(k, serialize(v));
 		}
-		catch(err)
+		catch
 		{
 			// We failed to save in localStorage, so fall back to using memory
 			// Let's copy all values out of localStorage and save to mem object so we only have to look at it from this point on
@@ -96,7 +96,7 @@
 		if(storage.get(testKey)!==testVal)
 			useMem = true;
 	}
-	catch(err)
+	catch
 	{
 		useMem = true;
 	}

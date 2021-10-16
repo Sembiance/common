@@ -25,16 +25,14 @@ module.exports =
 				"message"  : "Don't use 'return setImmediate(this)' as setImmediate returns an ID and thus this() is executed twice.)"
 			},
 			{
-				"selector" : "CallExpression[callee.property.name='splice'][arguments.length>=3][arguments.0.value=0][arguments.1.value=0]",
-				"message"  : "Instead of .splice(0, 0, ...) use: .unshift(...)"
-			},
-			{
 				"selector" : "MemberExpression[property.name='then']",
 				"message"  : "Instead of .then() use: util.callbackify"
 			},
+
+			// These rules are ALSO located in shared-browser
 			{
-				"selector" : "CallExpression[callee.property.name='charAt'][arguments.length!=1]",
-				"message"  : ".charAt() should always have exactly 1 argument."
+				"selector" : "CallExpression[callee.property.name='splice'][arguments.length>=3][arguments.0.value=0][arguments.1.value=0]",
+				"message"  : "Instead of .splice(0, 0, ...) use: .unshift(...)"
 			}
 		],
 
@@ -61,6 +59,9 @@ module.exports =
 		// Best Practices
 		"node/no-deprecated-api" : 0,
 
+		// Strict
+		"strict" : [2, "global"],
+
 		// Stylistic Issues
 		"node/callback-return"                 : [2, ["cb", "callback", "subcb"]],
 		"node/exports-style"                   : 0,
@@ -69,7 +70,7 @@ module.exports =
 		"node/no-mixed-requires"               : 0,
 		"node/no-process-env"                  : 0,
 		"node/no-restricted-import"            : 2,
-		"node/no-restricted-require"           : [2, ["mkdirp", "rimraf", "nan", "glob", "accounting", "minimist"]],
+		"node/no-restricted-require"           : [2, ["mkdirp", "rimraf", "nan", "glob", "accounting", "minimist", "commander", "optimist", "yargs", "vorpal", "shelljs", "meow"]],
 		"node/no-sync"                         : 0,
 		"node/prefer-global/buffer"            : 0,
 		"node/prefer-global/console"           : 2,

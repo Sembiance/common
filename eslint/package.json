@@ -1,14 +1,19 @@
 {
 	"dependencies" : {
-		"@typescript-eslint/eslint-plugin"  : "~4.20.0_7448dc1756632cc6400f187319207d38",
+		"@typescript-eslint/eslint-plugin"  : "*",
 		"@typescript-eslint/parser"         : "*",
-		"eslint"                            : "~7.23.0",
+		"eslint"                            : "~7.32.0",
 		"eslint-plugin-array-func"          : "~3.1.7",
 		"eslint-plugin-eslint-comments"     : "~3.2.0",
 		"eslint-plugin-no-constructor-bind" : "~2.0.4",
 		"eslint-plugin-node"                : "~11.1.0",
 		"eslint-plugin-sembiance"           : "link:/mnt/compendium/DevLab/node-modules/eslint-plugin-sembiance",
+		"eslint-plugin-sonarjs"             : "~0.10.0",
 		"eslint-plugin-unicorn"             : "*",
-		"typescript"                        : "~4.2.3"
+		"typescript"                        : "~4.4.3"
+	},
+	"resolutions"  : { "caniuse-lite" : "~1.0.30001260" },
+	"comments"     : {
+		"resolutions" : "The caniuse-lite line will ensure that the latest caniuse-lite version is being used by all sub packages to prevent console spam from: https://github.com/browserslist/browserslist/issues/628"
 	}
 }

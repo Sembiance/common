@@ -40,7 +40,7 @@ b = Number(44);
 rb = "44 seconds";
 assert.strictEqual(b.secondsAsHumanReadable(), rb, TESTNAME);
 
-c = Number(1700355);
+c = Number(1_700_355);
 rc = "19d16h19m15s";
 assert.strictEqual(c.secondsAsHumanReadable({short : true}), rc, TESTNAME);
 rc = "19d16h";
@@ -50,11 +50,11 @@ d = Number(0.5);
 rd = "500ms";
 assert.strictEqual(d.secondsAsHumanReadable({short : true}), rd, TESTNAME);
 
-e = Number(1209601);
+e = Number(1_209_601);
 re = "14d1s";
 assert.strictEqual(e.secondsAsHumanReadable({short : true}), re, TESTNAME);
 
-f = Number(48923789432.25);
+f = Number(48_923_789_432.25);
 rf = "1,550 years, 3 months, 18 days, 18 hours, 32 seconds, 250 milliseconds";
 assert.strictEqual(f.secondsAsHumanReadable(), rf, TESTNAME);
 
