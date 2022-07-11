@@ -46,7 +46,7 @@
 				return;
 
 			this.clickItem(item);
-		}
+		};
 
 		// Expands the tree to the given path. Note, this makes assumptions about the data (bunch of object key/value pairs) specific to retormission. Sigh. Don't want to spend the time to make it more generic right now.
 		expandTo(path)

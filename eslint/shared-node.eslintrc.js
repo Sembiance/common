@@ -4,6 +4,10 @@
 module.exports =
 {
 	"env"     : { "node" : true },
+	"parserOptions" :
+	{
+		"sourceType" : "script"
+	},
 	"plugins" : ["sembiance", "node"],
 	"rules"   :
 	{

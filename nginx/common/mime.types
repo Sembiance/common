@@ -32,6 +32,7 @@ types
 	audio/ogg          oga ogg opus;
 	audio/x-realaudio  ra;
 	audio/x-wav        wav;
+	image/avif         avif;
 	image/x-ms-bmp     bmp;
 	image/gif          gif;
 	image/jpeg         jpeg jpg;
@@ -121,6 +122,7 @@ types
 	application/x-xpinstall              xpi;
 	application/xhtml+xml                xhtml;
 	application/xslt+xml                 xsl;
+    application/wasm                     wasm;
 	application/zip                      zip;
 	text/css                             css;
 	text/csv                             csv;

@@ -261,7 +261,7 @@ if(!String.prototype.encodeURLPath)
 		if(!skipEncodePercent)
 			r = r.replaceAll("%", "%25");
 		
-		r = r.replaceAll("#", "%23").replaceAll("?", "%3f").replaceAll("\\", "%5c").replaceAll("\r", "%0d").replaceAll("\n", "%0a");
+		r = r.replaceAll("#", "%23").replaceAll("?", "%3f").replaceAll("\\", "%5c").replaceAll("\t", "%09").replaceAll("\r", "%0d").replaceAll("\n", "%0a");
 		return r;
 	};
 }
@@ -271,7 +271,7 @@ if(!String.prototype.decodeURLPath)
 {
 	String.prototype.decodeURLPath = function decodeURLPath()
 	{
-		return this.replaceAll("%23", "#").replaceAll("%3f", "?").replaceAll("%5c", "\\").replaceAll("%0d", "\r").replaceAll("%0a", "\n").replaceAll("%20", " ").replaceAll("%25", "%");
+		return this.replaceAll("%23", "#").replaceAll("%3f", "?").replaceAll("%5c", "\\").replaceAll("%09", "\t").replaceAll("%0d", "\r").replaceAll("%0a", "\n").replaceAll("%20", " ").replaceAll("%25", "%");
 	};
 }
 

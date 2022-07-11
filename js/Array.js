@@ -768,7 +768,7 @@ if(!Array.prototype.pushCopyInPlace)
 	{
 		Array.prototype.serialForEach = function serialForEach(fun, cb, _options)
 		{
-			const minInterval = typeof _options==="number" ? _options : ((_options || {}).minInterval || 0);
+			const minInterval = typeof _options==="number" ? _options : ((_options || {}).minInterval || 0);	// eslint-disable-line @typescript-eslint/prefer-optional-chain
 			const tick = typeof _options==="object" ? _options.tick : undefined;
 			(new CBIterator(this, fun, {atOnce : 1, minInterval, tick})).go(cb);
 		};

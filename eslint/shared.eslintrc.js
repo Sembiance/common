@@ -8,7 +8,7 @@ module.exports =
 	"parser"        : "@typescript-eslint/parser",
 	"parserOptions" :
 	{
-		"sourceType"  : "script"
+		"ecmaVersion" : "latest"
 	},
 	// Use this comment to disable a rule in a file:	/* eslint-disable <rule> */
 	// Use this comment to disable a rule for a block:	/* eslint-disable <rule> */   <YOUR BLOCK HERE, MULTIPLE LINES FINE>    /* eslint-enable <rule> */
@@ -18,7 +18,7 @@ module.exports =
 	// 1 == warn
 	// 2 == error
 
-	"plugins" : ["sembiance", "array-func", "unicorn", "@typescript-eslint", "eslint-comments", "no-constructor-bind", "eslint-plugin-sonarjs"],
+	"plugins" : ["sembiance", "array-func", "unicorn", "@typescript-eslint", "eslint-comments", "no-constructor-bind", "eslint-plugin-sonarjs", "no-floating-promise"],
 
 	"rules" :
 	{
@@ -33,10 +33,12 @@ module.exports =
 		"sembiance/this-in-tiptoe-in-class"           : 2,
 		"sembiance/tiptoe-shorter-finish-wrap"        : 2,
 		"sembiance/tiptoe-suffix-code"                : 2,
+		"sembiance/class-property-semicolon"          : 2,
+		"sembiance/await-in-async"                    : 2,
 
 		// typescript-eslint : https://github.com/typescript-eslint/typescript-eslint/tree/master/packages/eslint-plugin
 		// NOTE: Due to the rules being coded in typescript, they are not included in the checkESLint app
-		"@typescript-eslint/prefer-optional-chain"    : 2,
+		"@typescript-eslint/prefer-optional-chain" : 2,
 
 		// array-func : https://github.com/freaktechnik/eslint-plugin-array-func
 		"array-func/from-map"                : 2,
@@ -61,6 +63,9 @@ module.exports =
 		"no-constructor-bind/no-constructor-bind"  : 2,
 		"no-constructor-bind/no-constructor-state" : 2,
 
+		// no-floating-promise : https://github.com/SebastienGllmt/eslint-plugin-no-floating-promise
+		"no-floating-promise/no-floating-promise" : 2,
+
 		// unicorn : https://github.com/sindresorhus/eslint-plugin-unicorn
 		"unicorn/better-regex"                            : [2, {sortCharacterClasses : false}],
 		"unicorn/catch-error-name"                        : [2, {name : "err"}],
@@ -82,8 +87,10 @@ module.exports =
 		"unicorn/no-array-method-this-argument"           : 0,
 		"unicorn/no-array-push-push"                      : 0,
 		"unicorn/no-array-reduce"                         : 0,
+		"unicorn/no-await-expression-member"			  : 0,
 		"unicorn/no-console-spaces"                       : 0,
 		"unicorn/no-document-cookie"                      : 2,
+		"unicorn/no-empty-file"							  : 2,
 		"unicorn/no-for-loop"                             : 0,
 		"unicorn/no-hex-escape"                           : 2,
 		"unicorn/no-instanceof-array"                     : 2,
@@ -97,13 +104,17 @@ module.exports =
 		"unicorn/no-object-as-default-parameter"          : 0,
 		"unicorn/no-process-exit"                         : 0,
 		"unicorn/no-static-only-class"                    : 2,
+		"unicorn/no-thenable"                             : 2,
 		"unicorn/no-this-assignment"                      : 0,
 		"unicorn/no-unreadable-array-destructuring"       : 0,
+		"unicorn/no-unreadable-iife"                      : 2,
 		"unicorn/no-unsafe-regex"                         : 0,
 		"unicorn/no-unused-properties"                    : 2,
 		"unicorn/no-useless-fallback-in-spread"           : 2,
 		"unicorn/no-useless-length-check"                 : 2,
+		"unicorn/no-useless-promise-resolve-reject"       : 2,
 		"unicorn/no-useless-spread"                       : 2,
+		"unicorn/no-useless-switch-case"                  : 2,
 		"unicorn/no-useless-undefined"                    : 0,
 		"unicorn/no-zero-fractions"                       : 0,
 		"unicorn/number-literal-case"                     : 2,
@@ -115,22 +126,26 @@ module.exports =
 		"unicorn/prefer-array-index-of"                   : 2,
 		"unicorn/prefer-array-some"                       : 2,
 		"unicorn/prefer-at"                               : 2,
+		"unicorn/prefer-code-point"                       : 0,
 		"unicorn/prefer-date-now"                         : 2,
 		"unicorn/prefer-default-parameters"               : 2,
 		"unicorn/prefer-dom-node-append"                  : 2,
 		"unicorn/prefer-dom-node-dataset"                 : 0, // Only handles setAttribute. My version sembiance/prefer-dataset handles both get and set and remove
 		"unicorn/prefer-dom-node-remove"                  : 2,
 		"unicorn/prefer-dom-node-text-content"            : 2,
+		"unicorn/prefer-export-from"                      : 2,
 		"unicorn/prefer-includes"                         : 2,
+		"unicorn/prefer-json-parse-buffer"                : 2,
 		"unicorn/prefer-keyboard-event-key"               : 2,
 		"unicorn/prefer-math-trunc"                       : 2,
 		"unicorn/prefer-modern-dom-apis"                  : 2,
+		"unicorn/prefer-modern-math-apis"                 : 2,
 		"unicorn/prefer-module"                           : 0,
+		"unicorn/prefer-native-coercion-functions"        : 2,
 		"unicorn/prefer-negative-index"                   : 2,
 		"unicorn/prefer-node-protocol"                    : 2,
 		"unicorn/prefer-number-properties"                : 0,
 		"unicorn/prefer-object-from-entries"              : 2,
-		"unicorn/prefer-object-has-own"                   : 2,
 		"unicorn/prefer-optional-catch-binding"           : 0,
 		"unicorn/prefer-prototype-methods"                : 2,
 		"unicorn/prefer-query-selector"                   : 2,
@@ -147,10 +162,13 @@ module.exports =
 		"unicorn/prefer-top-level-await"                  : 2, // No idea if I really want this set or not, since I don't use await yet and not sure how it functions
 		"unicorn/prefer-type-error"                       : 2,
 		"unicorn/prevent-abbreviations"                   : 0,
+		"unicorn/relative-url-style"                      : 2,
 		"unicorn/require-array-join-separator"            : 2,
 		"unicorn/require-number-to-fixed-digits-argument" : 2,
-		"unicorn/require-post-message-target-origin"      : 2,
+		"unicorn/require-post-message-target-origin"      : 0,
 		"unicorn/string-content"                          : 0,
+		"unicorn/template-indent"                         : 0,
+		"unicorn/text-encoding-identifier-case"           : 0,
 		"unicorn/throw-new-error"                         : 2,
 
 		// eslint-plugin-sonarjs : https://github.com/SonarSource/eslint-plugin-sonarjs
@@ -187,7 +205,7 @@ module.exports =
 		"sonarjs/no-useless-catch"             : 2,
 		"sonarjs/prefer-immediate-return"      : 2,
 		"sonarjs/prefer-object-literal"        : 0,
-		"sonarjs/prefer-single-boolean-return" : 2,
+		"sonarjs/prefer-single-boolean-return" : 0,
 		"sonarjs/prefer-while"                 : 2,
 
 		// New
@@ -198,9 +216,11 @@ module.exports =
 		"for-direction"                 : 2,
 		"getter-return"                 : 0,
 		"no-async-promise-executor"     : 2,
-		"no-await-in-loop"              : 2,
+		"no-await-in-loop"              : 0,
 		"no-compare-neg-zero"           : 2,
 		"no-cond-assign"                : [2, "always"],
+		"no-const-assign"               : 2,
+		"no-constant-binary-expression" : 2,
 		"no-console"                    : 0,
 		"no-constant-condition"         : [2, {"checkLoops" : false}],
 		"no-control-regex"              : 2,
@@ -236,7 +256,7 @@ module.exports =
 		"no-unsafe-negation"            : 2,
 		"no-unsafe-optional-chaining"   : 2,
 		"no-useless-backreference"      : 2,
-		"require-atomic-updates"        : 2,
+		"require-atomic-updates"        : 0,	// Lots of false positives
 		"use-isnan"                     : 2,
 		"valid-typeof"                  : 2,
 
@@ -326,17 +346,18 @@ module.exports =
 		// "strict" : // Handled in parents "node", "browser"
 
 		// Variables
-		"init-declarations"          : [2, "always"],
-		"no-delete-var"              : 2,
-		"no-label-var"               : 2,
-		"no-restricted-globals"      : 0,
-		"no-shadow"                  : 2,
-		"no-shadow-restricted-names" : 2,
-		"no-undef"                   : [2, {"typeof" : true}],
-		"no-undef-init"              : 0,
-		"no-undefined"               : 0,
-		"no-unused-vars"             : [2, {"caughtErrors" : "all", "argsIgnorePattern" : "^[iI]gnored$|^e$", "varsIgnorePattern" : "^XU|xu$" }],
-		"no-use-before-define"       : [2, {"functions" : false}],
+		"init-declarations"               : [2, "always"],
+		"no-delete-var"                   : 2,
+		"no-label-var"                    : 2,
+		"no-restricted-globals"           : 0,
+		"no-shadow"                       : 2,
+		"no-shadow-restricted-names"      : 2,
+		"no-undef"                        : [2, {"typeof" : true}],
+		"no-undef-init"                   : 0,
+		"no-undefined"                    : 0,
+		"no-unused-private-class-members" : 2,
+		"no-unused-vars"                  : [2, {"caughtErrors" : "all", "argsIgnorePattern" : "^[iI]gnored$|^e$", "varsIgnorePattern" : "^XU|xu$" }],
+		"no-use-before-define"            : [2, {"functions" : false}],
 
 		// Node.js and CommonJS : Handled in parents "node", "browser"
 
@@ -370,7 +391,7 @@ module.exports =
 		"line-comment-position"            : 0,
 		"linebreak-style"                  : [2, "unix"],
 		"lines-around-comment"             : 0,
-		"lines-between-class-members"      : [2, "always", {"exceptAfterSingleLine" : true}],
+		"lines-between-class-members"      : [0],
 		"max-depth"                        : [2, 7],
 		"max-len"                          : [2, 271, {"ignoreComments" : true}],
 		"max-lines"                        : 0,
@@ -441,7 +462,6 @@ module.exports =
 		"generator-star-spacing"  : 0,
 		"no-class-assign"         : 2,
 		"no-confusing-arrow"      : [2, {"allowParens" : true}],
-		"no-const-assign"         : 2,
 		"no-dupe-class-members"   : 2,
 		"no-duplicate-imports"    : 2,
 		"no-new-symbol"           : 2,
@@ -457,6 +477,7 @@ module.exports =
 		"prefer-const"            : 2,
 		"prefer-destructuring"    : 0,	// We have our own prefer-object-destructuring which behaves more how I want it to
 		"prefer-numeric-literals" : 2,
+		"prefer-object-has-own"   : 2,
 		"prefer-rest-params"      : 2,
 		"prefer-spread"           : 2,
 		"prefer-template"         : 2,

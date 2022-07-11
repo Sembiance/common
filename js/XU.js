@@ -162,6 +162,7 @@
 			cyan    : cc("\x1b[46m"),
 			white   : cc("\x1b[47m"),
 			peach   : cc("\x1b[48;5;203m"),
+			pink    : cc("\x1b[48;5;205m"),
 			orange  : cc("\x1b[48;5;208m"),
 			violet  : cc("\x1b[48;5;93m")
 		},
@@ -176,6 +177,7 @@
 			cyan    : cc("\x1b[96m"),
 			white   : cc("\x1b[97m"),
 			peach   : cc("\x1b[38;5;203m"),
+			pink    : cc("\x1b[38;5;205m"),
 			orange  : cc("\x1b[38;5;208m"),
 			violet  : cc("\x1b[38;5;93m")
 		}

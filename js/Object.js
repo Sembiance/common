@@ -131,6 +131,15 @@ if(!Object.forEach)
 	};
 }
 
+// Allows you to iterate over entries in an object calling cb with arguments: key, value, i  Is friendly than Object.entries().forEach()
+if(!Object.hasOwn)
+{
+	Object.hasOwn = function hasOwn(o, k)
+	{
+		return o.hasOwnProperty(k);
+	};
+}
+
 // Filters out keys from an object by calling cb(key, value, i) and deleting entries when that cb() returns a falsy value. Modifies the object directly.
 if(!Object.filterInPlace)
 {

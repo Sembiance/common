@@ -4,6 +4,10 @@
 module.exports =
 {
 	"env"   : { "browser" : true },
+	"parserOptions" :
+	{
+		"sourceType" : "script"
+	},
 	"rules" :
 	{
 		// Plugins
