@@ -276,6 +276,7 @@ module.exports =
 		"eqeqeq"                       : [2, "always"],
 		"grouped-accessor-pairs"       : 2,
 		"guard-for-in"                 : 2,
+		"logical-assignment-operators" : [2, "always", {"enforceForIfStatements" : true}],
 		"max-classes-per-file"         : 0,
 		"no-alert"                     : 2,
 		"no-caller"                    : 2,

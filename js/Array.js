@@ -1,6 +1,6 @@
 "use strict";
 /* eslint-env browser */
-/* eslint-disable node/callback-return */
+/* eslint-disable logical-assignment-operators, node/callback-return */
 
 ////////////////////
 //// Polyfills /////

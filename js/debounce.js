@@ -1,5 +1,6 @@
 "use strict";
 // COPIED AND MODIFIED FROM: https://github.com/component/debounce/blob/master/index.js
+/* eslint-disable logical-assignment-operators */
 
 (function _debounce(exports)
 {

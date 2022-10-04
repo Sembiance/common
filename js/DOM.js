@@ -1,5 +1,6 @@
 "use strict";
 /*global TextRectangle: true*/
+/* eslint-disable logical-assignment-operators */
 
 // Adds several helper methods to the built in DOM elements
 if(typeof Element!=="undefined")
