@@ -24,6 +24,11 @@ module.exports =
 				"selector" : "CallExpression[callee.object.name='Deno'][callee.property.name='readTextFile']",
 				"message"  : "Instead of Deno.readTextFile() use fileUtil.readTextFile()"
 			},
+			{
+				"selector" : "CallExpression[callee.object.name='Deno'][callee.property.name='writeTextFile']",	// We also weap writeTextFile just so there isn't confusion as to which one we use and which one we don't Deno vs fileUtil
+				"message"  : "Instead of Deno.writeTextFile() use fileUtil.writeTextFile()"
+			},
+
 
 			// Coding style, prefer certain functions over others
 			{

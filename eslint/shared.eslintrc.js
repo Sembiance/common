@@ -408,6 +408,7 @@ module.exports =
 		"no-array-constructor"             : 2,
 		"no-bitwise"                       : 2,
 		"no-continue"                      : 0,
+		"no-empty-static-block"            : 2,
 		"no-inline-comments"               : 0,
 		"no-lonely-if"                     : 0,	// Handled better by unicorn/no-lonely-if
 		"no-mixed-operators"               : 2,
@@ -416,6 +417,7 @@ module.exports =
 		"no-multiple-empty-lines"          : 2,
 		"no-negated-condition"             : 0,
 		"no-nested-ternary"                : 0,
+		"no-new-native-nonconstructor"     : 2,
 		"no-new-object"                    : 2,
 		"no-plusplus"                      : 0,
 		//"no-restricted-syntax"             : Handled in parents "node", "browser"
