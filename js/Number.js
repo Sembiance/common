@@ -104,6 +104,14 @@ if(!Number.prototype.secondsAsHumanReadable)
 	};
 }
 
+if(!Number.prototype.msAsHumanReadable)
+{
+	Number.prototype.msAsHumanReadable = function msAsHumanReadable(options)
+	{
+		return Number(this/1000).secondsAsHumanReadable(options);
+	};
+}
+
 // Returns an array of bits that represent the given number
 if(!Number.prototype.getBits)
 {
