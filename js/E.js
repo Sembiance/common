@@ -9,7 +9,7 @@
 	{
 		dispatch : function dispatch(name, data)
 		{
-			return window.dispatchEvent(new CustomEvent(name, typeof data!=="undefined" ? {detail : data} : undefined));
+			return window.dispatchEvent(new CustomEvent(name, data!==undefined ? {detail : data} : undefined));
 		},
 
 		listen : function listen(name, cb)

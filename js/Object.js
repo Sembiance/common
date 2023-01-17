@@ -245,7 +245,7 @@ if(!Object.reduce)
 		if(!cb)
 			return;
 
-		let result = ((typeof startResult!=="undefined") ? startResult : undefined);
+		let result = ((startResult!==undefined) ? startResult : undefined);
 
 		Object.keys(o).forEach(key => { result = cb(key, o[key], result); });
 
@@ -261,11 +261,11 @@ if(!Object.reduceOnce)
 		if(!cb)
 			return;
 
-		let result = ((typeof startResult!=="undefined") ? startResult : undefined);
+		let result = ((startResult!==undefined) ? startResult : undefined);
 
 		Object.keys(o).forEach(key =>
 		{
-			if(typeof result!=="undefined")
+			if(result!==undefined)
 				return;
 			
 			result = cb(key, o[key], result);

@@ -58,7 +58,7 @@ if(!Number.prototype.toClock)
 			secondsElapsed %= 60;
 			secondsElapsed = parseInt(secondsElapsed, 10);
 		}
-		else if(typeof omitMinutes==="undefined" || !omitMinutes)
+		else if(omitMinutes===undefined || !omitMinutes)
 		{
 			clockText += "00:";
 		}

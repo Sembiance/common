@@ -42,7 +42,7 @@
 		clickHandler = e =>
 		{
 			const item = e.target.getAncestor(node => node?.classList.includes("item"));
-			if(!item || !item.classList.includes("clickable"))
+			if(!item?.classList?.includes("clickable"))
 				return;
 
 			this.clickItem(item);

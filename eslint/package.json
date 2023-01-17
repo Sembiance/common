@@ -1,23 +1,21 @@
 {
-	"dependencies": {
-		"@sembiance/xu": "link:/mnt/compendium/DevLab/node-modules/xu",
-		"@typescript-eslint/eslint-plugin": "~5.17.0",
-		"@typescript-eslint/parser": "~5.17.0",
-		"eslint": "~8.12.0",
-		"eslint-plugin-array-func": "~3.1.7",
-		"eslint-plugin-eslint-comments": "~3.2.0",
-		"eslint-plugin-no-constructor-bind": "~2.0.4",
-		"eslint-plugin-no-floating-promise": "~1.0.2",
-		"eslint-plugin-node": "~11.1.0",
-		"eslint-plugin-sembiance": "link:/mnt/compendium/DevLab/node-modules/eslint-plugin-sembiance",
-		"eslint-plugin-sonarjs": "~0.13.0",
-		"eslint-plugin-unicorn": "~42.0.0",
-		"typescript": "~4.6.4"
+	"dependencies" : {
+		"@sembiance/xu"                     : "link:/mnt/compendium/DevLab/node-modules/xu",
+		"@typescript-eslint/eslint-plugin"  : "*",
+		"@typescript-eslint/parser"         : "*",
+		"eslint"                            : "~8.29.0",
+		"eslint-plugin-array-func"          : "~3.1.7",
+		"eslint-plugin-eslint-comments"     : "~3.2.0",
+		"eslint-plugin-no-constructor-bind" : "~2.0.4",
+		"eslint-plugin-no-floating-promise" : "~1.0.2",
+		"eslint-plugin-node"                : "~11.1.0",
+		"eslint-plugin-sembiance"           : "link:/mnt/compendium/DevLab/node-modules/eslint-plugin-sembiance",
+		"eslint-plugin-sonarjs"             : "*",
+		"eslint-plugin-unicorn"             : "*",
+		"typescript"                        : "~4.9.4"
 	},
-	"resolutions": {
-		"caniuse-lite": "~1.0.30001260"
-	},
-	"comments": {
-		"resolutions": "The caniuse-lite line will ensure that the latest caniuse-lite version is being used by all sub packages to prevent console spam from: https://github.com/browserslist/browserslist/issues/628"
+	"resolutions"  : { "caniuse-lite" : "~1.0.30001260" },
+	"comments"     : {
+		"resolutions" : "The caniuse-lite line will ensure that the latest caniuse-lite version is being used by all sub packages to prevent console spam from: https://github.com/browserslist/browserslist/issues/628"
 	}
 }

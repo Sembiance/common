@@ -126,7 +126,7 @@ types
 	application/zip                      zip;
 	text/css                             css;
 	text/csv                             csv;
-	text/html                            htm html shtml;
+	text/html                            htm html shtml phtml hts;
 	text/markdown                        md;
 	text/mathml                          mml;
 	text/plain                           txt;

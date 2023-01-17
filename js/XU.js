@@ -6,7 +6,7 @@
 {
 	const XU = exports;
 
-	exports.IS_NODE = typeof process!=="undefined" && typeof process.versions!=="undefined" && typeof process.versions.node!=="undefined";
+	exports.IS_NODE = typeof process!=="undefined" && process.versions!==undefined && process.versions.node!==undefined;
 	if(XU.IS_NODE)
 	{
 		require("./Math.js");
@@ -280,4 +280,4 @@
 			return defaultValue;
 		}
 	};
-})(typeof window!=="undefined" ? (window.XU ? window.XU : window.XU={}) : exports);
+})(typeof window!=="undefined" ? (window.XU ? window.XU : window.XU={}) : exports);	// eslint-disable-line unicorn/prefer-logical-operator-over-ternary
