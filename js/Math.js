@@ -15,7 +15,7 @@ if(!Math.trunc)
 {
 	Math.trunc = function trunc(x)
 	{
-		x = +x;	// eslint-disable-line no-param-reassign
+		x = +x;
 		return (x-(x%1)) || (!isFinite(x) || x===0 ? x : (x<0 ? -0 : 0));
 	};
 }

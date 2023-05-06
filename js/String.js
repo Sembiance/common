@@ -33,7 +33,7 @@ if(!String.prototype.endsWith)
 	String.prototype.endsWith = function endsWith(searchString, thisLength)
 	{
 		if(thisLength===undefined || thisLength>this.length)
-			thisLength = this.length;	// eslint-disable-line no-param-reassign
+			thisLength = this.length;
 
 		return this.substring(thisLength-searchString.length, thisLength)===searchString;
 	};

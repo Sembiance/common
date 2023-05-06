@@ -1,18 +1,18 @@
 {
 	"dependencies" : {
-		"@sembiance/xu"                     : "link:/mnt/compendium/DevLab/node-modules/xu",
+		"@sembiance/xu"                     : "file:/mnt/compendium/DevLab/node-modules/xu",
 		"@typescript-eslint/eslint-plugin"  : "*",
 		"@typescript-eslint/parser"         : "*",
-		"eslint"                            : "~8.29.0",
-		"eslint-plugin-array-func"          : "~3.1.7",
-		"eslint-plugin-eslint-comments"     : "~3.2.0",
-		"eslint-plugin-no-constructor-bind" : "~2.0.4",
-		"eslint-plugin-no-floating-promise" : "~1.0.2",
-		"eslint-plugin-node"                : "~11.1.0",
-		"eslint-plugin-sembiance"           : "link:/mnt/compendium/DevLab/node-modules/eslint-plugin-sembiance",
+		"eslint"                            : "*",
+		"eslint-plugin-array-func"          : "*",
+		"eslint-plugin-eslint-comments"     : "*",
+		"eslint-plugin-no-constructor-bind" : "*",
+		"eslint-plugin-no-floating-promise" : "*",
+		"eslint-plugin-node"                : "*",
+		"eslint-plugin-sembiance"           : "file:/mnt/compendium/DevLab/node-modules/eslint-plugin-sembiance",
 		"eslint-plugin-sonarjs"             : "*",
 		"eslint-plugin-unicorn"             : "*",
-		"typescript"                        : "~4.9.4"
+		"typescript"                        : "*"
 	},
 	"resolutions"  : { "caniuse-lite" : "~1.0.30001260" },
 	"comments"     : {
