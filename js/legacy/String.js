@@ -1,147 +1,84 @@
 "use strict";
+/* eslint-disable logical-assignment-operators */
 
-if(!String.prototype.reverse)
+////////////////////
+//// Polyfills /////
+////////////////////
+
+//------------//
+//// ES2015 ////
+//------------//
+
+// Returns true if the string includes the passed in match substring
+if(!String.prototype.includes)
 {
-	String.prototype.reverse = function()
+	String.prototype.includes = function includes(match)
 	{
-		var i = this.length;
-		var result = "";
-
-		while(i>0)
-		{
-			result += this.charAt(i-1);
-			i--;
-		}
-
-		return result;
+		return this.indexOf(match)!==-1;	// eslint-disable-line unicorn/prefer-includes
 	};
 }
 
+// Returns true if the string starts with the given match
 if(!String.prototype.startsWith)
 {
-	String.prototype.startsWith = function(match)
+	String.prototype.startsWith = function startsWith(searchString, position)
 	{
-		return this.indexOf(match)===0;
+		return (position ? this.substring(position) : this).indexOf(searchString)===0;
 	};
 }
 
+// Returns true if the string ends with the given match
 if(!String.prototype.endsWith)
 {
-	String.prototype.endsWith = function(match)
+	String.prototype.endsWith = function endsWith(searchString, thisLength)
 	{
-		return this.reverse().startsWith(match.reverse());
+		if(thisLength===undefined || thisLength>this.length)
+			thisLength = this.length;
+
+		return this.substring(thisLength-searchString.length, thisLength)===searchString;
 	};
 }
 
-if(!String.prototype.contains)
+// Repeats a given string count times.
+// I always over-ride the ES2015 version because I added a seperator argument
+String.prototype.repeat = function repeat(count, seperator)
 {
-	String.prototype.contains = function(match)
-	{
-		return this.indexOf(match)!==-1;
-	};
-}
-
-// Always over-rides the existing trim() with my version
-String.prototype.trim = function(chars)
-{
-	if(!chars)
-		chars = "\\s\\u200B";
-
-	if(Array.isArray(chars))
-		chars = chars.join("");
-
-	return this.replace(new RegExp("^[" + chars + "]+|[" + chars + "]+$", "g"), "");
-};
-
-if(!String.prototype.replaceAll)
-{
-	String.prototype.replaceAll = function(match, replaceWith)
-	{
-		return this.replace(new RegExp(match, "g"), replaceWith);
-	};
-}
-
-if(!String.prototype.strip)
-{
-	String.prototype.strip = function()
-	{
-		var chars = Array.isArray(arguments[0]) ? arguments[0].join() : Array.prototype.slice.call(arguments).join();
-		return this.replace(new RegExp("[" + chars + "]", "g"), "");
-	};
-}
-
-if(!String.prototype.innerTrim)
-{
-	String.prototype.innerTrim = function()
-	{
-		var text = this;
-		var re = new RegExp(/\s\s/g);
-		while(text.search(re)!==-1)
-		{
-			text = text.replace(re, " ");
-		}
-
-		return text;
-	};
-}
-
-if(!String.prototype.capitalize)
-{
-	String.prototype.capitalize = function ()
-	{
-		return this.charAt(0).toUpperCase() + this.substr(1);
-	};
-}
-
-if(!String.prototype.toProperCase)
-{
-	String.prototype.toProperCase = function()
-	{
-		return this.replace(/\w\S*/g, function(txt)
-		{
-			return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
-		});
-	};
-}
-
-if(!String.prototype.toArray)
-{
-	String.prototype.toArray = function()
-	{
-		return this.split("");
-	};
-}
-
-String.prototype.repeat = function(count, seperator)
-{
-	var result = "";
-	for(var i=0;i<count;i++)
+	let result = "";
+	for(let i=0;i<count;i++)
 	{
 		if(i>0 && seperator)
 			result += seperator;
 		
-		result += this;
+		result += this;	// eslint-disable-line consistent-this
 	}
 
 	return result;
 };
 
-if(!String.prototype.repeatAsArray)
+// Returns the last index location of the given substring txt
+if(!String.prototype.lastIndexOf)
 {
-	String.prototype.repeatAsArray = function(count)
+	String.prototype.lastIndexOf = function lastIndexOf(txt)
 	{
-		var result = [];
-		result.pushMany(""+this, count);	// The ""+ is needed for IE9, it oddly passes 'object' rather than a string.
-		return result;
+		const loc = this.reverse().indexOf(txt);
+		if(loc===-1)
+			return -1;
+
+		return this.length-loc;
 	};
 }
 
+//------------//
+//// ES2017 ////
+//------------//
+
+// Pads the start of the given string to targetLength with the given padString
 if(!String.prototype.padStart)
 {
-	String.prototype.padStart = function padStart(targetLength, padString)
+	String.prototype.padStart = function padStart(_targetLength, _padString)
 	{
-		targetLength = targetLength>>0; //floor if number or convert non-number to 0;
-		padString = String(padString || " ");
+		let targetLength = _targetLength >> 0; // eslint-disable-line no-bitwise, unicorn/prefer-math-trunc
+		let padString = String(_padString || " ");
 		if(this.length>targetLength)
 			return String(this);
 		
@@ -153,12 +90,13 @@ if(!String.prototype.padStart)
 	};
 }
 
+// Pads the end of the given string to targetLength with the given padString
 if(!String.prototype.padEnd)
 {
-	String.prototype.padEnd = function padEnd(targetLength, padString)
+	String.prototype.padEnd = function padEnd(_targetLength, _padString)
 	{
-		targetLength = targetLength>>0; //floor if number or convert non-number to 0;
-		padString = String(padString || " ");
+		let targetLength = _targetLength >> 0; // eslint-disable-line no-bitwise, unicorn/prefer-math-trunc
+		let padString = String(_padString || " ");
 		if(this.length>targetLength)
 			return String(this);
 	
@@ -170,54 +108,179 @@ if(!String.prototype.padEnd)
 	};
 }
 
-if(!String.prototype.replaceCharAt)
+////////////////
+//// Custom ////
+////////////////
+
+// Returns true if this is a number
+if(!String.prototype.isNumber)
 {
-	String.prototype.replaceCharAt = function(index, c)
+	String.prototype.isNumber = function isNumber()
 	{
-		return this.substring(0, index) + c + this.substring(index+1);
+		const n = parseFloat(this);
+		return !isNaN(n) && isFinite(n);
 	};
 }
 
-if(!String.prototype.shorten)
+// Reverses a string, character by character
+if(!String.prototype.reverse)
 {
-	String.prototype.shorten = function(c)
+	String.prototype.reverse = function reverse()
 	{
-		return this.substring(0, this.length-c);
-	};
-}
+		let i = this.length;
+		let result = "";
 
-if(!String.prototype.isWhiteSpace)
-{
-	String.prototype.isWhiteSpace = function()
-	{
-		for(var i=0;i<this.length;i++)
+		while(i>0)
 		{
-			if(this.charAt(i)==='\t')
-				continue;
-			if(this.charAt(i)==='\n')
-				continue;
-			if(this.charAt(i)==='\r')
-				continue;
-			if(this.charAt(i)===' ')
-				continue;
-			if(this.charCodeAt(i)===160)	// nbsp
-				continue;
-			
-			return false;
+			result += this.charAt(i-1);
+			i--;
 		}
-		
-		return true;
+
+		return result;
 	};
 }
 
-if(!String.prototype.lastIndexOf)
+// Replace all occurencs of match with replaceWith - Currently is a TC39 draft proposal: https://github.com/tc39/proposal-string-replaceall
+if(!String.prototype.replaceAll)
 {
-	String.prototype.lastIndexOf = function(txt)
+	String.prototype.replaceAll = function replaceAll(match, replaceWith)
 	{
-		var loc = this.reverse().indexOf(txt);
-		if(loc===-1)
-			return -1;
+		return this.split(match).join(replaceWith);
+	};
+}
 
-		return this.length-loc;
+// Replaces any extra whitespace from within the middle of a string
+if(!String.prototype.innerTrim)
+{
+	String.prototype.innerTrim = function innerTrim()
+	{
+		let text = this;	// eslint-disable-line consistent-this
+		const re = new RegExp(/\s\s/g);
+		while(text.search(re)!==-1)
+			text = text.replace(re, " ");
+
+		return text;
+	};
+}
+
+// Capitalizes the first letter of the string
+if(!String.prototype.capitalize)
+{
+	String.prototype.capitalize = function capitalize()
+	{
+		return this.charAt(0).toUpperCase() + this.substr(1);
+	};
+}
+
+// Reverses a string
+if(!String.prototype.reverse)
+{
+	String.prototype.reverse = function reverse()
+	{
+		return this.split("").reverse().join("");
+	};
+}
+
+// Truncates the inner part of a string to maxLen
+if(!String.prototype.innerTruncate)
+{
+	String.prototype.innerTruncate = function innerTruncate(_maxLen)
+	{
+		if(this.length<=_maxLen)
+			return this;
+		
+		const maxLen = _maxLen-1;
+		const trimSideLength = Math.floor((this.length-maxLen)/2);
+		const midPoint = Math.floor(this.length/2);
+		return `${this.substring(0, midPoint-trimSideLength)}…${this.substring(midPoint+(trimSideLength+((this.length-(trimSideLength*2))-maxLen)))}`;
+	};
+}
+
+// Converts a string to proper case, capitilizing the first letter of each word and lowercasing the rest of the word
+if(!String.prototype.toProperCase)
+{
+	String.prototype.toProperCase = function toProperCase()
+	{
+		return this.replace(/\w\S*/g, txt => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase());
+	};
+}
+
+// Converts a string to camel case
+if(!String.prototype.toCamelCase)
+{
+	String.prototype.toCamelCase = function toCamelCase()
+	{
+		return this.replace(/(?:^\w|[A-Z]|\b\w)/g, (word, index) => (index === 0 ? word.toLowerCase() : word.toUpperCase())).replace(/\s+/g, "");	// eslint-disable-line unicorn/better-regex
+	};
+}
+
+// Strips out the given chars from the string
+if(!String.prototype.strip)
+{
+	String.prototype.strip = function strip(_chars)
+	{
+		const chars = Array.isArray(_chars) ? _chars.join(",") : Array.prototype.slice.call(arguments).join(",");	// eslint-disable-line prefer-rest-params
+		return this.replace(new RegExp(`[${chars}]`, "g"), "");
+	};
+}
+
+// Trim specific characters from the front and end of string
+if(!String.prototype.trimChars)
+{
+	String.prototype.trimChars = function trimChars(_chars)
+	{
+		if(!_chars)
+			return this.trim();
+
+		const chars = Array.isArray(_chars) ? _chars.join("") : _chars;
+		return this.replace(new RegExp(`^[${chars}]+|[${chars}]+$`, "g"), "");
+	};
+}
+
+// Escape the string for HTML/XML and other markup language documents
+if(!String.prototype.escapeXML)
+{
+	String.prototype.escapeXML = function escapeXML()
+	{
+		return this.
+			replaceAll("&", "&amp;").
+			replaceAll("<", "&lt;").
+			replaceAll(">", "&gt;").
+			replaceAll('"', "&quot;").
+			replaceAll("'", "&#039;");
+	};
+}
+
+String.prototype.escapeHTML = String.prototype.escapeXML;
+
+// Encode a URL path segment, replacing things like # and ? and % with the proper hex escaping
+if(!String.prototype.encodeURLPath)
+{
+	String.prototype.encodeURLPath = function encodeURLPath({skipEncodePercent}={})
+	{
+		let r = this;		// eslint-disable-line consistent-this
+		if(!skipEncodePercent)
+			r = r.replaceAll("%", "%25");
+		
+		r = r.replaceAll("#", "%23").replaceAll("?", "%3f").replaceAll("\\", "%5c").replaceAll("\t", "%09").replaceAll("\r", "%0d").replaceAll("\n", "%0a");
+		return r;
+	};
+}
+
+// Reverses a string that was encoded with encodeURLPath
+if(!String.prototype.decodeURLPath)
+{
+	String.prototype.decodeURLPath = function decodeURLPath()
+	{
+		return this.replaceAll("%23", "#").replaceAll("%3f", "?").replaceAll("%5c", "\\").replaceAll("%09", "\t").replaceAll("%0d", "\r").replaceAll("%0a", "\n").replaceAll("%20", " ").replaceAll("%25", "%");
+	};
+}
+
+// Escape the string for inclusion in regex
+if(!String.prototype.escapeRegex)
+{
+	String.prototype.escapeRegex = function escapeRegex()
+	{
+		return this.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');	// eslint-disable-line unicorn/better-regex, no-useless-escape, @stylistic/quotes
 	};
 }
