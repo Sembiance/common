@@ -3,7 +3,7 @@ module.exports =
 {
     "parserOptions" :
     {
-        "sourceType" : "script"
+        "sourceType" : "module"
     },
 	"extends" : ["/mnt/compendium/DevLab/common/eslint/shared.eslintrc.js", "/mnt/compendium/DevLab/common/eslint/shared-browser.eslintrc.js"]
 };

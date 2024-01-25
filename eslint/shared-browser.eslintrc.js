@@ -4,10 +4,6 @@
 module.exports =
 {
 	"env"   : { "browser" : true },
-	"parserOptions" :
-	{
-		"sourceType" : "script"
-	},
 	"rules" :
 	{
 		// Plugins
@@ -15,6 +11,7 @@ module.exports =
 
 		// Best Practices (core)
 		"no-implicit-globals" : 2,
+		"no-alert"            : 2,
 
 		// Stylistic Issues (core)
 		// Interactive AST explorer, VERY useful: https://astexplorer.net/
