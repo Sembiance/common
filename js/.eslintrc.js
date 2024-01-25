@@ -1,1 +1,1 @@
-/mnt/compendium/DevLab/common/eslint/both.eslintrc.js
+/mnt/compendium/DevLab/common/eslint/browser-module.eslintrc.js

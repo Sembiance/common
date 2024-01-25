@@ -1,4 +1,7 @@
+"use strict";
 /*global TextRectangle: true*/
+/* eslint-disable logical-assignment-operators */
+
 // Adds several helper methods to the built in DOM elements
 if(typeof Element!=="undefined")
 {
@@ -24,6 +27,28 @@ if(typeof Element!=="undefined")
 		return [r.width, r.height];
 	};
 
+	// Polyfill for NODE.remove()
+	if(!Element.prototype.remove)
+	{
+		Element.prototype.remove = function remove()
+		{
+			if(this.parentNode!==null)
+				this.parentNode.removeChild(this);	// eslint-disable-line unicorn/prefer-dom-node-remove
+		};
+	}
+
+	// Polyfill for NODE.before()
+	if(!Element.prototype.before)
+	{
+		Element.prototype.before = function before(...args)
+		{
+			if(this.parentNode===null)
+				return;
+				
+			args.forEach(arg => this.parentNode.insertBefore((typeof arg==="string" ? document.createTextNode(arg) : arg), this));
+		};
+	}
+
 	Element.prototype.setText = function setText(text)
 	{
 		if(!this.childNodes || this.childNodes.length!==1)
@@ -37,6 +62,15 @@ if(typeof Element!=="undefined")
 
 		return this;
 	};
+
+	// PolyFill for NODE.append()
+	if(!Element.prototype.append)
+	{
+		Element.prototype.append = function append(...args)
+		{
+			args.forEach(arg => this.appendChild((typeof arg==="string" ? document.createTextNode(arg) : arg)));	// eslint-disable-line unicorn/prefer-dom-node-append
+		};
+	}
 
 	// Returns the first prev sibling that the passed in function returns true to upon receiving it passed in
 	Element.prototype.getPreviousSibling = function getPreviousSibling(f)
