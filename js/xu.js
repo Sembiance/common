@@ -279,16 +279,15 @@ xu.dirname = function dirname(meta)
 	return path.resolve((new URL(".", meta.url)).pathname);
 };
 
-/** returns a random ASCII name in the format PID_RANDOM INT_COUNTER INCR where each number is represented as base-36 ASCII A-Za-z0-9 */
-const MAX_COUNTER = 46655;
+/** returns a random ASCII name in the format PID_RANDOM INT_COUNTER INCR where each number is represented as base-36 ASCII a-z0-9 */
 let TMP_COUNTER = 0;
 xu.randStr = function randStr()
 {
-	if(TMP_COUNTER>=MAX_COUNTER)
+	if(TMP_COUNTER>=1295)
 		TMP_COUNTER = 0;
 
-	const randPrefix = xu.tryFallback(() => Deno.pid.toString(36), Math.randomInt(0, 32767));
-	return `${randPrefix}${Math.randomInt(0, MAX_COUNTER).toString(36)}${(TMP_COUNTER++).toString(36)}`;
+	const randPrefix = xu.tryFallback(() => Deno.pid.toString(36), Math.randomInt(0, 46655));
+	return `${randPrefix}${Math.randomInt(0, 1295).toString(36)}${(TMP_COUNTER++).toString(36)}`;
 };
 
 export { xu, fg };

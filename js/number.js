@@ -7,8 +7,8 @@ Number.prototype.bytesToSize ||= function bytesToSize(precision)
 	if(bytes===0)
 		return "0 bytes";
 	
-	const i = +(Math.floor(Math.log(bytes) / Math.log(1000)));
-	const num = bytes / (1000 ** i);
+	const i = +(Math.floor(Math.log(bytes) / Math.log(1024)));
+	const num = bytes / (1024 ** i);
 	return (precision ? num.toFixed(precision) : Math.round(num)) + ["b", "KB", "MB", "GB", "TB"][i];
 };
 
