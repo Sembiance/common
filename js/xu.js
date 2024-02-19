@@ -283,11 +283,11 @@ xu.dirname = function dirname(meta)
 let TMP_COUNTER = 0;
 xu.randStr = function randStr()
 {
-	if(TMP_COUNTER>=1295)
+	if(TMP_COUNTER>=2_176_782_335)
 		TMP_COUNTER = 0;
 
-	const randPrefix = xu.tryFallback(() => Deno.pid.toString(36), Math.randomInt(0, 46655));
-	return `${randPrefix}${Math.randomInt(0, 1295).toString(36)}${(TMP_COUNTER++).toString(36)}`;
+	const strPrefix = xu.tryFallback(() => Deno.pid.toString(36), Math.randomInt(0, 46655));
+	return `${strPrefix}${(TMP_COUNTER++).toString(36)}${Math.randomInt(0, 1_679_615).toString(36)}`;
 };
 
 export { xu, fg };
