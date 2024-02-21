@@ -1,5 +1,5 @@
-let delay=null, path=null;	// This method allows us to use this code in both deno and browser
-try { ({delay, path} = await import("std")); } catch {}	// eslint-disable-line @stylistic/brace-style
+let delay=null;	// This method allows us to use this code in both deno and browser
+try { ({delay} = await import("std")); } catch {}	// eslint-disable-line @stylistic/brace-style
 import {} from "./array.js";
 import {} from "./math.js";
 import {} from "./number.js";
@@ -271,12 +271,6 @@ xu.waitUntil = async function waitUntil(fun, {interval, timeout, stopper}={})
 	}
 
 	return !timedOut;
-};
-
-/** returns the node equilivant __dirname when passed in import.meta */
-xu.dirname = function dirname(meta)
-{
-	return path.resolve((new URL(".", meta.url)).pathname);
 };
 
 /** returns a random ASCII name in the format PID_RANDOM INT_COUNTER INCR where each number is represented as base-36 ASCII a-z0-9 */

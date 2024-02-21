@@ -1,6 +1,6 @@
 import {xu, fg} from "./xu.js";
 
-/** Converts a given number of bytes into KB/MB/GB/TB. From: https://stackoverflow.com/questions/15900485/correct-way-to-convert-size-in-bytes-to-kb-mb-gb-in-javascript */
+/** Converts a given number of bytes into KB/MB/GB/TB/PB */
 Number.prototype.bytesToSize ||= function bytesToSize(precision)
 {
 	const bytes = this;	// eslint-disable-line consistent-this
@@ -9,7 +9,7 @@ Number.prototype.bytesToSize ||= function bytesToSize(precision)
 	
 	const i = +(Math.floor(Math.log(bytes) / Math.log(1024)));
 	const num = bytes / (1024 ** i);
-	return (precision ? num.toFixed(precision) : Math.round(num)) + ["b", "KB", "MB", "GB", "TB"][i];
+	return (precision ? num.toFixed(precision) : Math.round(num)) + ["b", "KB", "MB", "GB", "TB", "PB"][i];
 };
 
 /** Clears the given bit in a number to 0 */
