@@ -141,7 +141,7 @@ Object.mapInPlace ||= function mapInPlace(o, cb)
 		}
 		else if(r.length===1)
 		{
-			o[k] = r[0];
+			o[k] = r;
 		}
 		else
 		{

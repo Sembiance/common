@@ -90,7 +90,7 @@ if(typeof Element!=="undefined")
 		if(!computedFontSize)
 			return 16;
 
-		const matchedParts = computedFontSize.match(/(\d+(\.\d+)?)px$/);	// eslint-disable-line prefer-named-capture-group
+		const matchedParts = computedFontSize.match(/(\d+(\.\d+)?)px$/);
 		if(!matchedParts || matchedParts.length<2 || !matchedParts[1])
 			return 16;
 

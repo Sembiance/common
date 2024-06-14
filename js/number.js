@@ -191,8 +191,11 @@ Number.prototype.scale ||= function scale(inMin, inMax, outMin, outMax)
 	return (((this - inMin) * (outMax - outMin)) / (inMax - inMin)) + outMin;
 };
 
-/** Converts a given number of seconds into a human readable value such as 3 days, 45 minutes, 10 seconds or 3d45m10s if short is set to true */
-Number.prototype.secondsAsHumanReadable ||= function secondsAsHumanReadable({lang="en", short=false, maxParts=Infinity, colorize=false}={})
+/** Converts a given number of seconds into a human readable value such as 3 days, 45 minutes, 10 seconds or 3d45m10s if short is set to true
+ * Setting pad to a truthy value will pad non-leading unit values to 2 chars with zeroes and will always include a ##s suffix even if ##===00
+ * Additionally if you set pad to a positive number, then leading unit values will be padded with spaces to the pad length specified
+ */
+Number.prototype.secondsAsHumanReadable ||= function secondsAsHumanReadable({lang="en", short=false, pad=false, maxParts=Infinity, colorize=false}={})
 {
 	if(this===0)
 		return short ? "0s" : "0 seconds";
@@ -211,12 +214,15 @@ Number.prototype.secondsAsHumanReadable ||= function secondsAsHumanReadable({lan
 		{n : "second", s :  "s", v : 1}
 	].forEach(({n, v, s}) =>
 	{
-		if(left===0 || left<v)
+		if((left===0 || left<v) && (!pad || s!=="s"))
 			return;
-		
+
 		const qty = Math.floor(left/v);
 		left -= qty*v;
-		r.push(`${colorize ? fg.cyan(qty.toLocaleString(lang)) : qty.toLocaleString(lang)}${short ? s : ` ${n}${qty>1 || qty===0 ? "s" : ""}`}`);
+		let qtyStr = qty.toLocaleString(lang);
+		if(pad && (r.length || typeof pad==="number"))
+			qtyStr = qtyStr.padStart(r.length ? 2 : (typeof pad==="number" ? pad : 2), r.length ? "0" : " ");
+		r.push(`${colorize ? fg.cyan(qtyStr) : qtyStr}${short ? s : ` ${n}${qty>1 || qty===0 ? "s" : ""}`}`);
 	});
 
 	return r.slice(0, maxParts).join(short ? "" : ", ");

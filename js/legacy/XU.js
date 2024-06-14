@@ -228,7 +228,7 @@
 			if(val.includes("\x1b["))	// eslint-disable-line unicorn/escape-case, unicorn/no-hex-escape
 				return val;
 
-			return val.replace(/([+!@#&_()[\]%${}:/,.'"|\\=*^`~;?-])/g, `${c.reset}${c.fg.cyan}$1${defaultColor}`);	// eslint-disable-line prefer-named-capture-group
+			return val.replace(/([+!@#&_()[\]%${}:/,.'"|\\=*^`~;?-])/g, `${c.reset}${c.fg.cyan}$1${defaultColor}`);
 		}
 
 		function val2string(val)

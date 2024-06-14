@@ -19,7 +19,7 @@ String.prototype.decolor ||= function decolor()
 /** Encode a URL path segment, replacing things like # and ? and % with the proper hex escaping  */
 String.prototype.encodeURLPath ||= function encodeURLPath({skipEncodePercent=false}={})
 {
-	let r = this;		// eslint-disable-line consistent-this
+	let r = this;	// eslint-disable-line consistent-this
 	if(!skipEncodePercent)
 		r = r.replaceAll("%", "%25");
 	

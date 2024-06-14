@@ -173,6 +173,7 @@ xu.parseJSON = function parseJSON(raw, fallback)
  * timeout - ms duration after which the fetch will be aborted
  *    json - Object to POST as JSON to the remote host
  *  asJSON - Instead of .text() return the result as JSON
+ *  silent - If true, will not log any errors to the console
  **/
 xu.fetch = async function xuFetch(url, opts={})
 {
@@ -206,14 +207,26 @@ xu.fetch = async function xuFetch(url, opts={})
 	const asJSON = fetchOpts.asJSON;
 	delete fetchOpts.asJSON;
 
-	const r = await (await fetch(url, fetchOpts))[asJSON ? "json" : "text"]();
+	let r = null;
+	let rawText = null;
+	try
+	{
+		rawText = await (await fetch(url, fetchOpts)).text();
+		r = asJSON ? JSON.parse(rawText) : rawText;	// eslint-disable-line no-restricted-syntax
+	}
+	catch(err)
+	{
+		if(!opts.silent)
+			console.error(`xu.fetch (${url}) error: ${err} with payload: ${rawText}`);
+	}
+
 	if(abortTimeout)
 		clearTimeout(abortTimeout);
 
 	return r;
 };
 
-/** template literaly that allows you to easily include multi-line strings and each line will be trimmed */
+/** template literal that allows you to easily include multi-line strings and each line will be trimmed */
 xu.trim = function trim(strs, ...vals)
 {
 	const r = [];
@@ -251,8 +264,8 @@ xu.tryFallbackAsync = async function tryFallbackAsync(fn, fallbackResult)
 	return r;
 };
 
-/** waits until the given async function fun returns a truthy value. Exponential delay, starting at 5ms */
-xu.waitUntil = async function waitUntil(fun, {interval, timeout, stopper}={})
+/** waits until the given async function fun returns a truthy value. Linear retry interval starting at 5ms */
+xu.waitUntil = async function waitUntil(fun, {interval, timeout, stopper, stopAfter}={})
 {
 	let i=0;
 	let timedOut = false;
@@ -266,7 +279,7 @@ xu.waitUntil = async function waitUntil(fun, {interval, timeout, stopper}={})
 			break;
 		}
 
-		if(stopper?.stop)
+		if(stopper?.stop || (stopAfter && i>=stopAfter))
 			break;
 	}
 
@@ -283,6 +296,8 @@ xu.randStr = function randStr()
 	const strPrefix = xu.tryFallback(() => Deno.pid.toString(36), Math.randomInt(0, 46655));
 	return `${strPrefix}${(TMP_COUNTER++).toString(36)}${Math.randomInt(0, 1_679_615).toString(36)}`;
 };
+
+xu.nbsp = " ";
 
 export { xu, fg };
 
