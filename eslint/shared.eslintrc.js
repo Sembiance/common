@@ -420,7 +420,7 @@ module.exports =
 		"no-undef-init"                   : 0,
 		"no-undefined"                    : 0,
 		"no-unused-private-class-members" : 2,
-		"no-unused-vars"                  : [2, {"caughtErrors" : "all", "argsIgnorePattern" : "^[iI]gnored$|^e$", "varsIgnorePattern" : "^XU|xu$" }],
+		"no-unused-vars"                  : [2, {"caughtErrors" : "all", "argsIgnorePattern" : "^[iI]gnored$|^e$", "varsIgnorePattern" : "^XU|xu|xlog$" }],
 		"no-use-before-define"            : [2, {"functions" : false}],
 
 		// Node.js and CommonJS : Handled in parents "node", "browser"

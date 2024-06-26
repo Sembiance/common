@@ -197,6 +197,8 @@ xu.fetch = async function xuFetch(url, opts={})
 
 		abortTimeout = setTimeout(() =>
 		{
+			if(!opts.silent)
+				console.error(`xu.fetch (${url}) timed out after ${fetchOpts.timeout ? fetchOpts.timeout.msAsHumanReadable() : "???ms"}`);
 			abortTimeout = null;
 			abortController.abort();
 		}, fetchOpts.timeout);
