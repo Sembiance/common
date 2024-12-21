@@ -151,8 +151,7 @@ if(typeof Element!=="undefined")
 		this.removeAttribute("disabled");
 	};
 
-	// Safely scrolls the element into view. Currently only supports vevrtical movement.
-	// .scrollIntoView should always be avoided due to it moving the whole darn screen if anything at all is offscreen. Piece of junk that function is.
+	// Safely scrolls the element into view. Currently only supports vevrtical movement.  .scrollIntoView should always be avoided due to it moving the whole darn screen if anything at all is offscreen. Piece of junk that function is.
 	Element.prototype.safeScrollIntoView = function safeScrollIntoView(scrollParent)
 	{
 		const thisHeight = this.getHeight();

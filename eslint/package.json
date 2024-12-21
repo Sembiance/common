@@ -1,19 +1,17 @@
 {
+	"type": "module",
 	"dependencies": {
-		"@sembiance/xu": "file:/mnt/compendium/DevLab/node-modules/xu",
-		"@stylistic/eslint-plugin": "^1.4.1",
-		"@typescript-eslint/eslint-plugin": "*",
-		"@typescript-eslint/parser": "*",
-		"eslint": "*",
-		"eslint-plugin-array-func": "^4.0.0",
-		"eslint-plugin-eslint-comments": "*",
-		"eslint-plugin-no-constructor-bind": "*",
-		"eslint-plugin-no-floating-promise": "*",
-		"eslint-plugin-node": "*",
-		"eslint-plugin-sembiance": "file:/mnt/compendium/DevLab/node-modules/eslint-plugin-sembiance",
-		"eslint-plugin-sonarjs": "*",
-		"eslint-plugin-unicorn": "*",
-		"typescript": "*"
+		"@eslint-community/eslint-plugin-eslint-comments": "^4.4.1",
+		"@stylistic/eslint-plugin-js": "^2.12.1",
+		"eslint": "^9.17.0",
+		"eslint-plugin-array-func": "^5.0.2",
+		"eslint-plugin-n": "file:forks/eslint-plugin-n",
+		"eslint-plugin-no-constructor-bind": "^2.0.4",
+		"eslint-plugin-no-floating-promise": "^2.0.0",
+		"eslint-plugin-sembiance": "file:./../../node-modules/eslint-plugin-sembiance",
+		"eslint-plugin-sonarjs": "^3.0.1",
+		"eslint-plugin-unicorn": "^56.0.1",
+		"globals": "^15.14.0"
 	},
 	"resolutions": {
 		"caniuse-lite": "~1.0.30001260"

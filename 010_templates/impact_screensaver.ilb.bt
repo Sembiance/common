@@ -1,0 +1,31 @@
+//------------------------------------------------
+//--- 010 Editor v11.0.1 Binary Template
+//
+//      File: 
+//   Authors: 
+//   Version: 
+//   Purpose: 
+//  Category: 
+// File Mask: 
+//  ID Bytes: 
+//   History: 
+//------------------------------------------------
+struct FILE {
+    uint32 filenameLen;
+    uint32 fileLen;
+    char filename[filenameLen];
+    byte fileData[fileLen];
+    byte filePadding;
+};
+
+uint32 nameLen;
+char name[nameLen];
+uint32 numImages;
+
+if(numImages!=0)
+    byte unknownBytes[numImages];
+
+while(!FEof())
+{
+    FILE file;
+}

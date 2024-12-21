@@ -13,6 +13,9 @@ module.exports =
 		"no-implicit-globals" : 2,
 		"no-alert"            : 2,
 
+		// Strict Mode
+		"strict" : [2, "safe"],
+
 		// Stylistic Issues (core)
 		// Interactive AST explorer, VERY useful: https://astexplorer.net/
 		"no-restricted-syntax" : [2,

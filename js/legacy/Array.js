@@ -1,6 +1,5 @@
 "use strict";
-/* eslint-env browser */
-/* eslint-disable logical-assignment-operators, node/callback-return */
+/* eslint-disable logical-assignment-operators, n/callback-return */
 
 ////////////////////
 //// Polyfills /////
@@ -375,7 +374,7 @@ if(!Array.prototype.shuffle)
 {
 	Array.prototype.shuffle = function shuffle()
 	{
-		let m=this.length, t=null, i=0;
+		let m=this.length, t, i;
 		while(m)
 		{
 			i = Math.randomInt(0, --m);
@@ -666,7 +665,7 @@ if(!Array.prototype.pushCopyInPlace)
 
 (function _arrayAsyncFuncs()
 {
-	const p = (typeof window!=="undefined" && typeof window.performance!=="undefined") ? window.performance : ((typeof process!=="undefined" && typeof process.versions!=="undefined" && typeof process.versions.node!=="undefined") ? require("perf_hooks").performance : Date);	// eslint-disable-line node/global-require, unicorn/no-typeof-undefined
+	const p = (typeof window!=="undefined" && typeof window.performance!=="undefined") ? window.performance : ((typeof process!=="undefined" && typeof process.versions!=="undefined" && typeof process.versions.node!=="undefined") ? require("perf_hooks").performance : Date);	// eslint-disable-line n/global-require, unicorn/no-typeof-undefined
 
 	function CBRunner(_fun, _val, _i, _finish)
 	{

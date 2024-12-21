@@ -11,7 +11,7 @@
 // Returns a string version of the number. Standardized funcation available in almost all implementations, but for those few that don't support, here is this crappy version
 if(!Number.prototype.toLocaleString)
 {
-	Number.prototype.toLocaleString = function toLocaleString()
+	Number.prototype.toLocaleString = function toLocaleString()	// eslint-disable-line sonarjs/no-built-in-override
 	{
 		return this.toString();
 	};

@@ -3,7 +3,7 @@ import "./DOM.js";
 
 export class Tooltip
 {
-	constructor(node, text, {classNames=[], delay=xu.SECOND*0.5, alwaysLeft, alwaysRight, alwaysAbove, alwaysBelow})
+	constructor(node, text, {classNames=[], delay=xu.SECOND*0.5, alwaysLeft, alwaysRight, alwaysAbove, alwaysBelow, useTextAsDIV})
 	{
 		this.node = node;
 		this.node.dataset.tooltipid = xu.randStr();
@@ -13,10 +13,17 @@ export class Tooltip
 		this.alwaysAbove = alwaysAbove;
 		this.alwaysBelow = alwaysBelow;
 
-		this.tooltip = document.createElement("div");
+		if(useTextAsDIV)
+		{
+			this.tooltip = text;
+		}
+		else
+		{
+			this.tooltip = document.createElement("div");
+			this.tooltip.innerHTML = (typeof this.text==="function" ? this.text() : this.text);
+		}
 		for(const className of classNames)
 			this.tooltip.classList.add(className);
-		this.tooltip.innerHTML = (typeof this.text==="function" ? this.text() : this.text);
 		this.tooltip.dataset.tooltipid = this.node.dataset.tooltipid;
 
 		this.tooltipOffset = 15;

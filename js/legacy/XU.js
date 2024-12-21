@@ -1,6 +1,5 @@
 "use strict";
-/* eslint-env node, browser */
-/* eslint-disable node/global-require */
+/* eslint-disable n/global-require */
 
 (function _XU(exports)
 {
@@ -13,7 +12,7 @@
 		require("./Array.js");
 		require("./String.js");
 		require("./Object.js");
-		require("./Function.js");	// eslint-disable-line node/no-missing-require -- don't remove this line even though it appears un-used in VSCode
+		require("./Function.js");
 		require("./Number.js");
 
 		exports.IS_DEV = !process.argv.includes("--staging") && !process.argv.includes("--production");
@@ -92,7 +91,7 @@
 	// Tries the passed in fn, returning whatever it returns. If it fails, will return the fallbackResult
 	exports.tryFallback = function tryFallback(fn, fallbackResult)
 	{
-		let r = null;
+		let r;
 		try
 		{
 			r = fn();
@@ -130,7 +129,7 @@
 	{
 		try
 		{
-			p.then((...pargs) => cb(undefined, ...pargs), err => cb(err));	// eslint-disable-line no-restricted-syntax -- don't remove this line even though it appears un-used in VSCode
+			p.then((...pargs) => cb(undefined, ...pargs), err => cb(err));
 		}
 		catch(err)
 		{
@@ -191,7 +190,7 @@
 		Object.forEach(src, (key, val) =>
 		{
 			if(Object.isObject(val))
-				functionizeColors(val, dest[key] = {});
+				functionizeColors(val, dest[key] = {});	// eslint-disable-line sonarjs/no-nested-assignment
 			else
 				dest[key] = str => `${src[key]}${str}`;
 		});
@@ -280,4 +279,4 @@
 			return defaultValue;
 		}
 	};
-})(typeof window!=="undefined" ? (window.XU ? window.XU : window.XU={}) : exports);	// eslint-disable-line unicorn/prefer-logical-operator-over-ternary
+})(typeof window!=="undefined" ? (window.XU ? window.XU : window.XU={}) : exports);	// eslint-disable-line unicorn/prefer-logical-operator-over-ternary, sonarjs/no-nested-assignment

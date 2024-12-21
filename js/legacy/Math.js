@@ -1,6 +1,5 @@
 "use strict";
-/* eslint-env browser */
-/* eslint-disable logical-assignment-operators */
+/* eslint-disable logical-assignment-operators, n/no-unsupported-features/node-builtins */
 
 ////////////////////
 //// Polyfills /////
@@ -57,7 +56,7 @@ if(!Math.randomInt)
 		if(excluding.length===((max-min)+1))
 			throw new RangeError("randomIntExcluding called with excluding all nums, no possible return value");
 		
-		let num = undefined;
+		let num;
 		do
 			num = Math.randomInt(min, max);
 		while(excluding.includes(num));

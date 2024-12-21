@@ -420,7 +420,7 @@ module.exports =
 		"no-undef-init"                   : 0,
 		"no-undefined"                    : 0,
 		"no-unused-private-class-members" : 2,
-		"no-unused-vars"                  : [2, {"caughtErrors" : "all", "argsIgnorePattern" : "^[iI]gnored$|^e$", "varsIgnorePattern" : "^XU|xu|xlog$" }],
+		"no-unused-vars"                  : [2, {"caughtErrors" : "all", "argsIgnorePattern" : "^[iI]gnored$|^e|xlog$", "varsIgnorePattern" : "^XU|xu|xlog$" }],
 		"no-use-before-define"            : [2, {"functions" : false}],
 
 		// Node.js and CommonJS : Handled in parents "node", "browser"
@@ -436,7 +436,7 @@ module.exports =
 		"id-length"                        : 0,
 		"id-match"                         : 0,
 		"line-comment-position"            : 0,
-		"max-depth"                        : [2, 7],
+		"max-depth"                        : [2, 10],
 		"max-lines"                        : 0,
 		"max-lines-per-function"           : 0,
 		"max-nested-callbacks"             : [2, 5],

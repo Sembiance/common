@@ -1,5 +1,5 @@
 "use strict";
-/* eslint-disable logical-assignment-operators, node/callback-return */
+/* eslint-disable logical-assignment-operators, n/callback-return */
 
 ////////////////////
 //// Polyfills /////
