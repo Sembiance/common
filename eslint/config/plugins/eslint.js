@@ -58,7 +58,7 @@ export default
 		"no-unsafe-negation"              : 2,
 		"no-unsafe-optional-chaining"     : 2,
 		"no-unused-private-class-members" : 2,
-		"no-unused-vars"                  : [2, {"caughtErrors" : "all", "argsIgnorePattern" : "^[iI]gnored$|^e|xlog$", "varsIgnorePattern" : "^XU|xu|xlog$" }],
+		"no-unused-vars"                  : [2, {"caughtErrors" : "all", "argsIgnorePattern" : "^[iI]gnored$|^e$|^xlog$|^_", "varsIgnorePattern" : "^XU|xu|xlog$" }],
 		"no-use-before-define"            : [2, {"functions" : false}],
 		"no-useless-assignment"           : 2,
 		"no-useless-backreference"        : 2,
