@@ -495,7 +495,7 @@ if(!Array.prototype.rotateInPlace)
 {
 	Array.prototype.rotateInPlace = function rotateInPlace(x=0)
 	{
-		this.unshift.apply(this, this.splice(x, this.length));	// eslint-disable-line prefer-spread
+		this.unshift.apply(this, this.splice(x));	// eslint-disable-line prefer-spread
 		return this;
 	};
 }

@@ -39,7 +39,6 @@ export default
 		"sonarjs/block-scoped-var"                     : 2,
 		"sonarjs/bool-param-default"                   : 0,	// typescript
 		"sonarjs/call-argument-line"                   : 0,
-		"sonarjs/certificate-transparency"             : 0,
 		"sonarjs/chai-determinate-assertion"           : 0,
 		"sonarjs/class-name"                           : 0,
 		"sonarjs/class-prototype"                      : 0,
