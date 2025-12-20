@@ -2,12 +2,10 @@ const nodePlugin = await import("eslint-plugin-n");
 
 export default
 {
-	plugins :
-	{
+	plugins : {
 		n : nodePlugin.default
 	},
-	rules :
-	{
+	rules : {
 		// https://github.com/eslint-community/eslint-plugin-n#-rules
 		"n/callback-return"                       : [2, ["cb", "callback", "subcb"]],
 		"n/exports-style"                         : 0,
@@ -30,6 +28,7 @@ export default
 		"n/no-restricted-import"                  : 2,
 		"n/no-restricted-require"                 : [2, ["mkdirp", "rimraf", "nan", "glob", "accounting", "minimist", "commander", "optimist", "yargs", "vorpal", "shelljs", "meow"]],
 		"n/no-sync"                               : 0,
+		"n/no-top-level-await"                    : 0,
 		"n/no-unpublished-bin"                    : 2,
 		"n/no-unpublished-import"                 : 0,
 		"n/no-unpublished-require"                : 0,

@@ -14,6 +14,7 @@ export default
 		"sembiance/prefer-array-force"                : 2,
 		"sembiance/prefer-char-at"                    : 2,
 		"sembiance/prefer-dataset"                    : 0,
+		"sembiance/prefer-math-clamp"                 : 2,
 		"sembiance/prefer-object-destructuring"       : 2,
 		"sembiance/prefer-parameter-context-matching" : 0,
 		"sembiance/prefer-relative-require"           : 0,

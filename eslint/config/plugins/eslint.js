@@ -1,7 +1,6 @@
 export default
 {
-	rules :
-	{
+	rules : {
 		// https://eslint.org/docs/latest/rules/
 		
 		///////////////////////
@@ -49,6 +48,7 @@ export default
 		"no-sparse-arrays"                : 2,
 		"no-template-curly-in-string"     : 2,
 		"no-this-before-super"            : 2,
+		"no-unassigned-vars"              : 2,
 		"no-undef"                        : [2, {"typeof" : true}],
 		"no-unexpected-multiline"         : 2,
 		"no-unmodified-loop-condition"    : 2,
@@ -196,6 +196,7 @@ export default
 		"prefer-rest-params"             : 2,
 		"prefer-spread"                  : 2,
 		"prefer-template"                : 2,
+		"preserve-caught-error"          : 2,
 		"radix"                          : 2,
 		"require-await"                  : 2,
 		"require-unicode-regexp"         : 0,

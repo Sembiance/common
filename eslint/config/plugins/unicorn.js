@@ -2,12 +2,10 @@ import eslintPluginUnicorn from "eslint-plugin-unicorn";
 
 export default
 {
-	plugins :
-	{
+	plugins : {
 		unicorn : eslintPluginUnicorn
 	},
-	rules :
-	{
+	rules : {
 		// https://github.com/sindresorhus/eslint-plugin-unicorn#rules
 		"unicorn/better-regex"                            : [2, {sortCharacterClasses : false}],
 		"unicorn/catch-error-name"                        : [2, {name : "err"}],
@@ -33,6 +31,8 @@ export default
 		"unicorn/no-array-for-each"                       : 0,
 		"unicorn/no-array-method-this-argument"           : 0,
 		"unicorn/no-array-reduce"                         : 0,
+		"unicorn/no-array-reverse"                        : 0,
+		"unicorn/no-array-sort"                           : 0,
 		"unicorn/no-await-expression-member"			  : 0,
 		"unicorn/no-await-in-promise-methods"             : 2,
 		"unicorn/no-console-spaces"                       : 0,
@@ -40,6 +40,7 @@ export default
 		"unicorn/no-empty-file"							  : 2,
 		"unicorn/no-for-loop"                             : 0,
 		"unicorn/no-hex-escape"                           : 2,
+		"unicorn/no-immediate-mutation"                   : 0,
 		"unicorn/no-instanceof-builtins"                  : 2,
 		"unicorn/no-invalid-fetch-options"                : 2,
 		"unicorn/no-invalid-remove-event-listener"        : 2,
@@ -68,6 +69,8 @@ export default
 		"unicorn/no-unreadable-array-destructuring"       : 0,
 		"unicorn/no-unreadable-iife"                      : 2,
 		"unicorn/no-unused-properties"                    : 2,
+		"unicorn/no-useless-collection-argument"   	      : 2,
+		"unicorn/no-useless-error-capture-stack-trace"    : 2,
 		"unicorn/no-useless-fallback-in-spread"           : 2,
 		"unicorn/no-useless-length-check"                 : 2,
 		"unicorn/no-useless-promise-resolve-reject"       : 2,
@@ -84,7 +87,10 @@ export default
 		"unicorn/prefer-array-index-of"                   : 2,
 		"unicorn/prefer-array-some"                       : 2,
 		"unicorn/prefer-at"                               : 2,
+		"unicorn/prefer-bigint-literals"                  : 0,
 		"unicorn/prefer-blob-reading-methods"             : 2,
+		"unicorn/prefer-class-fields"                     : 2,
+		"unicorn/prefer-classlist-toggle"                 : 2,
 		"unicorn/prefer-code-point"                       : 0,
 		"unicorn/prefer-date-now"                         : 2,
 		"unicorn/prefer-default-parameters"               : 2,
@@ -115,6 +121,7 @@ export default
 		"unicorn/prefer-query-selector"                   : 2,
 		"unicorn/prefer-reflect-apply"                    : 2,
 		"unicorn/prefer-regexp-test"                      : 2,
+		"unicorn/prefer-response-static-json"             : 2,
 		"unicorn/prefer-set-has"                          : 0,
 		"unicorn/prefer-single-call"                      : 0,
 		"unicorn/prefer-spread"                           : 0, // Array.from() is better as it has a mapFn built in and is covered by array-func/prefer-array-from
@@ -132,6 +139,8 @@ export default
 		"unicorn/prevent-abbreviations"                   : 0,
 		"unicorn/relative-url-style"                      : 2,
 		"unicorn/require-array-join-separator"            : 2,
+		"unicorn/require-module-attributes"               : 2,
+		"unicorn/require-module-specifiers"               : 2,
 		"unicorn/require-number-to-fixed-digits-argument" : 2,
 		"unicorn/require-post-message-target-origin"      : 0,
 		"unicorn/string-content"                          : 0,

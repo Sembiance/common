@@ -1,13 +1,11 @@
-import stylisticJs from "@stylistic/eslint-plugin-js";
+import stylisticJs from "@stylistic/eslint-plugin";
 
 export default
 {
-	plugins :
-	{
+	plugins : {
 		"@stylistic" : stylisticJs
 	},
-	rules :
-	{
+	rules : {
 		// https://eslint.style/packages/js#rules
 		"@stylistic/array-bracket-newline"            : 0,
 		"@stylistic/array-bracket-spacing"            : [2, "never"],
@@ -20,23 +18,45 @@ export default
 		"@stylistic/comma-spacing"                    : [2, { "before" : false, "after" : true }],
 		"@stylistic/comma-style"                      : [2, "last"],
 		"@stylistic/computed-property-spacing"        : [2, "never"],
+		"@stylistic/curly-newline"                    : 0,
 		"@stylistic/dot-location"                     : [2, "object"],
 		"@stylistic/eol-last"                         : [2, "always"],
-		"@stylistic/function-call-argument-newline"   : 0, // In Theory I like [2, "never"] here, but due to how I call tiptoe() with newlines, I have to disable this rule
+		"@stylistic/function-call-argument-newline"   : 0,	// In Theory I like [2, "never"] here, but due to how I call tiptoe() with newlines, I have to disable this rule
 		"@stylistic/function-call-spacing"            : [2, "never"],
 		"@stylistic/function-paren-newline"           : [2, "consistent"],
 		"@stylistic/generator-star-spacing"           : 0,
 		"@stylistic/implicit-arrow-linebreak"         : 0,
 		"@stylistic/indent"                           : [2, "tab", {"SwitchCase" : 1}],
+		"@stylistic/indent-binary-ops"                : 0,
+		"@stylistic/jsx-child-element-spacing"        : 0,
+		"@stylistic/jsx-closing-bracket-location"     : 0,
+		"@stylistic/jsx-closing-tag-location"         : 0,
+		"@stylistic/jsx-curly-brace-presence"         : 0,
+		"@stylistic/jsx-curly-newline"                : 0,
+		"@stylistic/jsx-curly-spacing"                : 0,
+		"@stylistic/jsx-equals-spacing"               : 0,
+		"@stylistic/jsx-first-prop-new-line"          : 0,
+		"@stylistic/jsx-function-call-newline"        : 0,
+		"@stylistic/jsx-indent-props"                 : 0,
+		"@stylistic/jsx-max-props-per-line"           : 0,
+		"@stylistic/jsx-newline"                      : 0,
+		"@stylistic/jsx-one-expression-per-line"      : 0,
+		"@stylistic/jsx-pascal-case"                  : 0,
 		"@stylistic/jsx-quotes"                       : 0,
+		"@stylistic/jsx-self-closing-comp"            : 0,
+		"@stylistic/jsx-sort-props"                   : 0,
+		"@stylistic/jsx-tag-spacing"                  : 0,
+		"@stylistic/jsx-wrap-multilines"              : 0,
 		"@stylistic/key-spacing"                      : [2, {"beforeColon" : true, "afterColon" : true, "mode" : "minimum"}],
 		"@stylistic/keyword-spacing"                  : 0,
-		"@stylistic/line-comment-position"			  : 0,
+		"@stylistic/line-comment-position"            : 0,
 		"@stylistic/linebreak-style"                  : [2, "unix"],
 		"@stylistic/lines-around-comment"             : 0,
 		"@stylistic/lines-between-class-members"      : [0],
+		"@stylistic/list-style"                       : 0,
 		"@stylistic/max-len"                          : 0,
 		"@stylistic/max-statements-per-line"          : 0,
+		"@stylistic/member-delimiter-style"           : 0,
 		"@stylistic/multiline-comment-style"          : 0,
 		"@stylistic/multiline-ternary"                : [2, "never"],
 		"@stylistic/new-parens"                       : 2,
@@ -61,13 +81,13 @@ export default
 		"@stylistic/padded-blocks"                    : [2, "never"],
 		"@stylistic/padding-line-between-statements"  : 0,
 		"@stylistic/quote-props"                      : 0,
-		"@stylistic/quotes"                           : [2, "double", {"avoidEscape" : true, "allowTemplateLiterals" : true}],
+		"@stylistic/quotes"                           : [2, "double", {"avoidEscape" : true, "allowTemplateLiterals" : "always"}],
 		"@stylistic/rest-spread-spacing"              : [2, "never"],
 		"@stylistic/semi"                             : [2, "always"],
 		"@stylistic/semi-spacing"                     : 0,
 		"@stylistic/semi-style"                       : [2, "last"],
 		"@stylistic/space-before-blocks"              : [2, "always"],
-		"@stylistic/space-before-function-paren"      : [2, { "anonymous" : "never", "named" : "never", "asyncArrow" : "always" }],
+		"@stylistic/space-before-function-paren"      : [2, { "anonymous" : "never", "named" : "never", "asyncArrow" : "always", "catch" : "never" }],
 		"@stylistic/space-in-parens"                  : 0,
 		"@stylistic/space-infix-ops"                  : 0,
 		"@stylistic/space-unary-ops"                  : 2,
@@ -75,6 +95,9 @@ export default
 		"@stylistic/switch-colon-spacing"             : [2, {"after" : true, "before" : false}],
 		"@stylistic/template-curly-spacing"           : [2, "never"],
 		"@stylistic/template-tag-spacing"             : 2,
+		"@stylistic/type-annotation-spacing"          : 0,
+		"@stylistic/type-generic-spacing"             : 0,
+		"@stylistic/type-named-tuple-spacing"         : 0,
 		"@stylistic/wrap-iife"                        : [2, "inside"],
 		"@stylistic/wrap-regex"                       : 2,
 		"@stylistic/yield-star-spacing"               : 0

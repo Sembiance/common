@@ -1,17 +1,17 @@
 {
 	"type": "module",
 	"dependencies": {
-		"@eslint-community/eslint-plugin-eslint-comments": "*",
-		"@stylistic/eslint-plugin-js": "*",
-		"eslint": "*",
-		"eslint-plugin-array-func": "*",
-		"eslint-plugin-n": "file:forks/eslint-plugin-n",
-		"eslint-plugin-no-constructor-bind": "*",
-		"eslint-plugin-no-floating-promise": "*",
+		"@eslint-community/eslint-plugin-eslint-comments": "^4.5.0",
+		"@stylistic/eslint-plugin": "^5.6.1",
+		"eslint": "^9.39.2",
+		"eslint-plugin-array-func": "^5.1.0",
+		"eslint-plugin-n": "^17.23.1",
+		"eslint-plugin-no-constructor-bind": "^2.0.4",
+		"eslint-plugin-no-floating-promise": "^2.0.0",
 		"eslint-plugin-sembiance": "file:./../../node-modules/eslint-plugin-sembiance",
-		"eslint-plugin-sonarjs": "*",
-		"eslint-plugin-unicorn": "*",
-		"globals": "*"
+		"eslint-plugin-sonarjs": "^3.0.5",
+		"eslint-plugin-unicorn": "^62.0.0",
+		"globals": "^16.5.0"
 	},
 	"resolutions": {
 		"caniuse-lite": "~1.0.30001260"
