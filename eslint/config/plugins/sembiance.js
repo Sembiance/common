@@ -13,6 +13,7 @@ export default
 		"sembiance/no-useless-variables"              : 2,
 		"sembiance/prefer-array-force"                : 2,
 		"sembiance/prefer-char-at"                    : 2,
+		"sembiance/prefer-computed-property-names"    : 2,
 		"sembiance/prefer-dataset"                    : 0,
 		"sembiance/prefer-math-clamp"                 : 2,
 		"sembiance/prefer-object-destructuring"       : 2,

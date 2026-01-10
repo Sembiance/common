@@ -1,6 +1,3 @@
-nginx/status-htpasswd
-lib
-images
-stylus/*.css
-stylus/*.css.map
-nginx/modules/
+/lib/
+/stylus/*.css
+/stylus/*.css.map
