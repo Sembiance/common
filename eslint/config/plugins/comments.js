@@ -14,8 +14,7 @@ export default
 		"@eslint-community/eslint-comments/disable-enable-pair"   : 0,
 		"@eslint-community/eslint-comments/no-aggregating-enable" : 2,
 		"@eslint-community/eslint-comments/no-duplicate-disable"  : 2,
-		"@eslint-community/eslint-comments/no-unlimited-disable"  : 2,
-		"@eslint-community/eslint-comments/no-unused-disable"     : 2,
+		"@eslint-community/eslint-comments/no-unlimited-disable"  : 0,
 		"@eslint-community/eslint-comments/no-unused-enable"      : 2,
 		
 		// Stylistic Issues

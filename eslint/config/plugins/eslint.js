@@ -93,7 +93,7 @@ export default
 		"id-length"                      : 0,
 		"id-match"                       : 0,
 		"init-declarations"              : 0,
-		"logical-assignment-operators"   : [2, "always", {"enforceForIfStatements" : true}],
+		"logical-assignment-operators"   : 0, // Handled better by unicorn/logical-assignment-operators
 		"max-classes-per-file"           : 0,
 		"max-depth"                      : [2, 10],
 		"max-lines"                      : 0,

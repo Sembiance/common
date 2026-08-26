@@ -40,14 +40,14 @@ if(!String.prototype.endsWith)
 }
 
 // Repeats a given string count times.
-// I always over-ride the ES2015 version because I added a seperator argument
-String.prototype.repeat = function repeat(count, seperator)
+// I always over-ride the ES2015 version because I added a separator argument
+String.prototype.repeat = function repeat(count, separator)
 {
 	let result = "";
 	for(let i=0;i<count;i++)
 	{
-		if(i>0 && seperator)
-			result += seperator;
+		if(i>0 && separator)
+			result += separator;
 		
 		result += this;	// eslint-disable-line consistent-this
 	}
@@ -210,7 +210,7 @@ if(!String.prototype.toCamelCase)
 {
 	String.prototype.toCamelCase = function toCamelCase()
 	{
-		return this.replace(/(?:^\w|[A-Z]|\b\w)/g, (word, index) => (index === 0 ? word.toLowerCase() : word.toUpperCase())).replace(/\s+/g, "");	// eslint-disable-line unicorn/better-regex
+		return this.replace(/(?:^\w|[A-Z]|\b\w)/g, (word, index) => (index === 0 ? word.toLowerCase() : word.toUpperCase())).replace(/\s+/g, "");
 	};
 }
 
@@ -281,6 +281,6 @@ if(!String.prototype.escapeRegex)
 {
 	String.prototype.escapeRegex = function escapeRegex()
 	{
-		return this.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');	// eslint-disable-line unicorn/better-regex, no-useless-escape, @stylistic/quotes
+		return this.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');	// eslint-disable-line no-useless-escape, @stylistic/quotes
 	};
 }
